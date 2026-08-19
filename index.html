@@ -4,23 +4,25 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>CatalogPro AI - Supplier Dashboard</title>
+    <!-- External PDF Libraries for Auto-Crop -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/2.16.105/pdf.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
     <style>
         * { box-sizing: border-box; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif; margin: 0; padding: 0; }
         body { display: flex; height: 100vh; background-color: #f8fafc; color: #1e293b; overflow: hidden; }
 
-        /* Left Sidebar Styling */
+        /* Left Sidebar */
         .sidebar { width: 260px; background-color: #ffffff; border-right: 1px solid #e2e8f0; display: flex; flex-direction: column; padding: 20px 15px; }
-        .brand { font-size: 20px; font-weight: 700; color: #2563eb; padding: 10px 15px; margin-bottom: 25px; display: flex; align-items: center; gap: 10px; }
+        .brand { font-size: 20px; font-weight: 700; color: #2563eb; padding: 10px 15px; margin-bottom: 25px; }
         .nav-item { display: flex; align-items: center; gap: 12px; padding: 12px 15px; font-size: 14px; font-weight: 500; color: #64748b; text-decoration: none; border-radius: 8px; margin-bottom: 4px; cursor: pointer; transition: all 0.2s; }
         .nav-item:hover, .nav-item.active { background-color: #eff6ff; color: #2563eb; font-weight: 600; }
         .badge { background-color: #2563eb; color: white; font-size: 10px; padding: 2px 6px; border-radius: 10px; text-transform: uppercase; margin-left: auto; }
 
-        /* Main Content Area */
+        /* Main Content */
         .main-content { flex: 1; overflow-y: auto; padding: 40px; }
         .page { display: none; }
         .page.active { display: block; }
 
-        /* Home Page Dashboard Cards */
         .header h1 { font-size: 28px; font-weight: 700; color: #0f172a; margin-bottom: 8px; }
         .header p { color: #64748b; font-size: 15px; margin-bottom: 35px; }
         
@@ -36,19 +38,19 @@
         .btn-action { width: 100%; padding: 10px; background-color: #2563eb; color: white; border: none; border-radius: 8px; font-weight: 600; font-size: 14px; cursor: pointer; text-align: center; }
         .btn-action:hover { background-color: #1d4ed8; }
 
-        /* Inner Tool Form Styles */
-        .form-box { background: white; border: 1px solid #e2e8f0; padding: 25px; border-radius: 12px; max-width: 600px; margin-bottom: 20px; }
+        /* Form Box */
+        .form-box { background: white; border: 1px solid #e2e8f0; padding: 25px; border-radius: 12px; max-width: 650px; margin-bottom: 20px; }
         .form-group { margin-bottom: 15px; }
         .form-group label { display: block; font-weight: 600; margin-bottom: 6px; font-size: 14px; }
         .form-group select, .form-group input { width: 100%; padding: 10px; border: 1px solid #cbd5e1; border-radius: 6px; }
-        .image-preview-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 15px; margin-top: 20px; }
-        .preview-card { background: white; border: 1px solid #e2e8f0; border-radius: 8px; padding: 10px; text-align: center; }
-        .preview-card img { width: 100%; height: auto; border-radius: 4px; }
+        
+        .status-msg { margin-top: 15px; font-size: 14px; font-weight: 600; color: #2563eb; }
+        #canvasContainer { display: none; }
     </style>
 </head>
 <body>
 
-    <!-- Left Navigation Sidebar -->
+    <!-- Left Sidebar Menu -->
     <div class="sidebar">
         <div class="brand">CatalogPro AI</div>
         <div class="nav-item active" onclick="showPage('home-page', this)">🏠 Home</div>
@@ -59,7 +61,7 @@
         <div class="nav-item" onclick="showPage('plans-page', this)">💳 Plans</div>
     </div>
 
-    <!-- Right Side Dynamic Content -->
+    <!-- Right Side Content -->
     <div class="main-content">
 
         <!-- HOME PAGE -->
@@ -70,7 +72,6 @@
             </div>
 
             <div class="tools-grid">
-                <!-- Tool 1 -->
                 <div class="tool-card">
                     <div>
                         <div class="icon-box">⚡</div>
@@ -79,36 +80,32 @@
                         <ul class="features-list">
                             <li>Lower shipping tier images</li>
                             <li>Batch generation</li>
-                            <li>Compare with competitor</li>
                         </ul>
                     </div>
                     <button class="btn-action" onclick="switchNav('generator-page')">Open Generator →</button>
                 </div>
 
-                <!-- Tool 2 -->
                 <div class="tool-card">
                     <div>
                         <div class="icon-box">📄</div>
                         <h3>Shipping Label Export</h3>
-                        <p>Upload Meesho PDFs, filter by SKU, quantity, or courier, and export clean label packs in seconds.</p>
+                        <p>Upload Meesho, Flipkart & Amazon PDFs and export auto-cropped 4x6 inch thermal labels in seconds.</p>
                         <ul class="features-list">
-                            <li>Multi-file upload & processing</li>
-                            <li>Advanced filtering & sorting</li>
-                            <li>Bulk export all combinations</li>
+                            <li>Meesho / Flipkart / Amazon support</li>
+                            <li>Auto-crop label area</li>
+                            <li>Ready for Thermal Printer</li>
                         </ul>
                     </div>
                     <button class="btn-action" onclick="switchNav('label-page')">Start Exporting →</button>
                 </div>
 
-                <!-- Tool 3 -->
                 <div class="tool-card">
                     <div>
                         <div class="icon-box">📊</div>
                         <h3>Profit Calculator</h3>
-                        <p>Calculate the ideal listing price or check your real profit on any order — accounting for GST, returns, and product loss.</p>
+                        <p>Calculate the ideal listing price or check your real profit on any order accounting for GST & returns.</p>
                         <ul class="features-list">
                             <li>Listing price & profit modes</li>
-                            <li>Return cost & loss breakdown</li>
                             <li>GST input credit summary</li>
                         </ul>
                     </div>
@@ -117,59 +114,70 @@
             </div>
         </div>
 
+        <!-- SHIPPING LABEL EXPORT PAGE -->
+        <div id="label-page" class="page">
+            <div class="header">
+                <h1>Shipping Label Auto-Crop & Export</h1>
+                <p>Upload PDF invoice/label files to automatically extract & crop shipping labels for thermal printing.</p>
+            </div>
+
+            <div class="form-box">
+                <div class="form-group">
+                    <label>Select Marketplace Platform:</label>
+                    <select id="platformSelect">
+                        <option value="meesho">Meesho (Top-Half Label Crop)</option>
+                        <option value="flipkart">Flipkart (Top-Left Label Crop)</option>
+                        <option value="amazon">Amazon (Standard Label Crop)</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label>Upload Shipping Label PDF:</label>
+                    <input type="file" id="pdfUpload" accept="application/pdf">
+                </div>
+
+                <button class="btn-action" onclick="processPDFLabel()">Auto-Crop & Export PDF</button>
+                <div id="status" class="status-msg"></div>
+            </div>
+        </div>
+
         <!-- IMAGE GENERATOR PAGE -->
         <div id="generator-page" class="page">
             <div class="header">
                 <h1>Meesho Image Generator</h1>
-                <p>Upload product images to apply optimal borders & framing for Meesho Lens bypass.</p>
+                <p>Upload product images to apply optimal borders & framing.</p>
             </div>
             <div class="form-box">
                 <div class="form-group">
                     <label>Select Category:</label>
-                    <select id="catSelect">
-                        <option>Kurtis / Short Kurtis</option>
-                        <option>Sarees</option>
-                        <option>Footwear</option>
-                    </select>
+                    <select><option>Kurtis / Short Kurtis</option><option>Sarees</option></select>
                 </div>
                 <div class="form-group">
                     <label>Upload Image:</label>
-                    <input type="file" id="imgUpload" accept="image/*">
+                    <input type="file" accept="image/*">
                 </div>
-                <button class="btn-action" onclick="generateImages()">Generate Optimized Images</button>
+                <button class="btn-action">Generate Optimized Images</button>
             </div>
-            <div id="results" class="image-preview-grid"></div>
         </div>
 
-        <!-- OTHER TOOL PAGES (PLACEHOLDERS) -->
-        <div id="label-page" class="page">
-            <div class="header"><h1>Shipping Label Export</h1><p>Feature coming soon...</p></div>
-        </div>
-        <div id="lens-page" class="page">
-            <div class="header"><h1>Meesho Lens</h1><p>Feature coming soon...</p></div>
-        </div>
-        <div id="calculator-page" class="page">
-            <div class="header"><h1>Price & Profit Calculator</h1><p>Feature coming soon...</p></div>
-        </div>
-        <div id="plans-page" class="page">
-            <div class="header"><h1>Subscription Plans</h1><p>Choose your plan...</p></div>
-        </div>
+        <!-- OTHER PAGES -->
+        <div id="lens-page" class="page"><div class="header"><h1>Meesho Lens</h1><p>Feature coming soon...</p></div></div>
+        <div id="calculator-page" class="page"><div class="header"><h1>Price Calculator</h1><p>Feature coming soon...</p></div></div>
+        <div id="plans-page" class="page"><div class="header"><h1>Subscription Plans</h1><p>Choose your plan...</p></div></div>
 
     </div>
 
+    <!-- Hidden Canvas for PDF Processing -->
+    <div id="canvasContainer"><canvas id="pdfCanvas"></canvas></div>
+
     <script>
+        pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/2.16.105/pdf.worker.min.js';
+
         function showPage(pageId, element) {
-            // Hide all pages
             document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
-            // Remove active class from menu
             document.querySelectorAll('.nav-item').forEach(nav => nav.classList.remove('active'));
-            
-            // Show selected page
             document.getElementById(pageId).classList.add('active');
-            
-            if (element) {
-                element.classList.add('active');
-            }
+            if (element) element.classList.add('active');
         }
 
         function switchNav(pageId) {
@@ -179,23 +187,69 @@
             if(pageId === 'calculator-page') showPage('calculator-page', navItems[4]);
         }
 
-        function generateImages() {
-            const input = document.getElementById('imgUpload');
-            const results = document.getElementById('results');
-            if(!input.files[0]) { alert('Select an image first!'); return; }
-            
-            results.innerHTML = '<p>Processing...</p>';
-            const reader = new FileReader();
-            reader.onload = function(e) {
-                results.innerHTML = `
-                    <div class="preview-card">
-                        <img src="${e.target.result}">
-                        <p style="color:#16a34a; font-weight:bold; margin-top:5px;">Est. Shipping: ₹60</p>
-                        <a href="${e.target.result}" download="optimized.jpg" style="display:block; margin-top:8px; color:#2563eb;">Download</a>
-                    </div>
-                `;
+        async function processPDFLabel() {
+            const fileInput = document.getElementById('pdfUpload');
+            const platform = document.getElementById('platformSelect').value;
+            const status = document.getElementById('status');
+
+            if (!fileInput.files[0]) {
+                alert('Please select a PDF file first!');
+                return;
             }
-            reader.readAsDataURL(input.files[0]);
+
+            status.innerText = "Processing PDF and cropping labels...";
+
+            const file = fileInput.files[0];
+            const fileArrayBuffer = await file.arrayBuffer();
+            const pdf = await pdfjsLib.getDocument({ data: fileArrayBuffer }).promise;
+            
+            const { jsPDF } = window.jspdf;
+            const outPdf = new jsPDF({ orientation: 'portrait', unit: 'in', format: [4, 6] }); // 4x6 inch label standard
+
+            for (let i = 1; i <= pdf.numPages; i++) {
+                const page = await pdf.getPage(i);
+                const viewport = page.getViewport({ scale: 2.0 });
+
+                const canvas = document.getElementById('pdfCanvas');
+                const ctx = canvas.getContext('2d');
+                canvas.width = viewport.width;
+                canvas.height = viewport.height;
+
+                await page.render({ canvasContext: ctx, viewport: viewport }).promise;
+
+                // Crop logic depending on marketplace
+                let cropX = 0, cropY = 0, cropWidth = canvas.width, cropHeight = canvas.height / 2;
+
+                if (platform === 'meesho') {
+                    // Meesho label is at the top half
+                    cropY = 0;
+                    cropHeight = canvas.height * 0.48;
+                } else if (platform === 'flipkart') {
+                    // Flipkart label is top half left side
+                    cropY = 0;
+                    cropWidth = canvas.width * 0.55;
+                    cropHeight = canvas.height * 0.50;
+                } else if (platform === 'amazon') {
+                    // Amazon standard label area
+                    cropY = 0;
+                    cropHeight = canvas.height * 0.50;
+                }
+
+                // Create cropped image
+                const cropCanvas = document.createElement('canvas');
+                cropCanvas.width = cropWidth;
+                cropCanvas.height = cropHeight;
+                const cropCtx = cropCanvas.getContext('2d');
+                
+                cropCtx.drawImage(canvas, cropX, cropY, cropWidth, cropHeight, 0, 0, cropWidth, cropHeight);
+                const croppedImgData = cropCanvas.toDataURL('image/jpeg', 1.0);
+
+                if (i > 1) outPdf.addPage([4, 6], 'portrait');
+                outPdf.addImage(croppedImgData, 'JPEG', 0, 0, 4, 6);
+            }
+
+            outPdf.save(`${platform}_cropped_labels.pdf`);
+            status.innerText = "Done! Cropped labels PDF downloaded successfully.";
         }
     </script>
 </body>
