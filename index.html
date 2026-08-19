@@ -4,21 +4,21 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>CatalogPro AI - Supplier Dashboard</title>
-    <!-- External PDF Libraries for Auto-Crop -->
+    <!-- External PDF Libraries -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/2.16.105/pdf.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
     <style>
         * { box-sizing: border-box; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif; margin: 0; padding: 0; }
         body { display: flex; height: 100vh; background-color: #f8fafc; color: #1e293b; overflow: hidden; }
 
-        /* Left Sidebar */
+        /* Left Sidebar Menu */
         .sidebar { width: 260px; background-color: #ffffff; border-right: 1px solid #e2e8f0; display: flex; flex-direction: column; padding: 20px 15px; }
         .brand { font-size: 20px; font-weight: 700; color: #2563eb; padding: 10px 15px; margin-bottom: 25px; }
         .nav-item { display: flex; align-items: center; gap: 12px; padding: 12px 15px; font-size: 14px; font-weight: 500; color: #64748b; text-decoration: none; border-radius: 8px; margin-bottom: 4px; cursor: pointer; transition: all 0.2s; }
         .nav-item:hover, .nav-item.active { background-color: #eff6ff; color: #2563eb; font-weight: 600; }
         .badge { background-color: #2563eb; color: white; font-size: 10px; padding: 2px 6px; border-radius: 10px; text-transform: uppercase; margin-left: auto; }
 
-        /* Main Content */
+        /* Main Content Area */
         .main-content { flex: 1; overflow-y: auto; padding: 40px; }
         .page { display: none; }
         .page.active { display: block; }
@@ -50,7 +50,6 @@
 </head>
 <body>
 
-    <!-- Left Sidebar Menu -->
     <div class="sidebar">
         <div class="brand">CatalogPro AI</div>
         <div class="nav-item active" onclick="showPage('home-page', this)">🏠 Home</div>
@@ -61,7 +60,6 @@
         <div class="nav-item" onclick="showPage('plans-page', this)">💳 Plans</div>
     </div>
 
-    <!-- Right Side Content -->
     <div class="main-content">
 
         <!-- HOME PAGE -->
@@ -89,11 +87,11 @@
                     <div>
                         <div class="icon-box">📄</div>
                         <h3>Shipping Label Export</h3>
-                        <p>Upload Meesho, Flipkart & Amazon PDFs and export auto-cropped 4x6 inch thermal labels in seconds.</p>
+                        <p>Upload Meesho, Flipkart & Amazon PDFs and export horizontally aligned labels.</p>
                         <ul class="features-list">
-                            <li>Meesho / Flipkart / Amazon support</li>
-                            <li>Auto-crop label area</li>
-                            <li>Ready for Thermal Printer</li>
+                            <li>Horizontal / Wide Rotation</li>
+                            <li>2 Labels Stacked Per Page</li>
+                            <li>Optimal Barcode Clarity</li>
                         </ul>
                     </div>
                     <button class="btn-action" onclick="switchNav('label-page')">Start Exporting →</button>
@@ -103,7 +101,7 @@
                     <div>
                         <div class="icon-box">📊</div>
                         <h3>Profit Calculator</h3>
-                        <p>Calculate the ideal listing price or check your real profit on any order accounting for GST & returns.</p>
+                        <p>Calculate ideal listing price or check real profit accounting for GST & returns.</p>
                         <ul class="features-list">
                             <li>Listing price & profit modes</li>
                             <li>GST input credit summary</li>
@@ -117,17 +115,17 @@
         <!-- SHIPPING LABEL EXPORT PAGE -->
         <div id="label-page" class="page">
             <div class="header">
-                <h1>Shipping Label Auto-Crop & Export</h1>
-                <p>Upload PDF invoice/label files to automatically extract & crop shipping labels for thermal printing.</p>
+                <h1>Horizontal Shipping Label Auto-Crop</h1>
+                <p>Upload PDF files to crop and auto-rotate labels horizontally.</p>
             </div>
 
             <div class="form-box">
                 <div class="form-group">
                     <label>Select Marketplace Platform:</label>
                     <select id="platformSelect">
-                        <option value="meesho">Meesho (Top-Half Label Crop)</option>
-                        <option value="flipkart">Flipkart (Top-Left Label Crop)</option>
-                        <option value="amazon">Amazon (Standard Label Crop)</option>
+                        <option value="meesho">Meesho (Horizontal Crop)</option>
+                        <option value="flipkart">Flipkart (Horizontal Crop)</option>
+                        <option value="amazon">Amazon (Horizontal Crop)</option>
                     </select>
                 </div>
 
@@ -136,38 +134,20 @@
                     <input type="file" id="pdfUpload" accept="application/pdf">
                 </div>
 
-                <button class="btn-action" onclick="processPDFLabel()">Auto-Crop & Export PDF</button>
+                <button class="btn-action" onclick="processPDFLabel()">Auto-Crop Horizontal & Export</button>
                 <div id="status" class="status-msg"></div>
             </div>
         </div>
 
-        <!-- IMAGE GENERATOR PAGE -->
-        <div id="generator-page" class="page">
-            <div class="header">
-                <h1>Meesho Image Generator</h1>
-                <p>Upload product images to apply optimal borders & framing.</p>
-            </div>
-            <div class="form-box">
-                <div class="form-group">
-                    <label>Select Category:</label>
-                    <select><option>Kurtis / Short Kurtis</option><option>Sarees</option></select>
-                </div>
-                <div class="form-group">
-                    <label>Upload Image:</label>
-                    <input type="file" accept="image/*">
-                </div>
-                <button class="btn-action">Generate Optimized Images</button>
-            </div>
-        </div>
-
         <!-- OTHER PAGES -->
+        <div id="generator-page" class="page"><div class="header"><h1>Meesho Image Generator</h1><p>Image Optimization Ready.</p></div></div>
         <div id="lens-page" class="page"><div class="header"><h1>Meesho Lens</h1><p>Feature coming soon...</p></div></div>
         <div id="calculator-page" class="page"><div class="header"><h1>Price Calculator</h1><p>Feature coming soon...</p></div></div>
         <div id="plans-page" class="page"><div class="header"><h1>Subscription Plans</h1><p>Choose your plan...</p></div></div>
 
     </div>
 
-    <!-- Hidden Canvas for PDF Processing -->
+    <!-- Hidden Canvas Container -->
     <div id="canvasContainer"><canvas id="pdfCanvas"></canvas></div>
 
     <script>
@@ -197,14 +177,16 @@
                 return;
             }
 
-            status.innerText = "Processing PDF and cropping labels...";
+            status.innerText = "Cropping and rotating labels horizontally...";
 
             const file = fileInput.files[0];
             const fileArrayBuffer = await file.arrayBuffer();
             const pdf = await pdfjsLib.getDocument({ data: fileArrayBuffer }).promise;
             
             const { jsPDF } = window.jspdf;
-            const outPdf = new jsPDF({ orientation: 'portrait', unit: 'in', format: [4, 6] }); // 4x6 inch label standard
+            const outPdf = new jsPDF({ orientation: 'portrait', unit: 'in', format: 'a4' });
+
+            let labelCountOnCurrentPage = 0;
 
             for (let i = 1; i <= pdf.numPages; i++) {
                 const page = await pdf.getPage(i);
@@ -217,39 +199,46 @@
 
                 await page.render({ canvasContext: ctx, viewport: viewport }).promise;
 
-                // Crop logic depending on marketplace
-                let cropX = 0, cropY = 0, cropWidth = canvas.width, cropHeight = canvas.height / 2;
+                let cropX = 0, cropY = 0, cropWidth = canvas.width, cropHeight = canvas.height * 0.48;
 
-                if (platform === 'meesho') {
-                    // Meesho label is at the top half
-                    cropY = 0;
+                if (platform === 'flipkart') {
+                    cropWidth = canvas.width * 0.58;
                     cropHeight = canvas.height * 0.48;
-                } else if (platform === 'flipkart') {
-                    // Flipkart label is top half left side
-                    cropY = 0;
-                    cropWidth = canvas.width * 0.55;
-                    cropHeight = canvas.height * 0.50;
-                } else if (platform === 'amazon') {
-                    // Amazon standard label area
-                    cropY = 0;
-                    cropHeight = canvas.height * 0.50;
                 }
 
-                // Create cropped image
+                // 1. First Canvas for Cropping
                 const cropCanvas = document.createElement('canvas');
                 cropCanvas.width = cropWidth;
                 cropCanvas.height = cropHeight;
                 const cropCtx = cropCanvas.getContext('2d');
-                
                 cropCtx.drawImage(canvas, cropX, cropY, cropWidth, cropHeight, 0, 0, cropWidth, cropHeight);
-                const croppedImgData = cropCanvas.toDataURL('image/jpeg', 1.0);
 
-                if (i > 1) outPdf.addPage([4, 6], 'portrait');
-                outPdf.addImage(croppedImgData, 'JPEG', 0, 0, 4, 6);
+                // 2. Second Canvas for Horizontal Rotation (90 Degrees)
+                const rotateCanvas = document.createElement('canvas');
+                rotateCanvas.width = cropHeight;  // Swapping Width/Height for Horizontal orientation
+                rotateCanvas.height = cropWidth;
+                const rotateCtx = rotateCanvas.getContext('2d');
+
+                rotateCtx.translate(rotateCanvas.width / 2, rotateCanvas.height / 2);
+                rotateCtx.rotate(90 * Math.PI / 180);
+                rotateCtx.drawImage(cropCanvas, -cropWidth / 2, -cropHeight / 2);
+
+                const horizontalImgData = rotateCanvas.toDataURL('image/jpeg', 1.0);
+
+                if (labelCountOnCurrentPage === 2) {
+                    outPdf.addPage('a4', 'portrait');
+                    labelCountOnCurrentPage = 0;
+                }
+
+                // Position for 2 horizontal labels stacked on A4 sheet
+                let yPos = labelCountOnCurrentPage === 0 ? 0.5 : 5.8;
+                outPdf.addImage(horizontalImgData, 'JPEG', 0.5, yPos, 7.2, 5.0);
+
+                labelCountOnCurrentPage++;
             }
 
-            outPdf.save(`${platform}_cropped_labels.pdf`);
-            status.innerText = "Done! Cropped labels PDF downloaded successfully.";
+            outPdf.save(`${platform}_horizontal_labels.pdf`);
+            status.innerText = "Done! Horizontal labels exported successfully.";
         }
     </script>
 </body>
