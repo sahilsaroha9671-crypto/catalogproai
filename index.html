@@ -10,22 +10,24 @@
         * { box-sizing: border-box; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; margin: 0; padding: 0; }
         body { display: flex; height: 100vh; background-color: #f8fafc; color: #1e293b; overflow: hidden; }
 
+        /* Left Sidebar */
         .sidebar { width: 260px; background-color: #ffffff; border-right: 1px solid #e2e8f0; display: flex; flex-direction: column; padding: 20px 15px; }
         .brand { font-size: 20px; font-weight: 700; color: #2563eb; padding: 10px 15px; margin-bottom: 25px; }
         .nav-item { display: flex; align-items: center; gap: 12px; padding: 12px 15px; font-size: 14px; font-weight: 500; color: #64748b; border-radius: 8px; margin-bottom: 4px; cursor: pointer; }
         .nav-item:hover, .nav-item.active { background-color: #eff6ff; color: #2563eb; font-weight: 600; }
 
+        /* Main Content */
         .main-content { flex: 1; overflow-y: auto; padding: 40px; }
         .header h1 { font-size: 28px; font-weight: 700; color: #0f172a; margin-bottom: 8px; }
         .header p { color: #64748b; font-size: 15px; margin-bottom: 25px; }
 
-        .cropper-box { background: white; border: 2px dashed #cbd5e1; border-radius: 12px; padding: 30px; max-width: 650px; text-align: center; }
+        .cropper-box { background: white; border: 2px dashed #cbd5e1; border-radius: 12px; padding: 35px; max-width: 600px; text-align: center; }
         .cropper-box:hover { border-color: #2563eb; }
         .form-group { margin-bottom: 20px; text-align: left; }
-        .form-group label { display: block; font-weight: 600; margin-bottom: 6px; font-size: 14px; }
-        .form-group select, .form-group input { width: 100%; padding: 10px; border: 1px solid #cbd5e1; border-radius: 6px; }
+        .form-group label { display: block; font-weight: 600; margin-bottom: 8px; font-size: 14px; color: #334155; }
+        .form-group input { width: 100%; padding: 12px; border: 1px solid #cbd5e1; border-radius: 8px; font-size: 14px; }
 
-        .btn-action { width: 100%; padding: 12px; background-color: #2563eb; color: white; border: none; border-radius: 8px; font-weight: 600; font-size: 15px; cursor: pointer; }
+        .btn-action { width: 100%; padding: 12px; background-color: #2563eb; color: white; border: none; border-radius: 8px; font-weight: 600; font-size: 15px; cursor: pointer; transition: background 0.2s; }
         .btn-action:hover { background-color: #1d4ed8; }
         .status-msg { margin-top: 15px; font-size: 14px; font-weight: 600; color: #16a34a; }
         #canvasContainer { display: none; }
@@ -35,30 +37,22 @@
 
     <div class="sidebar">
         <div class="brand">CatalogPro AI</div>
-        <div class="nav-item active">🏷️ Meesho Label Cropper</div>
+        <div class="nav-item active">🏷️ Meesho 4x6 Label Cropper</div>
     </div>
 
     <div class="main-content">
         <div class="header">
-            <h1>Meesho Smart Label Cropper</h1>
-            <p>Upload Meesho shipping PDFs to crop labels cleanly (2 Labels Per Page).</p>
+            <h1>Meesho Label Auto-Cropper (4x6 Thermal)</h1>
+            <p>Upload Meesho PDF labels to get individual 4x6 inch cropped thermal labels.</p>
         </div>
 
         <div class="cropper-box">
             <div class="form-group">
-                <label>Select Print Format:</label>
-                <select id="layoutMode">
-                    <option value="a4_2perpage">A4 Sheet (2 Labels Per Page - Straight)</option>
-                    <option value="thermal">4x6 Thermal Printer (1 Label Per Page)</option>
-                </select>
-            </div>
-
-            <div class="form-group">
-                <label>Select Meesho Shipping PDF:</label>
+                <label>Select Meesho Label PDF File:</label>
                 <input type="file" id="pdfUpload" accept="application/pdf">
             </div>
 
-            <button class="btn-action" onclick="processMeeshoPDF()">Crop & Download PDF</button>
+            <button class="btn-action" onclick="processMeeshoPDF()">Crop & Export 4x6 PDF</button>
             <div id="status" class="status-msg"></div>
         </div>
     </div>
@@ -70,7 +64,6 @@
 
         async function processMeeshoPDF() {
             const fileInput = document.getElementById('pdfUpload');
-            const layoutMode = document.getElementById('layoutMode').value;
             const status = document.getElementById('status');
 
             if (!fileInput.files[0]) {
@@ -78,22 +71,15 @@
                 return;
             }
 
-            status.innerText = "PDF Process ho rahi hai...";
+            status.innerText = "PDF Processing & Cropping...";
 
             const file = fileInput.files[0];
             const arrayBuffer = await file.arrayBuffer();
             const pdf = await pdfjsLib.getDocument({ data: arrayBuffer }).promise;
             
             const { jsPDF } = window.jspdf;
-            let outPdf;
-
-            if (layoutMode === 'thermal') {
-                outPdf = new jsPDF({ orientation: 'portrait', unit: 'in', format: [4, 6] });
-            } else {
-                outPdf = new jsPDF({ orientation: 'portrait', unit: 'in', format: 'a4' });
-            }
-
-            let labelsOnPage = 0;
+            // Standard 4x6 inch thermal page format
+            const outPdf = new jsPDF({ orientation: 'portrait', unit: 'in', format: [4, 6] });
 
             for (let i = 1; i <= pdf.numPages; i++) {
                 const page = await pdf.getPage(i);
@@ -106,11 +92,11 @@
 
                 await page.render({ canvasContext: ctx, viewport: viewport }).promise;
 
-                // Crop Top Meesho Shipping Label
+                // Crop Top Half (Only the Meesho Shipping Label Portion)
                 let cropX = 0;
                 let cropY = 0;
                 let cropWidth = canvas.width;
-                let cropHeight = canvas.height * 0.47;
+                let cropHeight = canvas.height * 0.47; 
 
                 const cropCanvas = document.createElement('canvas');
                 cropCanvas.width = cropWidth;
@@ -120,25 +106,16 @@
 
                 const finalImgData = cropCanvas.toDataURL('image/jpeg', 1.0);
 
-                if (layoutMode === 'thermal') {
-                    if (i > 1) outPdf.addPage([4, 6], 'portrait');
-                    // Fit on 4x6 inch thermal paper
-                    outPdf.addImage(finalImgData, 'JPEG', 0.1, 0.2, 3.8, 5.5);
-                } else {
-                    if (labelsOnPage === 2) {
-                        outPdf.addPage('a4', 'portrait');
-                        labelsOnPage = 0;
-                    }
-
-                    // A4 Vertical Placement (Top Label & Bottom Label)
-                    let yPos = labelsOnPage === 0 ? 0.3 : 5.8;
-                    outPdf.addImage(finalImgData, 'JPEG', 0.5, yPos, 7.2, 5.2);
-                    labelsOnPage++;
+                if (i > 1) {
+                    outPdf.addPage([4, 6], 'portrait');
                 }
+
+                // Fit Perfectly inside 4x6 inch thermal area
+                outPdf.addImage(finalImgData, 'JPEG', 0.1, 0.1, 3.8, 5.8);
             }
 
-            outPdf.save(`meesho_cropped_labels.pdf`);
-            status.innerText = "Done! Cropped PDF Download ho gayi hai.";
+            outPdf.save(`meesho_4x6_labels.pdf`);
+            status.innerText = "Done! 4x6 Cropped PDF download ho gayi hai.";
         }
     </script>
 </body>
