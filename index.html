@@ -41,16 +41,15 @@
     <div class="main-content">
         <div class="header">
             <h1>Meesho Smart Label Cropper</h1>
-            <p>Upload Meesho shipping PDFs to crop labels cleanly and stack 2-per-page for printing.</p>
+            <p>Upload Meesho shipping PDFs to crop labels cleanly (2 Labels Per Page).</p>
         </div>
 
         <div class="cropper-box">
             <div class="form-group">
-                <label>Layout & Orientation Mode:</label>
+                <label>Select Print Format:</label>
                 <select id="layoutMode">
-                    <option value="horizontal">2 Labels Per Page (Horizontal Stack)</option>
-                    <option value="vertical">2 Labels Per Page (Vertical Stack)</option>
-                    <option value="thermal">4x6 Thermal Printer Single Label</option>
+                    <option value="a4_2perpage">A4 Sheet (2 Labels Per Page - Straight)</option>
+                    <option value="thermal">4x6 Thermal Printer (1 Label Per Page)</option>
                 </select>
             </div>
 
@@ -79,7 +78,7 @@
                 return;
             }
 
-            status.innerText = "PDF Process aur Crop ho rahi hai...";
+            status.innerText = "PDF Process ho rahi hai...";
 
             const file = fileInput.files[0];
             const arrayBuffer = await file.arrayBuffer();
@@ -107,11 +106,11 @@
 
                 await page.render({ canvasContext: ctx, viewport: viewport }).promise;
 
-                // Exact Crop Box Coordinates for Meesho Label Segment
+                // Crop Top Meesho Shipping Label
                 let cropX = 0;
                 let cropY = 0;
                 let cropWidth = canvas.width;
-                let cropHeight = canvas.height * 0.46; // Top-half label area
+                let cropHeight = canvas.height * 0.47;
 
                 const cropCanvas = document.createElement('canvas');
                 cropCanvas.width = cropWidth;
@@ -119,40 +118,21 @@
                 const cropCtx = cropCanvas.getContext('2d');
                 cropCtx.drawImage(canvas, cropX, cropY, cropWidth, cropHeight, 0, 0, cropWidth, cropHeight);
 
-                let finalImgData;
-
-                if (layoutMode === 'horizontal') {
-                    // Rotate Canvas 90 degrees for wide layout
-                    const rotateCanvas = document.createElement('canvas');
-                    rotateCanvas.width = cropHeight;
-                    rotateCanvas.height = cropWidth;
-                    const rotateCtx = rotateCanvas.getContext('2d');
-
-                    rotateCtx.translate(rotateCanvas.width / 2, rotateCanvas.height / 2);
-                    rotateCtx.rotate(90 * Math.PI / 180);
-                    rotateCtx.drawImage(cropCanvas, -cropWidth / 2, -cropHeight / 2);
-
-                    finalImgData = rotateCanvas.toDataURL('image/jpeg', 1.0);
-                } else {
-                    finalImgData = cropCanvas.toDataURL('image/jpeg', 1.0);
-                }
+                const finalImgData = cropCanvas.toDataURL('image/jpeg', 1.0);
 
                 if (layoutMode === 'thermal') {
                     if (i > 1) outPdf.addPage([4, 6], 'portrait');
-                    outPdf.addImage(finalImgData, 'JPEG', 0.1, 0.1, 3.8, 5.8);
+                    // Fit on 4x6 inch thermal paper
+                    outPdf.addImage(finalImgData, 'JPEG', 0.1, 0.2, 3.8, 5.5);
                 } else {
                     if (labelsOnPage === 2) {
                         outPdf.addPage('a4', 'portrait');
                         labelsOnPage = 0;
                     }
 
-                    if (layoutMode === 'horizontal') {
-                        let yPos = labelsOnPage === 0 ? 0.4 : 5.8;
-                        outPdf.addImage(finalImgData, 'JPEG', 0.5, yPos, 7.2, 5.2);
-                    } else {
-                        let yPos = labelsOnPage === 0 ? 0.4 : 5.8;
-                        outPdf.addImage(finalImgData, 'JPEG', 0.5, yPos, 7.2, 5.0);
-                    }
+                    // A4 Vertical Placement (Top Label & Bottom Label)
+                    let yPos = labelsOnPage === 0 ? 0.3 : 5.8;
+                    outPdf.addImage(finalImgData, 'JPEG', 0.5, yPos, 7.2, 5.2);
                     labelsOnPage++;
                 }
             }
