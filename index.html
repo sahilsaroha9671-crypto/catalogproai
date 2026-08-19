@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="hi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CatalogPro AI - Meesho Shipping Image Generator</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gray-100 min-h-screen pb-10">
+
+    <!-- Header -->
+    <header class="bg-white shadow p-4 mb-6 text-center">
+        <h1 class="text-2xl font-bold text-blue-600">CatalogPro AI</h1>
+        <p class="text-sm text-gray-600">Optimize Images for Lower Meesho Shipping Rates</p>
+    </header>
+
+    <!-- Main Container -->
+    <div class="max-w-xl mx-auto bg-white p-6 rounded-lg shadow-md">
+        
+        <!-- Input Controls -->
+        <div class="mb-4">
+            <label class="block font-semibold mb-1">Select Category:</label>
+            <select id="category" class="w-full border p-2 rounded">
+                <option value="Kurtis">Kurtis</option>
+                <option value="Sarees">Sarees</option>
+                <option value="Western Wear">Western Wear</option>
+                <option value="Footwear">Footwear</option>
+            </select>
+        </div>
+
+        <div class="mb-4">
+            <label class="block font-semibold mb-1">Upload Product Image:</label>
+            <input type="file" id="imageInput" accept="image/*" class="w-full border p-2 rounded">
+        </div>
+
+        <button onclick="generateImages()" class="w-full bg-blue-600 text-white py-2 rounded font-semibold hover:bg-blue-700">
+            Generate Optimized Images
+        </button>
+    </div>
+
+    <!-- Results Section -->
+    <div id="results" class="max-w-4xl mx-auto mt-8 grid grid-cols-1 md:grid-cols-2 gap-6 p-4 hidden">
+        <!-- Generated Cards Will Appear Here -->
+    </div>
+
+    <script>
+        function generateImages() {
+            const input = document.getElementById('imageInput');
+            const category = document.getElementById('category').value;
+            const resultsDiv = document.getElementById('results');
+
+            if (!input.files || !input.files[0]) {
+                alert("Kripya pehle ek image upload karein!");
+                return;
+            }
+
+            const file = input.files[0];
+            const reader = new FileReader();
+
+            reader.onload = function(e) {
+                const imgUrl = e.target.result;
+                resultsDiv.innerHTML = '';
+                resultsDiv.classList.remove('hidden');
+
+                // Variations Configuration
+                const variations = [
+                    { border: '#ec4899', badge: 'SPECIAL OFFER', rate: '₹60' },
+                    { border: '#22c55e', badge: 'BIG SALE', rate: '₹64' },
+                    { border: '#3b82f6', badge: 'FREE DELIVERY', rate: '₹60' },
+                    { border: '#f59e0b', badge: 'BEST PRICE', rate: '₹62' }
+                ];
+
+                variations.forEach((v, index) => {
+                    const canvas = document.createElement('canvas');
+                    const ctx = canvas.getContext('2d');
+                    const img = new Image();
+
+                    img.onload = function() {
+                        canvas.width = 600;
+                        canvas.height = 800;
+
+                        // Background Border
+                        ctx.fillStyle = v.border;
+                        ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+                        // Draw Image
+                        ctx.drawImage(img, 15, 15, 570, 770);
+
+                        // Draw Badge Sticker
+                        ctx.fillStyle = '#dc2626';
+                        ctx.fillRect(20, 720, 200, 50);
+                        ctx.fillStyle = '#ffffff';
+                        ctx.font = 'bold 20px Arial';
+                        ctx.fillText(v.badge, 30, 752);
+
+                        const finalDataUrl = canvas.toDataURL('image/jpeg');
+
+                        // Card UI
+                        const cardHtml = `
+                            <div class="bg-white p-4 rounded-lg shadow border">
+                                <img src="${finalDataUrl}" class="w-full rounded mb-3">
+                                <div class="flex justify-between items-center mb-2">
+                                    <span class="text-sm font-bold text-gray-500">SHIPPING RATE</span>
+                                    <span class="bg-gray-200 text-xs font-semibold px-2 py-1 rounded">${category}</span>
+                                </div>
+                                <div class="text-xl font-bold text-green-600 mb-3">${v.rate}</div>
+                                <a href="${finalDataUrl}" download="meesho_optimized_${index + 1}.jpg" class="block text-center border border-blue-600 text-blue-600 font-semibold py-2 rounded hover:bg-blue-50">
+                                    Download Image
+                                </a>
+                            </div>
+                        `;
+                        resultsDiv.innerHTML += cardHtml;
+                    };
+                    img.src = imgUrl;
+                });
+            };
+            reader.readAsDataURL(file);
+        }
+    </script>
+</body>
+</html>
