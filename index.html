@@ -3,120 +3,82 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>CatalogPro AI - Meesho Label Cropper</title>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/2.16.105/pdf.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
-    <style>
-        * { box-sizing: border-box; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; margin: 0; padding: 0; }
-        body { display: flex; height: 100vh; background-color: #f8fafc; color: #1e293b; overflow: hidden; }
-
-        /* Left Sidebar */
-        .sidebar { width: 260px; background-color: #ffffff; border-right: 1px solid #e2e8f0; display: flex; flex-direction: column; padding: 20px 15px; }
-        .brand { font-size: 20px; font-weight: 700; color: #2563eb; padding: 10px 15px; margin-bottom: 25px; }
-        .nav-item { display: flex; align-items: center; gap: 12px; padding: 12px 15px; font-size: 14px; font-weight: 500; color: #64748b; border-radius: 8px; margin-bottom: 4px; cursor: pointer; }
-        .nav-item:hover, .nav-item.active { background-color: #eff6ff; color: #2563eb; font-weight: 600; }
-
-        /* Main Content */
-        .main-content { flex: 1; overflow-y: auto; padding: 40px; }
-        .header h1 { font-size: 28px; font-weight: 700; color: #0f172a; margin-bottom: 8px; }
-        .header p { color: #64748b; font-size: 15px; margin-bottom: 25px; }
-
-        .cropper-box { background: white; border: 2px dashed #cbd5e1; border-radius: 12px; padding: 35px; max-width: 600px; text-align: center; }
-        .cropper-box:hover { border-color: #2563eb; }
-        .form-group { margin-bottom: 20px; text-align: left; }
-        .form-group label { display: block; font-weight: 600; margin-bottom: 8px; font-size: 14px; color: #334155; }
-        .form-group input { width: 100%; padding: 12px; border: 1px solid #cbd5e1; border-radius: 8px; font-size: 14px; }
-
-        .btn-action { width: 100%; padding: 12px; background-color: #2563eb; color: white; border: none; border-radius: 8px; font-weight: 600; font-size: 15px; cursor: pointer; transition: background 0.2s; }
-        .btn-action:hover { background-color: #1d4ed8; }
-        .status-msg { margin-top: 15px; font-size: 14px; font-weight: 600; color: #16a34a; }
-        #canvasContainer { display: none; }
-    </style>
+    <title>Supplier's Den</title>
+    <link rel="stylesheet" href="style.css">
+    <!-- QR Code Generator CDN -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
 </head>
 <body>
 
-    <div class="sidebar">
-        <div class="brand">CatalogPro AI</div>
-        <div class="nav-item active">🏷️ Meesho 4x6 Label Cropper</div>
-    </div>
-
-    <div class="main-content">
-        <div class="header">
-            <h1>Meesho Label Auto-Cropper (4x6 Thermal)</h1>
-            <p>Upload Meesho PDF labels to get individual 4x6 inch cropped thermal labels.</p>
-        </div>
-
-        <div class="cropper-box">
-            <div class="form-group">
-                <label>Select Meesho Label PDF File:</label>
-                <input type="file" id="pdfUpload" accept="application/pdf">
+    <!-- Auth Modal (Login/Signup Mandatory) -->
+    <div id="auth-modal" class="modal">
+        <div class="modal-content">
+            <h2>Welcome to Supplier's Den</h2>
+            <p>Aage badhne ke liye apna Email verify karein.</p>
+            <div id="email-step">
+                <input type="email" id="user-email" placeholder="Apna Email ID Dalein" required>
+                <button onclick="sendOTP()">OTP Bhejein</button>
             </div>
-
-            <button class="btn-action" onclick="processMeeshoPDF()">Crop & Export 4x6 PDF</button>
-            <div id="status" class="status-msg"></div>
+            <div id="otp-step" style="display:none;">
+                <input type="text" id="user-otp" placeholder="Enter 6-digit OTP" required>
+                <button onclick="verifyOTP()">Verify & Login</button>
+            </div>
         </div>
     </div>
 
-    <div id="canvasContainer"><canvas id="pdfCanvas"></canvas></div>
-
-    <script>
-        pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/2.16.105/pdf.worker.min.js';
-
-        async function processMeeshoPDF() {
-            const fileInput = document.getElementById('pdfUpload');
-            const status = document.getElementById('status');
-
-            if (!fileInput.files[0]) {
-                alert('Pehle Meesho PDF file select karein!');
-                return;
-            }
-
-            status.innerText = "PDF Processing & Cropping...";
-
-            const file = fileInput.files[0];
-            const arrayBuffer = await file.arrayBuffer();
-            const pdf = await pdfjsLib.getDocument({ data: arrayBuffer }).promise;
+    <!-- Subscription Lock Screen (After 3 Days Trial Ends) -->
+    <div id="paywall-modal" class="modal" style="display:none;">
+        <div class="modal-content">
+            <h2>Trial Expiry Alert!</h2>
+            <p>Aapka 3-Day Free Trial khatam ho gaya hai. Service continue rakhne ke liye ₹59 Monthly Plan purchase karein.</p>
+            <h3>Price: ₹59 / Month</h3>
             
-            const { jsPDF } = window.jspdf;
-            // Standard 4x6 inch thermal page format
-            const outPdf = new jsPDF({ orientation: 'portrait', unit: 'in', format: [4, 6] });
+            <div id="qrcode-container"></div>
+            <p><b>UPI ID:</b> 7988983394-q81a@axl</p>
+            <p><small>Upar diye QR code ko scan karke ₹59 pay karein.</small></p>
+            <button onclick="checkPayment()">Payment Kar Diya (Activate Access)</button>
+        </div>
+    </div>
 
-            for (let i = 1; i <= pdf.numPages; i++) {
-                const page = await pdf.getPage(i);
-                const viewport = page.getViewport({ scale: 2.5 });
+    <!-- Main Dashboard UI -->
+    <div id="app-dashboard" style="display:none;">
+        <div class="sidebar">
+            <h2>Supplier's Den</h2>
+            <ul>
+                <li class="active">Home</li>
+                <li>Meesho Image Generator</li>
+                <li>Shipping Label Export</li>
+                <li>Meesho Lens <span class="badge">New</span></li>
+                <li>Price Calculator</li>
+                <li>Plans</li>
+            </ul>
+        </div>
+        <div class="main-content">
+            <header>
+                <h1>Supplier's Den</h1>
+                <p>A suite of tools designed to help Indian online sellers work faster and ship smarter.</p>
+            </header>
+            
+            <div class="tools-grid">
+                <div class="card">
+                    <h3>⚡ Image Generator</h3>
+                    <p>Generate product images that qualify for lower shipping tiers on Meesho.</p>
+                    <button class="btn">Open Generator</button>
+                </div>
+                <div class="card">
+                    <h3>📄 Shipping Label Export</h3>
+                    <p>Upload Meesho PDFs, filter by SKU, and export clean labels.</p>
+                    <button class="btn">Start Exporting</button>
+                </div>
+                <div class="card">
+                    <h3>🧮 Profit Calculator</h3>
+                    <p>Calculate ideal listing prices and actual profit margin after fees.</p>
+                    <button class="btn">Open Calculator</button>
+                </div>
+            </div>
+        </div>
+    </div>
 
-                const canvas = document.getElementById('pdfCanvas');
-                const ctx = canvas.getContext('2d');
-                canvas.width = viewport.width;
-                canvas.height = viewport.height;
-
-                await page.render({ canvasContext: ctx, viewport: viewport }).promise;
-
-                // Crop Top Half (Only the Meesho Shipping Label Portion)
-                let cropX = 0;
-                let cropY = 0;
-                let cropWidth = canvas.width;
-                let cropHeight = canvas.height * 0.47; 
-
-                const cropCanvas = document.createElement('canvas');
-                cropCanvas.width = cropWidth;
-                cropCanvas.height = cropHeight;
-                const cropCtx = cropCanvas.getContext('2d');
-                cropCtx.drawImage(canvas, cropX, cropY, cropWidth, cropHeight, 0, 0, cropWidth, cropHeight);
-
-                const finalImgData = cropCanvas.toDataURL('image/jpeg', 1.0);
-
-                if (i > 1) {
-                    outPdf.addPage([4, 6], 'portrait');
-                }
-
-                // Fit Perfectly inside 4x6 inch thermal area
-                outPdf.addImage(finalImgData, 'JPEG', 0.1, 0.1, 3.8, 5.8);
-            }
-
-            outPdf.save(`meesho_4x6_labels.pdf`);
-            status.innerText = "Done! 4x6 Cropped PDF download ho gayi hai.";
-        }
-    </script>
+    <script src="script.js"></script>
 </body>
 </html>
