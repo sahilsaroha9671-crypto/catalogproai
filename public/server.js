@@ -8,11 +8,9 @@ app.use(express.json());
 app.use(cors());
 app.use(express.static('public'));
 
-// Temporary Database (In-Memory)
 const users = {};
 const otps = {};
 
-// Transporter Setup using Environment Variables
 const transporter = nodemailer.createTransport({
   service: 'gmail',
   auth: {
@@ -24,23 +22,30 @@ const transporter = nodemailer.createTransport({
 // 1. Send OTP Endpoint
 app.post('/api/send-otp', (req, res) => {
   const { email } = req.body;
+  if (!email) {
+    return res.status(400).json({ success: false, message: 'Email zaroori hai!' });
+  }
+
   const generatedOtp = Math.floor(100000 + Math.random() * 900000).toString();
   otps[email] = generatedOtp;
 
   const mailOptions = {
     from: process.env.EMAIL_USER,
     to: email,
-    subject: 'Supplier Den - Login OTP',
-    text: `Aapka Login OTP hai: ${generatedOtp}`
+    subject: 'Catalogproai - Login OTP',
+    text: `Aapka Catalogproai Login OTP hai: ${generatedOtp}`
   };
 
-  transporter.sendMail(mailOptions, (error) => {
-    if (error) return res.status(500).json({ success: false, message: 'OTP bhejne me dikkat hui.' });
+  transporter.sendMail(mailOptions, (error, info) => {
+    if (error) {
+      console.error('Mail Error:', error);
+      return res.status(500).json({ success: false, message: 'OTP bhejne me dikkat hui. App password check karein.' });
+    }
     res.json({ success: true, message: 'OTP email par bhej diya gaya hai.' });
   });
 });
 
-// 2. Verify OTP & Trial Check
+// 2. Verify OTP Endpoint
 app.post('/api/verify-otp', (req, res) => {
   const { email, otp } = req.body;
 
@@ -71,7 +76,6 @@ app.post('/api/verify-otp', (req, res) => {
   });
 });
 
-// Serve Main Page
 app.get('*', (req, res) => {
   res.sendFile(path.join(__dirname, 'public', 'index.html'));
 });
