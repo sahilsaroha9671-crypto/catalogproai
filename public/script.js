@@ -150,15 +150,9 @@ function downloadImg(src) {
   a.click();
 }
 function showMeeshoGenerator() {
-  const mainDash = document.getElementById("mainDashboard") || document.querySelector(".dashboard-content");
-  if (mainDash) mainDash.style.display = "none";
+  const homeView = document.getElementById("homeView");
+  if (homeView) homeView.style.display = "none";
 
-  document.querySelectorAll(".view-section, .card-container").forEach(el => {
-    el.style.display = "none";
-  });
-
-  const generatorView = document.getElementById("meeshoGeneratorView");
-  if (generatorView) {
-    generatorView.style.display = "block";
-  }
+  const meeshoView = document.getElementById("meeshoGeneratorView");
+  if (meeshoView) meeshoView.style.display = "block";
 }
