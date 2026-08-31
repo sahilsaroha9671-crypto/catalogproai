@@ -414,3 +414,58 @@
     </script>
 </body>
 </html>
+
+<!-- Meesho Image Generator Section -->
+<div id="meeshoGeneratorView" class="generator-container" style="display: none;">
+  <div class="main-content">
+    <div class="card create-card">
+      <h3>Create New Generation</h3>
+      <div class="form-group">
+        <label>Select Categories <span class="subtext">Max 5</span></label>
+        <select id="categorySelect" class="form-control">
+          <option value="" disabled selected>Search and select categories...</option>
+          <option value="Kurtis">Kurtis</option>
+          <option value="Sarees">Sarees</option>
+          <option value="Western Wear">Western Wear</option>
+          <option value="Jewelry">Jewelry</option>
+          <option value="Footwear">Footwear</option>
+        </select>
+      </div>
+
+      <div class="form-group">
+        <label>Upload Image</label>
+        <div class="upload-box" id="dropZone" onclick="document.getElementById('fileInput').click()">
+          <div class="upload-icon">📥</div>
+          <p class="upload-title">Click or drag file to upload</p>
+          <p class="upload-desc">Raster image, up to 25 MB.</p>
+          <input type="file" id="fileInput" accept="image/*" style="display: none;" onchange="handleFileSelect(event)">
+        </div>
+      </div>
+
+      <button class="btn-primary" onclick="generateImages()">⚡ Generate Images</button>
+    </div>
+
+    <div class="card recent-card" id="recentCard" style="display: none;">
+      <h3>Recent Generations</h3>
+      <div class="recent-item">
+        <div class="recent-image-wrapper">
+          <img id="recentPreviewImg" src="" alt="Recent Upload">
+          <span class="badge-completed">COMPLETED</span>
+        </div>
+        <div class="recent-details">
+          <span class="recent-cat" id="recentCategory">Kurtis</span>
+          <span class="recent-date" id="recentDate">Jun 13, 2026 • 8:45 PM</span>
+          <div class="recent-price">
+            <span>Best Price</span>
+            <strong>₹60</strong>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="results-grid" id="resultsGrid" style="display: none;">
+    <h3>Generated Meesho Images</h3>
+    <div class="grid-container" id="gridContainer"></div>
+  </div>
+</div>
