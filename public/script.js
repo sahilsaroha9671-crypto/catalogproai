@@ -149,3 +149,16 @@ function downloadImg(src) {
   a.download = "meesho-generated-image.jpg";
   a.click();
 }
+function showMeeshoGenerator() {
+  const mainDash = document.getElementById("mainDashboard") || document.querySelector(".dashboard-content");
+  if (mainDash) mainDash.style.display = "none";
+
+  document.querySelectorAll(".view-section, .card-container").forEach(el => {
+    el.style.display = "none";
+  });
+
+  const generatorView = document.getElementById("meeshoGeneratorView");
+  if (generatorView) {
+    generatorView.style.display = "block";
+  }
+}
