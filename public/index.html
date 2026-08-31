@@ -73,7 +73,6 @@
         .res-row { display: flex; justify-content: space-between; font-size: 13px; color: #42526e; margin-bottom: 8px; }
         .res-row.bold { font-weight: 700; color: #172b4d; }
         .res-row.total { font-size: 15px; font-weight: 700; border-top: 1px solid #dfe1e6; padding-top: 10px; margin-top: 10px; }
-        hr { border: none; border-top: 1px solid #f0f0f0; margin: 15px 0; }
     </style>
 </head>
 <body>
@@ -87,7 +86,7 @@
             </div>
             <h3>Sign in to Catalogproai</h3>
             <p class="subtitle">Welcome back! Please sign in to continue</p>
-            <button class="google-btn" onclick="alert('Google login requires client setup.')">Continue with Google</button>
+            <button class="google-btn" onclick="alert('Google Auth requires Client ID')">Continue with Google</button>
             <div class="divider"><span>or</span></div>
             <form onsubmit="handleSendOtp(event)">
                 <div class="input-group">
@@ -99,7 +98,7 @@
         </div>
     </div>
 
-    <!-- MAIN APP WRAPPER -->
+    <!-- MAIN APP CONTAINER -->
     <div id="appContainer">
         <!-- SIDEBAR -->
         <div class="sidebar">
@@ -142,7 +141,6 @@
                         </div>
                         <button class="card-btn">→ Start Exporting</button>
                     </div>
-                    <!-- Profit Calculator Card -->
                     <div class="tool-card">
                         <div>
                             <h3>Profit Calculator</h3>
@@ -154,7 +152,7 @@
                 </div>
             </div>
 
-            <!-- VIEW 2: PROFIT / PRICE CALCULATOR -->
+            <!-- VIEW 2: PRICE & PROFIT CALCULATOR -->
             <div id="calculatorView">
                 <div class="breadcrumb">Home / Price Calculator</div>
                 <h1>Profit Calculator</h1>
@@ -179,12 +177,12 @@
                         </div>
 
                         <div class="form-group">
-                            <label>* Product Cost (Without GST) ₹</label>
+                            <label>* Product Cost (Without GST) ℹ️</label>
                             <input type="number" id="prodCost" value="100.00" oninput="calculateAll()">
                         </div>
 
                         <div class="form-group">
-                            <label>* GST Rate</label>
+                            <label>* GST Rate ℹ️</label>
                             <select id="gstRate" onchange="calculateAll()">
                                 <option value="18">18%</option>
                                 <option value="12">12%</option>
@@ -192,29 +190,35 @@
                             </select>
                         </div>
 
-                        <div class="form-group">
-                            <label>* Desired Profit Margin ₹</label>
+                        <!-- DYNAMIC INPUT (Desired Profit OR Listing Price) -->
+                        <div class="form-group" id="fieldDesiredProfit">
+                            <label>* Desired Profit Margin ℹ️</label>
                             <input type="number" id="desiredProfit" value="50.00" oninput="calculateAll()">
                         </div>
 
+                        <div class="form-group" id="fieldListingPriceInput" style="display: none;">
+                            <label>* Listing Price ℹ️</label>
+                            <input type="number" id="listingPriceInput" value="200.00" oninput="calculateAll()">
+                        </div>
+
                         <div class="form-group">
-                            <label>* Customer Return Rate %</label>
+                            <label>* Customer Return Rate % ℹ️</label>
                             <input type="number" id="returnRate" value="5" oninput="calculateAll()">
                         </div>
 
                         <div class="row-group">
                             <div class="form-group">
-                                <label>Good Return %</label>
+                                <label>Good Return % ℹ️</label>
                                 <input type="number" id="goodReturn" value="80" oninput="calculateAll()">
                             </div>
                             <div class="form-group">
-                                <label>Damaged Return %</label>
+                                <label>Damaged Return % ℹ️</label>
                                 <input type="number" id="damagedReturn" value="20" oninput="calculateAll()">
                             </div>
                         </div>
 
                         <div class="form-group">
-                            <label>* Return Shipping Cost ₹</label>
+                            <label>* Return Cost ℹ️</label>
                             <input type="number" id="returnCost" value="170.00" oninput="calculateAll()">
                         </div>
                     </div>
@@ -224,8 +228,8 @@
                         <div class="box-title">Results</div>
 
                         <div class="listing-banner">
-                            <span style="font-size: 13px; font-weight: 600; color: #42526e;">List your item at</span>
-                            <h2 id="resListingPrice">₹190.11</h2>
+                            <span id="resHeadingLabel" style="font-size: 13px; font-weight: 600; color: #42526e;">List your item at</span>
+                            <h2 id="resBannerVal">₹190.11</h2>
                             <p id="resSubNote">Price customers will see, including 18% GST</p>
                         </div>
 
@@ -237,11 +241,11 @@
 
                         <div class="res-section-title">PRICE CALCULATION</div>
                         <div class="res-row"><span>Total cost</span><span id="resCalcTotalCost">₹109.50</span></div>
-                        <div class="res-row"><span>+ Desired profit</span><span id="resCalcProfit">+ ₹50.00</span></div>
-                        <div class="res-row bold"><span>Target revenue</span><span id="resTargetRev">₹159.50</span></div>
+                        <div class="res-row"><span id="lblCalcProfitOrListing">+ Desired profit</span><span id="resCalcProfit">+ ₹50.00</span></div>
+                        <div class="res-row bold"><span id="lblTargetRev">Target revenue</span><span id="resTargetRev">₹159.50</span></div>
                         <div class="res-row"><span>+ Return buffer (<span id="resBufferText">1.0% damaged</span>)</span><span id="resReturnBuffer">+ ₹1.61</span></div>
                         <div class="res-row"><span>+ GST (<span id="resGstRateText">18%</span>)</span><span id="resGstAdd">+ ₹29.00</span></div>
-                        <div class="res-row bold total"><span>Listing Price</span><span id="resFinalListing">= ₹190.11</span></div>
+                        <div class="res-row bold total"><span id="lblFinalRowName">Listing Price</span><span id="resFinalListing">= ₹190.11</span></div>
 
                         <div class="res-section-title">GST SUMMARY</div>
                         <div class="res-row"><span>Output GST (collected from buyer)</span><span id="resOutputGst">₹29.00</span></div>
@@ -255,7 +259,8 @@
     </div>
 
     <script>
-        // VIEW SWITCHING
+        let currentMode = 'listing'; // 'listing' OR 'profit'
+
         function switchView(viewName) {
             document.getElementById('homeView').style.display = viewName === 'home' ? 'block' : 'none';
             document.getElementById('calculatorView').style.display = viewName === 'calc' ? 'block' : 'none';
@@ -265,61 +270,99 @@
         }
 
         function setMode(mode) {
+            currentMode = mode;
             document.getElementById('tabListing').classList.toggle('active', mode === 'listing');
             document.getElementById('tabProfit').classList.toggle('active', mode === 'profit');
+
+            if (mode === 'listing') {
+                document.getElementById('fieldDesiredProfit').style.display = 'block';
+                document.getElementById('fieldListingPriceInput').style.display = 'none';
+                document.getElementById('resHeadingLabel').innerText = "List your item at";
+                document.getElementById('lblCalcProfitOrListing').innerText = "+ Desired profit";
+                document.getElementById('lblFinalRowName').innerText = "Listing Price";
+            } else {
+                document.getElementById('fieldDesiredProfit').style.display = 'none';
+                document.getElementById('fieldListingPriceInput').style.display = 'block';
+                document.getElementById('resHeadingLabel').innerText = "Your estimated profit per order";
+                document.getElementById('lblCalcProfitOrListing').innerText = "Listing Price";
+                document.getElementById('lblFinalRowName').innerText = "Net Profit";
+            }
+
             calculateAll();
         }
 
-        // REALTIME CALCULATOR ENGINE
         function calculateAll() {
             const cost = parseFloat(document.getElementById('prodCost').value) || 0;
             const gstRate = parseFloat(document.getElementById('gstRate').value) || 18;
-            const desiredProfit = parseFloat(document.getElementById('desiredProfit').value) || 0;
             const retRate = parseFloat(document.getElementById('returnRate').value) || 0;
             const dmgRate = parseFloat(document.getElementById('damagedReturn').value) || 0;
             const retCost = parseFloat(document.getElementById('returnCost').value) || 0;
 
-            // Calculations
             const returnCostVal = (retRate / 100) * retCost;
             const damagedLossPercent = (retRate / 100) * (dmgRate / 100);
             const damageVal = damagedLossPercent * cost;
             const totalCost = cost + returnCostVal + damageVal;
 
-            const targetRevenue = totalCost + desiredProfit;
-            const returnBuffer = (damagedLossPercent / 100) * targetRevenue * 10; 
-            const gstAdd = (targetRevenue + returnBuffer) * (gstRate / 100);
-            const finalListingPrice = targetRevenue + returnBuffer + gstAdd;
+            if (currentMode === 'listing') {
+                const desiredProfit = parseFloat(document.getElementById('desiredProfit').value) || 0;
+                const targetRevenue = totalCost + desiredProfit;
+                const returnBuffer = (damagedLossPercent / 100) * targetRevenue * 10; 
+                const gstAdd = (targetRevenue + returnBuffer) * (gstRate / 100);
+                const finalListingPrice = targetRevenue + returnBuffer + gstAdd;
 
-            const outputGst = gstAdd;
-            const inputGst = finalListingPrice * (gstRate / (100 + gstRate)) * 0.6; // Estimated Input Credit
-            const netGstPayable = outputGst - inputGst;
+                const outputGst = gstAdd;
+                const inputGst = finalListingPrice * (gstRate / (100 + gstRate)) * 0.6;
+                const netGstPayable = outputGst - inputGst;
 
-            // Update UI
-            document.getElementById('resListingPrice').innerText = `₹${finalListingPrice.toFixed(2)}`;
-            document.getElementById('resSubNote').innerText = `Price customers will see, including ${gstRate}% GST`;
+                document.getElementById('resBannerVal').innerText = `₹${finalListingPrice.toFixed(2)}`;
+                document.getElementById('resSubNote').innerText = `Price customers will see, including ${gstRate}% GST`;
 
+                document.getElementById('resCalcProfit').innerText = `+ ₹${desiredProfit.toFixed(2)}`;
+                document.getElementById('resTargetRev').innerText = `₹${targetRevenue.toFixed(2)}`;
+                document.getElementById('resReturnBuffer').innerText = `+ ₹${returnBuffer.toFixed(2)}`;
+                document.getElementById('resGstAdd').innerText = `+ ₹${gstAdd.toFixed(2)}`;
+                document.getElementById('resFinalListing').innerText = `= ₹${finalListingPrice.toFixed(2)}`;
+
+                document.getElementById('resOutputGst').innerText = `₹${outputGst.toFixed(2)}`;
+                document.getElementById('resInputGst').innerText = `- ₹${inputGst.toFixed(2)}`;
+                document.getElementById('resNetGst').innerText = `= ₹${netGstPayable.toFixed(2)}`;
+            } else {
+                // PROFIT MODE
+                const listingPrice = parseFloat(document.getElementById('listingPriceInput').value) || 0;
+                const basePriceNoGst = listingPrice / (1 + (gstRate / 100));
+                const gstAmount = listingPrice - basePriceNoGst;
+                const calculatedProfit = basePriceNoGst - totalCost;
+
+                const outputGst = gstAmount;
+                const inputGst = cost * (gstRate / 100);
+                const netGstPayable = outputGst - inputGst;
+
+                document.getElementById('resBannerVal').innerText = `₹${calculatedProfit.toFixed(2)}`;
+                document.getElementById('resSubNote').innerText = `Profit after GST, returns, and damaged product losses`;
+
+                document.getElementById('resCalcProfit').innerText = `₹${listingPrice.toFixed(2)}`;
+                document.getElementById('resTargetRev').innerText = `₹${basePriceNoGst.toFixed(2)}`;
+                document.getElementById('resReturnBuffer').innerText = `- ₹${(returnCostVal + damageVal).toFixed(2)}`;
+                document.getElementById('resGstAdd').innerText = `- ₹${gstAmount.toFixed(2)}`;
+                document.getElementById('resFinalListing').innerText = `= ₹${calculatedProfit.toFixed(2)}`;
+
+                document.getElementById('resOutputGst').innerText = `₹${outputGst.toFixed(2)}`;
+                document.getElementById('resInputGst').innerText = `- ₹${inputGst.toFixed(2)}`;
+                document.getElementById('resNetGst').innerText = `= ₹${netGstPayable.toFixed(2)}`;
+            }
+
+            // Common UI Cost section
             document.getElementById('resCost').innerText = `₹${cost.toFixed(2)}`;
             document.getElementById('resRetRateText').innerText = `${retRate}%`;
             document.getElementById('resRetCostText').innerText = `${retCost}`;
             document.getElementById('resReturnCostVal').innerText = `₹${returnCostVal.toFixed(2)}`;
-            
             document.getElementById('resDmgLossText').innerText = `${(damagedLossPercent * 100).toFixed(1)}%`;
             document.getElementById('resProdLossCost').innerText = `${cost}`;
             document.getElementById('resDamageVal').innerText = `₹${damageVal.toFixed(2)}`;
             document.getElementById('resTotalCost').innerText = `₹${totalCost.toFixed(2)}`;
-
             document.getElementById('resCalcTotalCost').innerText = `₹${totalCost.toFixed(2)}`;
-            document.getElementById('resCalcProfit').innerText = `+ ₹${desiredProfit.toFixed(2)}`;
-            document.getElementById('resTargetRev').innerText = `₹${targetRevenue.toFixed(2)}`;
             document.getElementById('resBufferText').innerText = `${(damagedLossPercent * 100).toFixed(1)}% damaged`;
-            document.getElementById('resReturnBuffer').innerText = `+ ₹${returnBuffer.toFixed(2)}`;
             document.getElementById('resGstRateText').innerText = `${gstRate}%`;
-            document.getElementById('resGstAdd').innerText = `+ ₹${gstAdd.toFixed(2)}`;
-            document.getElementById('resFinalListing').innerText = `= ₹${finalListingPrice.toFixed(2)}`;
-
-            document.getElementById('resOutputGst').innerText = `₹${outputGst.toFixed(2)}`;
-            document.getElementById('resInputGst').innerText = `- ₹${inputGst.toFixed(2)}`;
-            document.getElementById('resNetGst').innerText = `= ₹${netGstPayable.toFixed(2)}`;
         }
 
         // AUTH HANDLER
@@ -354,7 +397,7 @@
                             alert("Login Successful! Welcome to Catalogproai.");
                             document.getElementById('loginView').style.display = 'none';
                             document.getElementById('appContainer').style.display = 'flex';
-                            calculateAll(); // Run Calc Init
+                            calculateAll();
                         } else {
                             alert(vData.message);
                         }
