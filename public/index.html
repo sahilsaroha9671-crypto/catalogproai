@@ -430,42 +430,43 @@
       </div>
 
       <div class="form-group">
-        <label>Upload Image</label>
-        <div class="upload-box" id="dropZone" onclick="document.getElementById('fileInput').click()">
-          <div class="upload-icon">📥</div>
+        <label>Upload Image/Label</label>
+        <div class="upload-box" id="dropzone" onclick="document.getElementById('fileInput').click()">
+          <div class="upload-icon">📁</div>
           <p class="upload-title">Click or drag file to upload</p>
-          <p class="upload-desc">Raster image, up to 25 MB.</p>
-          <input type="file" id="fileInput" accept="image/*" style="display: none;" onchange="handleFileSelect(event)">
+          <p class="upload-des">Master Image, up to 25 MB</p>
         </div>
+        <input type="file" id="fileInput" accept="image/*" style="display: none;" onchange="handleFileSelect(event)">
       </div>
 
-      <button class="btn-primary" onclick="generateImages()">⚡ Generate Images</button>
+      <button class="btn-primary" onclick="generateImages()">Generate Images</button>
     </div>
 
     <div class="card recent-card" id="recentCard" style="display: none;">
       <h3>Recent Generations</h3>
-      <div class="recent-item">
-        <div class="recent-image-wrapper">
-          <img id="recentPreviewImg" src="" alt="Recent Upload">
-          <span class="badge-completed">COMPLETED</span>
-        </div>
-        <div class="recent-details">
-          <span class="recent-cat" id="recentCategory">Kurtis</span>
-          <span class="recent-date" id="recentDate">Jun 13, 2026 • 8:45 PM</span>
-          <div class="recent-price">
-            <span>Best Price</span>
-            <strong>₹60</strong>
-          </div>
+      <img id="recentPreviewImg" src="" alt="Recent Upload">
+      <span class="badge-completed">COMPLETED</span>
+      <div class="recent-details">
+        <span class="recent-cat" id="recentCat">Kurtis</span>
+        <span class="recent-date" id="recentDate">Jun 13, 2026</span>
+        <div class="recent-price">
+          <span>Best Price</span>
+          <strong>₹60</strong>
         </div>
       </div>
     </div>
-  </div>
 
-  <div class="results-grid" id="resultsGrid" style="display: none;">
-    <h3>Generated Meesho Images</h3>
-    <div class="grid-container" id="gridContainer"></div>
+    <div class="results-grid" id="resultsGrid" style="display: none;">
+      <h3>Generated Meesho Images</h3>
+      <div class="grid-container" id="gridContainer"></div>
+    </div>
   </div>
 </div>
+
+</div> <!-- main-content closure -->
+</div> <!-- appContainer closure -->
+
 <script src="script.js"></script>
 </body>
 </html>
+ 
