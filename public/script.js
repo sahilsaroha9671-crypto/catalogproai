@@ -75,7 +75,6 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 });
-
 // Meesho Image Generator Logic
 let uploadedImageSrc = "";
 
