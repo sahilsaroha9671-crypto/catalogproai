@@ -75,3 +75,78 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 });
+
+// Meesho Image Generator Logic
+let uploadedImageSrc = "";
+
+function handleFileSelect(event) {
+  const file = event.target.files[0];
+  if (file) {
+    const reader = new FileReader();
+    reader.onload = function(e) {
+      uploadedImageSrc = e.target.result;
+      alert("Image Successfully Upload Ho Gayi Hai!");
+    };
+    reader.readAsDataURL(file);
+  }
+}
+
+function generateImages() {
+  const category = document.getElementById("categorySelect").value;
+  if (!category) {
+    alert("Kripya pehle category select karein!");
+    return;
+  }
+  if (!uploadedImageSrc) {
+    alert("Kripya pehle image upload karein!");
+    return;
+  }
+
+  // Show Recent Card
+  document.getElementById("recentPreviewImg").src = uploadedImageSrc;
+  document.getElementById("recentCategory").innerText = category;
+  document.getElementById("recentCard").style.display = "block";
+
+  // Build Results Grid
+  const gridContainer = document.getElementById("gridContainer");
+  gridContainer.innerHTML = "";
+
+  const presets = [
+    { border: "border-purple", price: "₹60" },
+    { border: "border-orange", price: "₹64" },
+    { border: "border-dark", price: "₹65" },
+    { border: "border-brown", price: "₹77" },
+    { border: "border-purple", price: "₹79" },
+    { border: "border-orange", price: "₹85" },
+    { border: "border-orange", price: "₹85" },
+    { border: "border-brown", price: "₹100" }
+  ];
+
+  presets.forEach((preset) => {
+    const cardHtml = `
+      <div class="img-card">
+        <div class="img-frame ${preset.border}">
+          <img src="${uploadedImageSrc}" alt="Generated Product">
+        </div>
+        <div class="card-footer">
+          <div class="shipping-info">
+            <span class="shipping-title">SHIPPING RATE</span>
+            <span class="shipping-cat">${category}</span>
+          </div>
+          <div class="shipping-price">${preset.price}</div>
+          <button class="btn-download" onclick="downloadImg('${uploadedImageSrc}')">↓ Download Image</button>
+        </div>
+      </div>
+    `;
+    gridContainer.innerHTML += cardHtml;
+  });
+
+  document.getElementById("resultsGrid").style.display = "block";
+}
+
+function downloadImg(src) {
+  const a = document.createElement("a");
+  a.href = src;
+  a.download = "meesho-generated-image.jpg";
+  a.click();
+}
