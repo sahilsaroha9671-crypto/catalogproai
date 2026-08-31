@@ -1,5 +1,4 @@
 const express = require('express');
-const nodemailer = require('nodemailer');
 const cors = require('cors');
 const path = require('path');
 
@@ -8,74 +7,59 @@ app.use(express.json());
 app.use(cors());
 app.use(express.static('public'));
 
-// Temporary Database (In-Memory)
-const users = {}; 
 const otps = {};
 
-// Transporter Setup (Aapne Gmail aur App Password yahan dalna hai)
-const transporter = nodemailer.createTransport({
-    service: 'gmail',
-    auth: {
-        user: 'YOUR_EMAIL@gmail.com', 
-        pass: 'YOUR_GMAIL_APP_PASSWORD' 
-    }
-});
+// Send Real OTP using Direct Resend REST API
+app.post('/api/send-otp', async (req, res) => {
+  const { email } = req.body;
+  if (!email) return res.status(400).json({ success: false, message: 'Email Required' });
 
-// 1. Send OTP Endpoint
-app.post('/api/send-otp', (req, res) => {
-    const { email } = req.body;
-    const generatedOtp = Math.floor(100000 + Math.random() * 900000).toString();
-    otps[email] = generatedOtp;
+  const generatedOtp = Math.floor(100000 + Math.random() * 900000).toString();
+  otps[email] = generatedOtp;
 
-    const mailOptions = {
-        from: 'YOUR_EMAIL@gmail.com',
-        to: email,
-        subject: 'Supplier Den - Login OTP',
-        text: `Aapka Login OTP hai: ${generatedOtp}`
-    };
-
-    transporter.sendMail(mailOptions, (error) => {
-        if (error) return res.status(500).json({ success: false, message: 'OTP bhejne me dikkat hui.' });
-        res.json({ success: true, message: 'OTP email par bhej diya gaya hai.' });
+  try {
+    const response = await fetch('https://api.resend.com/emails', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${process.env.RESEND_API_KEY}`
+      },
+      body: JSON.stringify({
+        from: 'Catalogproai <onboarding@resend.dev>',
+        to: [email],
+        subject: 'Catalogproai - Your Login OTP',
+        html: `<h3>Catalogproai Login</h3><p>Your OTP is: <strong>${generatedOtp}</strong></p>`
+      })
     });
+
+    const data = await response.json();
+
+    if (response.ok) {
+      console.log('OTP Sent Successfully:', data);
+      return res.json({ success: true, message: 'Real OTP aapke email par bhej diya gaya hai!' });
+    } else {
+      console.error('Resend API Error:', data);
+      return res.status(500).json({ success: false, message: data.message || 'Email भेजने में समस्या आई' });
+    }
+  } catch (error) {
+    console.error('Server Catch Error:', error);
+    return res.status(500).json({ success: false, message: 'Server Connection Error: ' + error.message });
+  }
 });
 
-// 2. Verify OTP & Trial Check
+// Verify OTP
 app.post('/api/verify-otp', (req, res) => {
-    const { email, otp } = req.body;
-
-    if (otps[email] !== otp) {
-        return res.status(400).json({ success: false, message: 'Galat OTP!' });
-    }
-
-    delete otps[email]; // Clear OTP after use
-
-    if (!users[email]) {
-        // Naye User ke liye 3 Days Trial Start
-        const createdAt = new Date();
-        const trialExpiry = new Date(createdAt.getTime() + 3 * 24 * 60 * 60 * 1000);
-        users[email] = { email, trialExpiry, isPaid: false };
-    }
-
-    const user = users[email];
-    const now = new Date();
-    const isLocked = !user.isPaid && now > new Date(user.trialExpiry);
-
-    res.json({
-        success: true,
-        user: {
-            email: user.email,
-            isPaid: user.isPaid,
-            isLocked: isLocked,
-            trialExpiry: user.trialExpiry
-        }
-    });
+  const { email, otp } = req.body;
+  if (otps[email] && otps[email] === otp) {
+    delete otps[email];
+    return res.json({ success: true, message: 'Login Success!' });
+  }
+  return res.status(400).json({ success: false, message: 'Galat OTP! Kripya sahi OTP daalein.' });
 });
 
-// Serve Main Page
 app.get('*', (req, res) => {
-    res.sendFile(path.join(__dirname, 'public', 'index.html'));
+  res.sendFile(path.join(__dirname, 'public', 'index.html'));
 });
 
-const PORT = process.env.PORT || 3000;
+const PORT = process.env.PORT || 10000;
 app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
