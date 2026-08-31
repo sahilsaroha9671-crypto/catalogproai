@@ -55,3 +55,16 @@ async function sendOTP() {
     alert('Server error! Kripya baad me try karein.');
   }
 }
+function switchView(viewName) {
+  const homeView = document.getElementById('homeView');
+  const calcView = document.getElementById('calculatorView');
+  const meeshoView = document.getElementById('meeshoGeneratorView');
+
+  if (homeView) homeView.style.display = 'none';
+  if (calcView) calcView.style.display = 'none';
+  if (meeshoView) meeshoView.style.display = 'none';
+
+  if (viewName === 'home' && homeView) homeView.style.display = 'block';
+  if (viewName === 'calc' && calcView) calcView.style.display = 'block';
+  if (viewName === 'meesho' && meeshoView) meeshoView.style.display = 'block';
+}
