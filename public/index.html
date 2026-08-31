@@ -483,19 +483,6 @@ function downloadImg(src) {
   a.href = src;
   a.download = "meesho-generated-image.jpg";
   a.click();
-}
-
-function showMeeshoGenerator() {
-  const allViews = document.querySelectorAll('.view-section, .dashboard-content, #mainDashboard');
-  allViews.forEach(view => {
-    if (view) view.style.display = 'none';
-  });
-
-  const generatorView = document.getElementById('meeshoGeneratorView');
-  if (generatorView) {
-    generatorView.style.display = 'block';
-  }
-}
     <!-- Meesho Image Generator View -->
 <div id="meeshoGeneratorView" class="generator-container" style="display: none;">
   <div class="main-content">
