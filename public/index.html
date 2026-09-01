@@ -79,26 +79,48 @@
 
     <!-- 1. LOGIN VIEW -->
     <div id="loginView">
-        <div class="login-card">
-            <div class="brand-header">
-                <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#0052cc" stroke-width="2.5"><path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/></svg>
-                <h2>Catalogproai</h2>
-            </div>
-            <h3>Sign in to Catalogproai</h3>
-            <p class="subtitle">Welcome back! Please sign in to continue</p>
-            <button class="google-btn" onclick="alert('Google Auth requires Client ID')">Continue with Google</button>
-            <div class="divider"><span>or</span></div>
-            <form onsubmit="handleSendOtp(event)">
-                <div class="input-group">
-                    <label>Email address</label>
-                    <input type="email" id="userEmail" placeholder="sahilsaroha9671@gmail.com" required>
-                </div>
-                <button type="submit" id="btnText" class="submit-btn">Continue &#8250;</button>
-            </form>
-        </div>
-    </div>
+    <div class="login-card">
+      <div class="brand-header">
+        <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#0052cc" stroke-width="2.5"><path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/></svg>
+        <h2>Catalogproai</h2>
+      </div>
+      <h3>Sign in to Catalogproai</h3>
+      <p class="subtitle">Welcome back! Please sign in to continue</p>
+      
+      <button class="google-btn" type="button" onclick="handleGoogleLogin()">
+        Continue with Google
+      </button>
 
-    <!-- MAIN APP CONTAINER -->
+      <div class="divider"><span>or</span></div>
+
+      <!-- Email Step -->
+      <div id="emailStep">
+        <div class="input-group">
+          <label>Email address</label>
+          <input type="email" id="userEmail" placeholder="sahilsaroha9671@gmail.com" required>
+        </div>
+        <button type="button" onclick="sendOTP()" id="sendOtpBtn" class="submit-btn" style="width: 100%; margin-top: 10px;">
+          Send OTP
+        </button>
+      </div>
+
+      <!-- OTP Step -->
+      <div id="otpStep" style="display: none; margin-top: 15px;">
+        <div class="input-group">
+          <label>Enter 4-Digit OTP</label>
+          <input type="text" id="userOTP" placeholder="X X X X" maxlength="4" style="width: 100%; padding: 10px; font-size: 18px; text-align: center; letter-spacing: 5px; margin-bottom: 10px; border: 1px solid #ccc; border-radius: 6px;">
+        </div>
+        <button type="button" onclick="verifyOTP()" class="submit-btn" style="width: 100%; background: #16a34a;">
+          Verify OTP & Login
+        </button>
+        <button type="button" onclick="resendOTP()" style="background: none; border: none; color: #2563eb; cursor: pointer; margin-top: 10px; font-size: 13px; width: 100%;">
+          Resend OTP
+        </button>
+      </div>
+
+    </div>
+  </div>
+        <!-- MAIN APP CONTAINER -->
     <div id="appContainer">
         <!-- SIDEBAR -->
         <div class="sidebar">
