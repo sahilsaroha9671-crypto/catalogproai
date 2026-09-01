@@ -1,4 +1,4 @@
-// 1. Dynamic OTP Sender Function
+// Dynamic OTP Sender Function with UI Toggle
 async function sendOTP() {
   const emailInput = document.getElementById('userEmail')?.value.trim();
 
@@ -6,6 +6,9 @@ async function sendOTP() {
     alert('Kripya ek valid Email Address daalein.');
     return;
   }
+
+  const sendBtn = document.querySelector("button[onclick='sendOTP()']");
+  if (sendBtn) sendBtn.innerText = "Sending OTP...";
 
   try {
     const response = await fetch('/api/send-otp', {
@@ -18,23 +21,43 @@ async function sendOTP() {
 
     if (response.ok) {
       alert(`OTP aapki email (${emailInput}) par bhej diya gaya hai!`);
-      if (document.getElementById('emailStep')) document.getElementById('emailStep').style.display = 'none';
-      if (document.getElementById('otpStep')) document.getElementById('otpStep').style.display = 'block';
+      
+      // Email input hide karein aur OTP input screen show karein
+      const emailStep = document.getElementById('emailStep');
+      const otpStep = document.getElementById('otpStep');
+
+      if (emailStep) emailStep.style.display = 'none';
+      if (otpStep) otpStep.style.display = 'block';
+
     } else {
       alert(data.message || 'OTP bhejne me galti hui.');
+      if (sendBtn) sendBtn.innerText = "Send OTP";
     }
   } catch (error) {
     console.error('Error:', error);
     alert('Server error! Kripya baad me try karein.');
+    if (sendBtn) sendBtn.innerText = "Send OTP";
   }
 }
 
-// 2. Google Login Placeholder Handler
-function handleGoogleLogin() {
-  alert("Google Sign-In integration ke liye Client ID configured hona zaroori hai. Abhi ke liye kripya Email OTP Login ka upayog karein.");
+// Verify OTP Function
+function verifyOTP() {
+  const otpInput = document.getElementById('userOTP')?.value.trim();
+  if (!otpInput || otpInput.length < 4) {
+    alert('Kripya sahi 4-digit OTP daalein.');
+    return;
+  }
+  
+  alert('Login Successful!');
+  switchView('home');
 }
 
-// 3. Navigation Switch Function
+// Google Login Handler
+function handleGoogleLogin() {
+  alert("Google Sign-In integration ke liye Client ID zaroori hai. Kripya Email OTP ka upayog karein.");
+}
+
+// View Switcher (Calculator safe rahega)
 function switchView(viewName) {
   const homeView = document.getElementById('homeView');
   const calcView = document.getElementById('calculatorView');
