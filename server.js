@@ -6,7 +6,6 @@ const nodemailer = require('nodemailer');
 const app = express();
 const PORT = process.env.PORT || 3000;
 
-// Dynamic OTP Storage
 const userOTPStore = {};
 
 app.use(cors());
@@ -22,25 +21,18 @@ app.post('/api/send-otp', async (req, res) => {
       return res.status(400).json({ success: false, message: 'Valid Email address zaroori hai.' });
     }
 
-    // Generate 4-digit OTP
     const generatedOTP = Math.floor(1000 + Math.random() * 9000).toString();
-    userOTPStore[email.toLowerCase().trim()] = generatedOTP;
+    const cleanEmail = email.toLowerCase().trim();
+    userOTPStore[cleanEmail] = generatedOTP;
 
     const emailUser = (process.env.EMAIL_USER || '').toLowerCase().trim();
     const emailPass = (process.env.EMAIL_PASS || '').replace(/\s+/g, '');
 
-    if (!emailUser || !emailPass) {
-      return res.status(500).json({ 
-        success: false, 
-        message: 'Render par EMAIL_USER ya EMAIL_PASS missing hai.' 
-      });
-    }
-
-    // Nodemailer Setup
+    // Transporter with Port 587
     const transporter = nodemailer.createTransport({
       host: 'smtp.gmail.com',
-      port: 465,
-      secure: true,
+      port: 587,
+      secure: false, // TLS
       auth: {
         user: emailUser,
         pass: emailPass
@@ -50,16 +42,15 @@ app.post('/api/send-otp', async (req, res) => {
       }
     });
 
-    // Send Mail to requested User Email
     await transporter.sendMail({
       from: `"CatalogProAI" <${emailUser}>`,
-      to: email.trim(),
-      subject: 'CatalogProAI - Aapka Login OTP',
+      to: cleanEmail,
+      subject: 'CatalogProAI - Login OTP',
       html: `
-        <div style="font-family: Arial, sans-serif; padding: 20px; border: 1px solid #e0e0e0; border-radius: 8px;">
-          <h2 style="color: #0052cc;">CatalogProAI Login OTP</h2>
-          <p>Aapka One Time Password hai:</p>
-          <h1 style="background: #f4f4f4; padding: 12px; display: inline-block; letter-spacing: 5px; color: #16a34a; border-radius: 6px;">${generatedOTP}</h1>
+        <div style="font-family: Arial, sans-serif; padding: 20px; border: 1px solid #ddd; border-radius: 8px;">
+          <h2 style="color: #0052cc;">CatalogProAI Login</h2>
+          <p>Aapka One Time Password (OTP) hai:</p>
+          <h1 style="background: #eef2ff; color: #1d4ed8; padding: 12px 24px; display: inline-block; letter-spacing: 5px; border-radius: 6px;">${generatedOTP}</h1>
           <p>Ye OTP kisi ke saath share na karein.</p>
         </div>
       `
@@ -71,17 +62,17 @@ app.post('/api/send-otp', async (req, res) => {
     console.error('Nodemailer Error:', err);
     res.status(500).json({ 
       success: false, 
-      message: 'Email bhejne me dikat aayi. Ensure App Password correctly set hai.' 
+      message: 'Email bhejne me dikat aayi. App Password ya Google Account Auth re-check karein.' 
     });
   }
 });
 
 app.post('/api/verify-otp', (req, res) => {
   const { email, otp } = req.body;
-  const formattedEmail = (email || '').toLowerCase().trim();
+  const cleanEmail = (email || '').toLowerCase().trim();
 
-  if (userOTPStore[formattedEmail] && userOTPStore[formattedEmail] === otp.trim()) {
-    delete userOTPStore[formattedEmail];
+  if (userOTPStore[cleanEmail] && userOTPStore[cleanEmail] === (otp || '').trim()) {
+    delete userOTPStore[cleanEmail];
     return res.status(200).json({ success: true, message: 'Login Successful!' });
   } else {
     return res.status(400).json({ success: false, message: 'Galat OTP! Kripya sahi OTP enter karein.' });
