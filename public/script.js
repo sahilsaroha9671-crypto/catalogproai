@@ -1,13 +1,13 @@
-// Dynamic OTP Sender Function with UI Toggle
+// 1. Send OTP Function
 async function sendOTP() {
   const emailInput = document.getElementById('userEmail')?.value.trim();
+  const sendBtn = document.getElementById('sendOtpBtn');
 
   if (!emailInput || !emailInput.includes('@')) {
     alert('Kripya ek valid Email Address daalein.');
     return;
   }
 
-  const sendBtn = document.querySelector("button[onclick='sendOTP()']");
   if (sendBtn) sendBtn.innerText = "Sending OTP...";
 
   try {
@@ -22,13 +22,12 @@ async function sendOTP() {
     if (response.ok) {
       alert(`OTP aapki email (${emailInput}) par bhej diya gaya hai!`);
       
-      // Email input hide karein aur OTP input screen show karein
+      // Email UI Hide karein aur OTP UI Show karein
       const emailStep = document.getElementById('emailStep');
       const otpStep = document.getElementById('otpStep');
 
       if (emailStep) emailStep.style.display = 'none';
       if (otpStep) otpStep.style.display = 'block';
-
     } else {
       alert(data.message || 'OTP bhejne me galti hui.');
       if (sendBtn) sendBtn.innerText = "Send OTP";
@@ -40,24 +39,42 @@ async function sendOTP() {
   }
 }
 
-// Verify OTP Function
+// 2. Verify OTP Function
 function verifyOTP() {
-  const otpInput = document.getElementById('userOTP')?.value.trim();
-  if (!otpInput || otpInput.length < 4) {
-    alert('Kripya sahi 4-digit OTP daalein.');
+  const userEnteredOTP = document.getElementById('userOTP')?.value.trim();
+
+  if (!userEnteredOTP || userEnteredOTP.length < 4) {
+    alert('Kripya 4-digit ka sahi OTP enter karein.');
     return;
   }
-  
+
   alert('Login Successful!');
-  switchView('home');
+  
+  // Login Container Hide karke App/Calculator Show karein
+  const loginView = document.getElementById('loginView');
+  const appContainer = document.getElementById('appContainer');
+
+  if (loginView) loginView.style.display = 'none';
+  if (appContainer) appContainer.style.display = 'flex';
 }
 
-// Google Login Handler
+// 3. Resend OTP Function
+function resendOTP() {
+  const emailStep = document.getElementById('emailStep');
+  const otpStep = document.getElementById('otpStep');
+  const sendBtn = document.getElementById('sendOtpBtn');
+
+  if (otpStep) otpStep.style.display = 'none';
+  if (emailStep) emailStep.style.display = 'block';
+  if (sendBtn) sendBtn.innerText = "Send OTP";
+}
+
+// 4. Google Login Handler
 function handleGoogleLogin() {
-  alert("Google Sign-In integration ke liye Client ID zaroori hai. Kripya Email OTP ka upayog karein.");
+  alert("Google Sign-In ke liye Client ID configured hona zaroori hai. Abhi ke liye Email OTP Login ka upayog karein.");
 }
 
-// View Switcher (Calculator safe rahega)
+// 5. Views Switcher (Calculator Safe Section)
 function switchView(viewName) {
   const homeView = document.getElementById('homeView');
   const calcView = document.getElementById('calculatorView');
