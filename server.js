@@ -1,10 +1,13 @@
 const express = require('express');
 const path = require('path');
 const cors = require('cors');
-const nodemailer = require('nodemailer');
+const { Resend } = require('resend');
 
 const app = express();
 const PORT = process.env.PORT || 3000;
+
+// Initialize Resend with API Key from Render Environment
+const resend = new Resend(process.env.RESEND_API_KEY);
 
 const userOTPStore = {};
 
@@ -21,30 +24,22 @@ app.post('/api/send-otp', async (req, res) => {
       return res.status(400).json({ success: false, message: 'Valid Email address zaroori hai.' });
     }
 
+    // Generate Unique 4-digit OTP
     const generatedOTP = Math.floor(1000 + Math.random() * 9000).toString();
     const cleanEmail = email.toLowerCase().trim();
     userOTPStore[cleanEmail] = generatedOTP;
 
-    const emailUser = (process.env.EMAIL_USER || '').toLowerCase().trim();
-    const emailPass = (process.env.EMAIL_PASS || '').replace(/\s+/g, '');
+    if (!process.env.RESEND_API_KEY) {
+      return res.status(500).json({ 
+        success: false, 
+        message: 'Render par RESEND_API_KEY missing hai.' 
+      });
+    }
 
-    // Transporter with Port 587
-    const transporter = nodemailer.createTransport({
-      host: 'smtp.gmail.com',
-      port: 587,
-      secure: false, // TLS
-      auth: {
-        user: emailUser,
-        pass: emailPass
-      },
-      tls: {
-        rejectUnauthorized: false
-      }
-    });
-
-    await transporter.sendMail({
-      from: `"CatalogProAI" <${emailUser}>`,
-      to: cleanEmail,
+    // Send Mail via Resend API
+    await resend.emails.send({
+      from: 'CatalogProAI <onboarding@resend.dev>',
+      to: [cleanEmail],
       subject: 'CatalogProAI - Login OTP',
       html: `
         <div style="font-family: Arial, sans-serif; padding: 20px; border: 1px solid #ddd; border-radius: 8px;">
@@ -59,10 +54,10 @@ app.post('/api/send-otp', async (req, res) => {
     return res.status(200).json({ success: true, message: `OTP ${email} par bhej diya gaya hai!` });
 
   } catch (err) {
-    console.error('Nodemailer Error:', err);
+    console.error('Resend Error:', err);
     res.status(500).json({ 
       success: false, 
-      message: 'Email bhejne me dikat aayi. App Password ya Google Account Auth re-check karein.' 
+      message: 'Email delivery failed. Please check RESEND_API_KEY on Render.' 
     });
   }
 });
