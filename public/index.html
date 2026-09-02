@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+    <script src="https://unpkg.com/pdf-lib@1.17.1/dist/pdf-lib.min.js"></script>
     <!-- Google tag (gtag.js) -->
 <script async src="https://www.googletagmanager.com/gtag/js?id=G-VST845P1XP"></script>
 <script>
@@ -170,7 +171,10 @@
                             <p>Upload Meesho PDFs, filter by SKU, quantity, or courier, and export label packs.</p>
                             <ul class="features-list"><li>Multi-file upload & processing</li><li>Advanced filtering & sorting</li></ul>
                         </div>
-                        <button class="card-btn">→ Start Exporting</button>
+                        <label for="labelPdfInput" class="card-btn" style="cursor: pointer; display: inline-block; text-align: center;">
+                        Start Exporting 📁
+                       </label>
+                       <input type="file" id="labelPdfInput" accept="application/pdf" onchange="handleShippingLabelUpload(event)" style="display: none;" />
                     </div>
                     <div class="tool-card">
                         <div>
@@ -497,6 +501,48 @@
 </div> <!-- main-content closure -->
 </div> <!-- appContainer closure -->
 
+<script>
+async function cropMeeshoLabelsTo4x6(pdfFileBuffer) {
+  const { PDFDocument } = PDFLib;
+  const srcDoc = await PDFDocument.load(pdfFileBuffer);
+  const newDoc = await PDFDocument.create();
+
+  const labelWidth = 288;  // 4 inches
+  const labelHeight = 432; // 6 inches
+
+  const pageCount = srcDoc.getPageCount();
+
+  for (let i = 0; i < pageCount; i++) {
+    const [embeddedPage] = await newDoc.embedPages([srcDoc.getPage(i)]);
+    const newPage = newDoc.addPage([labelWidth, labelHeight]);
+
+    newPage.drawPage(embeddedPage, {
+      x: 0,
+      y: 0,
+      width: labelWidth,
+      height: labelHeight,
+      xScale: labelWidth / embeddedPage.width,
+      yScale: labelHeight / embeddedPage.height
+    });
+  }
+
+  return await newDoc.save();
+}
+
+async function handleShippingLabelUpload(event) {
+  const file = event.target.files[0];
+  if (!file) return;
+
+  const fileBuffer = await file.arrayBuffer();
+  const croppedPdfBytes = await cropMeeshoLabelsTo4x6(fileBuffer);
+
+  const blob = new Blob([croppedPdfBytes], { type: 'application/pdf' });
+  const link = document.createElement('a');
+  link.href = URL.createObjectURL(blob);
+  link.download = `Meesho_4x6_Labels_${Date.now()}.pdf`;
+  link.click();
+}
+</script>
 <script src="script.js"></script>
 </body>
 </html>
