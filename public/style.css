@@ -298,3 +298,43 @@ h3 {
     box-sizing: border-box !important;
   }
 }
+/* FORCE MOBILE RESPONSIVE FIX */
+@media screen and (max-width: 768px) {
+  div[style*="display: flex"], 
+  div[style*="display:flex"],
+  body > div,
+  .app-container,
+  #app,
+  main {
+    flex-direction: column !important;
+    flex-wrap: wrap !important;
+  }
+
+  /* Sidebar top bar ban jayega */
+  div[style*="width: 250px"],
+  div[style*="width:250px"],
+  .sidebar {
+    width: 100% !important;
+    min-width: 100% !important;
+    max-width: 100% !important;
+    border-right: none !important;
+    border-bottom: 1px solid #e5e7eb !important;
+    box-sizing: border-box !important;
+  }
+
+  /* Main content full screen ho jayega */
+  div[style*="flex: 1"],
+  .main-content {
+    width: 100% !important;
+    min-width: 100% !important;
+    padding: 12px !important;
+    box-sizing: border-box !important;
+  }
+
+  /* Dashboard Cards single column */
+  .tools-grid, .grid, div[style*="grid-template-columns"] {
+    display: flex !important;
+    flex-direction: column !important;
+    width: 100% !important;
+  }
+}
