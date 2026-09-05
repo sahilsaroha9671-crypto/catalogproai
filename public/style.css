@@ -247,35 +247,53 @@ h3 {
   object-fit: cover;
   height: 180px;
 }
-/* Mobile View Fix */
+/* Mobile Layout Complete Fix */
 @media (max-width: 768px) {
-  body {
-    padding: 10px !important;
+  /* Flex direction vertical karna */
+  #appContainer, .app-container {
+    flex-direction: column !important;
+    width: 100% !important;
     overflow-x: hidden !important;
   }
 
-  .app-container, .container, #main-content {
+  /* Sidebar Fix */
+  .sidebar {
     width: 100% !important;
-    max-width: 100% !important;
+    min-width: 100% !important;
     padding: 10px !important;
     box-sizing: border-box !important;
+    border-right: none !important;
+    border-bottom: 1px solid #dfe1e6 !important;
   }
 
-  .tools-grid, .grid-container, .results-grid, .calc-grid {
+  /* Navigation buttons horizontal scroll */
+  .sidebar nav, .nav-menu {
     display: flex !important;
-    flex-direction: column !important;
-    grid-template-columns: 1fr !important;
-    gap: 15px !important;
-    width: 100% !important;
+    flex-wrap: wrap !important;
+    gap: 5px !important;
   }
 
-  .tool-card, .box-card, .sidebar {
+  .nav-item {
+    font-size: 12px !important;
+    padding: 6px 10px !important;
+  }
+
+  /* Main Area Fix */
+  .main-content, #main-content {
     width: 100% !important;
-    margin-bottom: 15px !important;
+    padding: 15px 10px !important;
     box-sizing: border-box !important;
   }
 
-  .card-btn, button, .submit-btn {
+  /* Grid & Cards Single Column */
+  .tools-grid, .grid-container, .calc-grid, .results-grid {
+    display: flex !important;
+    flex-direction: column !important;
+    width: 100% !important;
+    grid-template-columns: 1fr !important;
+  }
+
+  .tool-card, .card, .box-card {
     width: 100% !important;
     box-sizing: border-box !important;
   }
