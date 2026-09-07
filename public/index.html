@@ -2,7 +2,6 @@
 <html lang="en">
 <head>
     <script src="https://unpkg.com/pdf-lib@1.17.1/dist/pdf-lib.min.js"></script>
-    <!-- Google tag (gtag.js) -->
     <script async src="https://www.googletagmanager.com/gtag/js?id=G-VST845P1XP"></script>
     <script>
       window.dataLayer = window.dataLayer || [];
@@ -22,6 +21,7 @@
         /* WELCOME SCREEN */
         #welcomeView {
             display: flex;
+            flex-direction: column;
             justify-content: center;
             align-items: center;
             min-height: 100vh;
@@ -31,6 +31,17 @@
             top: 0;
             left: 0;
             z-index: 9999;
+            text-align: center;
+            padding: 20px;
+        }
+
+        .welcome-title {
+            color: #ffffff;
+            font-size: 38px;
+            font-weight: 800;
+            letter-spacing: 1px;
+            margin-bottom: 25px;
+            text-shadow: 0 4px 15px rgba(0,0,0,0.5);
         }
 
         .get-started-btn {
@@ -38,12 +49,13 @@
             color: #ffffff;
             font-size: 20px;
             font-weight: 700;
-            padding: 16px 40px;
+            padding: 16px 45px;
             border: none;
             border-radius: 50px;
             cursor: pointer;
             box-shadow: 0 10px 25px rgba(22, 163, 74, 0.4);
             transition: all 0.3s ease;
+            margin-bottom: 18px;
         }
 
         .get-started-btn:hover {
@@ -52,36 +64,13 @@
             box-shadow: 0 15px 30px rgba(22, 163, 74, 0.6);
         }
 
-        /* TOP HEADER USER PROFILE */
-        .top-header {
-            display: flex;
-            justify-content: flex-end;
-            align-items: center;
-            padding: 15px 30px;
-            background: #ffffff;
-            border-bottom: 1px solid #dfe1e6;
-        }
-
-        .user-profile {
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            font-weight: 600;
-            color: #172b4d;
-            font-size: 14px;
-        }
-
-        .user-avatar {
-            width: 35px;
-            height: 35px;
-            background-color: #0052cc;
-            color: #ffffff;
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-weight: 700;
-            font-size: 14px;
+        .welcome-subtitle {
+            color: #93c5fd;
+            font-size: 16px;
+            font-weight: 500;
+            max-width: 500px;
+            line-height: 1.5;
+            opacity: 0.9;
         }
 
         /* MAIN LAYOUT */
@@ -138,14 +127,13 @@
 </head>
 <body>
 
-    <!-- 1. WELCOME SCREEN WITH GET STARTED BUTTON -->
     <div id="welcomeView">
+        <h1 class="welcome-title">Keshav Saroha</h1>
         <button class="get-started-btn" onclick="startApp()">Get Started</button>
+        <p class="welcome-subtitle">Welcome to Catalogproai — Your All-in-One E-Commerce Tools Suite</p>
     </div>
 
-    <!-- 2. MAIN APP CONTAINER -->
     <div id="appContainer">
-        <!-- SIDEBAR -->
         <div class="sidebar">
             <div class="logo">
                 <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#0052cc" stroke-width="2.5"><path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/></svg>
@@ -160,18 +148,8 @@
         </div>
 
         <div class="main-wrapper">
-            <!-- TOP HEADER WITH NAME -->
-            <div class="top-header">
-                <div class="user-profile">
-                    <div class="user-avatar">KS</div>
-                    <span>Keshav Saroha</span>
-                </div>
-            </div>
-
-            <!-- MAIN CONTENT AREA -->
             <div class="main-content">
                 
-                <!-- VIEW 1: HOME DASHBOARD -->
                 <div id="homeView">
                     <div class="header-title">
                         <h1>Catalogproai</h1>
@@ -209,14 +187,12 @@
                     </div>
                 </div>
 
-                <!-- VIEW 2: PRICE & PROFIT CALCULATOR -->
                 <div id="calculatorView">
                     <div class="breadcrumb">Home / Price Calculator</div>
                     <h1>Profit Calculator</h1>
                     <p style="color: #6b778c; font-size: 14px;">Calculate your ideal listing price or check profit on any order.</p>
 
                     <div class="calc-grid">
-                        <!-- LEFT FORM -->
                         <div class="calc-box">
                             <div class="box-title">Calculator</div>
                             
@@ -279,7 +255,6 @@
                             </div>
                         </div>
 
-                        <!-- RIGHT RESULTS -->
                         <div class="results-box">
                             <div class="box-title">Results</div>
 
@@ -311,7 +286,6 @@
                     </div>
                 </div>
 
-                <!-- Meesho Image Generator View -->
                 <div id="meeshoGeneratorView" class="generator-container" style="display: none;">
                   <div class="card create-card">
                     <h3>Create New Generation</h3>
@@ -341,11 +315,7 @@
                   </div>
                 </div>
 
-            </div> <!-- main-content closure -->
-        </div> <!-- main-wrapper closure -->
-    </div> <!-- appContainer closure -->
-
-    <script>
+            </div> </div> </div> <script>
         let currentMode = 'listing';
 
         function startApp() {
