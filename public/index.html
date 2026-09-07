@@ -12,7 +12,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Catalogproai - Price & Profit Calculator</title>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
@@ -25,19 +25,28 @@
     </div>
 
     <!-- 2. MAIN APP CONTAINER -->
-    <div id="appContainer">
+    <div id="appContainer" style="display: none;">
         <!-- SIDEBAR -->
         <div class="sidebar">
             <div class="logo">
-                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#0052cc" stroke-width="2.5"><path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/></svg>
-                Catalogproai
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#3b82f6" stroke-width="2.5"><path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/></svg>
+                <span>Catalogproai</span>
             </div>
             <a class="nav-item active" id="navHome" onclick="switchView('home')">🏠 Home</a>
-            <a href="#" class="nav-item" onclick="showMeeshoGenerator(); return false;">🖼️ Meesho Image Generator</a>
+            <a class="nav-item" onclick="showMeeshoGenerator(); return false;">🖼️ Meesho Image Generator</a>
             <a class="nav-item">📦 Shipping Label Export</a>
             <a class="nav-item">🔍 Meesho Lens</a>
             <a class="nav-item" id="navCalc" onclick="switchView('calc')">📊 Price Calculator</a>
             <a class="nav-item">💎 Plans</a>
+
+            <!-- Sidebar Footer Banner -->
+            <div class="sidebar-footer-card">
+                <span class="crown-icon">👑</span>
+                <div class="footer-card-text">
+                    <strong>Empowering Indian Sellers</strong>
+                    <p>List Smarter. Sell Faster.</p>
+                </div>
+            </div>
         </div>
 
         <div class="main-wrapper">
@@ -45,47 +54,99 @@
                 
                 <!-- VIEW 1: HOME DASHBOARD -->
                 <div id="homeView">
+                    <!-- Top Tag Header -->
+                    <div class="top-header-bar">
+                        <div class="pill-badge">🚀 Sell Smarter | <strong>Grow Faster</strong></div>
+                        <div class="slogan-badge">INDIAN SELLERS STRONGER TOGETHER</div>
+                    </div>
+
                     <div class="header-title">
                         <h1>Catalogproai</h1>
                         <p>A suite of tools designed to help Indian online sellers work faster, price smarter, and ship more efficiently.</p>
                     </div>
-                    <div class="section-label">TOOLS</div>
+
+                    <div class="section-label">TOOLS <span>FOR SMART SELLERS</span></div>
+
+                    <!-- Tools Grid -->
                     <div class="tools-grid">
-                        <div class="tool-card">
+                        <!-- Tool 1: Image Generator -->
+                        <div class="tool-card card-blue">
                             <div>
+                                <div class="card-icon-box">🖼️</div>
                                 <h3>Image Generator</h3>
                                 <p>Generate product images that qualify for lower shipping tiers on Meesho.</p>
-                                <ul class="features-list"><li>Lower shipping tier images</li><li>Batch generation</li></ul>
+                                <ul class="features-list">
+                                    <li>✓ Lower shipping tier images</li>
+                                    <li>✓ Batch generation</li>
+                                </ul>
                             </div>
-                            <button class="card-btn">→ Open Generator</button>
+                            <button class="card-btn btn-blue" onclick="showMeeshoGenerator()">→ Open Generator</button>
                         </div>
-                        <div class="tool-card">
+
+                        <!-- Tool 2: Shipping Label Export -->
+                        <div class="tool-card card-green">
                             <div>
+                                <div class="card-icon-box">📦</div>
                                 <h3>Shipping Label Export</h3>
                                 <p>Upload Meesho PDFs, filter by SKU, quantity, or courier, and export label packs.</p>
-                                <ul class="features-list"><li>Multi-file upload & processing</li><li>Advanced filtering & sorting</li></ul>
+                                <ul class="features-list">
+                                    <li>✓ Multi-file upload & processing</li>
+                                    <li>✓ Advanced filtering & sorting</li>
+                                </ul>
                             </div>
-                            <label for="labelPdfInput" class="card-btn" style="cursor: pointer; display: inline-block; text-align: center;">
-                            Start Exporting 📁
-                           </label>
-                           <input type="file" id="labelPdfInput" accept="application/pdf" onchange="handleShippingLabelUpload(event)" style="display: none;" />
+                            <label for="labelPdfInput" class="card-btn btn-green" style="cursor: pointer; display: block; text-align: center;">
+                                Start Exporting 📁
+                            </label>
+                            <input type="file" id="labelPdfInput" accept="application/pdf" onchange="handleShippingLabelUpload(event)" style="display: none;" />
                         </div>
-                        <div class="tool-card">
+
+                        <!-- Tool 3: Profit Calculator -->
+                        <div class="tool-card card-orange">
                             <div>
+                                <div class="card-icon-box">📊</div>
                                 <h3>Profit Calculator</h3>
                                 <p>Calculate the ideal listing price or check your real profit on any order — accounting for GST & returns.</p>
-                                <ul class="features-list"><li>Listing price & profit modes</li><li>Return cost & loss breakdown</li><li>GST input credit summary</li></ul>
+                                <ul class="features-list">
+                                    <li>✓ Listing price & profit modes</li>
+                                    <li>✓ Return cost & loss breakdown</li>
+                                    <li>✓ GST input credit summary</li>
+                                </ul>
                             </div>
-                            <button class="card-btn" onclick="switchView('calc')">→ Open Calculator</button>
+                            <button class="card-btn btn-orange" onclick="switchView('calc')">→ Open Calculator</button>
+                        </div>
+                    </div>
+
+                    <!-- Bottom Features Footer -->
+                    <div class="bottom-features-bar">
+                        <div class="feature-box">
+                            <span class="f-icon">⚡</span>
+                            <div>
+                                <strong>Save Time</strong>
+                                <p>Automate your workflow</p>
+                            </div>
+                        </div>
+                        <div class="feature-box">
+                            <span class="f-icon">📈</span>
+                            <div>
+                                <strong>Increase Profits</strong>
+                                <p>Make data-driven decisions</p>
+                            </div>
+                        </div>
+                        <div class="feature-box">
+                            <span class="f-icon">👥</span>
+                            <div>
+                                <strong>Built for Indian Sellers</strong>
+                                <p>Simple. Fast. Reliable.</p>
+                            </div>
                         </div>
                     </div>
                 </div>
 
                 <!-- VIEW 2: PRICE & PROFIT CALCULATOR -->
-                <div id="calculatorView">
+                <div id="calculatorView" style="display: none;">
                     <div class="breadcrumb">Home / Price Calculator</div>
                     <h1>Profit Calculator</h1>
-                    <p style="color: #6b778c; font-size: 14px;">Calculate your ideal listing price or check profit on any order.</p>
+                    <p style="color: #94a3b8; font-size: 14px; margin-bottom: 24px;">Calculate your ideal listing price or check profit on any order.</p>
 
                     <div class="calc-grid">
                         <div class="calc-box">
@@ -144,7 +205,7 @@
                         <div class="results-box">
                             <div class="box-title">Results</div>
                             <div class="listing-banner">
-                                <span id="resHeadingLabel" style="font-size: 13px; font-weight: 600; color: #42526e;">List your item at</span>
+                                <span id="resHeadingLabel" style="font-size: 13px; font-weight: 600; color: #94a3b8;">List your item at</span>
                                 <h2 id="resBannerVal">₹190.11</h2>
                                 <p id="resSubNote">Price customers will see, including 18% GST</p>
                             </div>
