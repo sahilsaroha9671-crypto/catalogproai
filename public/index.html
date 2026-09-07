@@ -2,6 +2,7 @@
 <html lang="en">
 <head>
     <script src="https://unpkg.com/pdf-lib@1.17.1/dist/pdf-lib.min.js"></script>
+    <!-- Google tag (gtag.js) -->
     <script async src="https://www.googletagmanager.com/gtag/js?id=G-VST845P1XP"></script>
     <script>
       window.dataLayer = window.dataLayer || [];
@@ -18,7 +19,7 @@
         * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Inter', sans-serif; }
         body { background-color: #f8f9fa; color: #172b4d; }
 
-        /* WELCOME SCREEN */
+        /* WELCOME LANDING SCREEN WITH RED/BLACK GRADIENT */
         #welcomeView {
             display: flex;
             flex-direction: column;
@@ -26,7 +27,7 @@
             align-items: center;
             min-height: 100vh;
             width: 100vw;
-            background: radial-gradient(circle at bottom right, #0052cc 0%, #001233 60%, #000000 100%);
+            background: radial-gradient(circle at bottom right, #cc0000 0%, #330000 60%, #000000 100%);
             position: fixed;
             top: 0;
             left: 0;
@@ -41,7 +42,7 @@
             font-weight: 800;
             letter-spacing: 1px;
             margin-bottom: 25px;
-            text-shadow: 0 4px 15px rgba(0,0,0,0.5);
+            text-shadow: 0 4px 15px rgba(0,0,0,0.6);
         }
 
         .get-started-btn {
@@ -65,7 +66,7 @@
         }
 
         .welcome-subtitle {
-            color: #93c5fd;
+            color: #fca5a5;
             font-size: 16px;
             font-weight: 500;
             max-width: 500px;
@@ -127,13 +128,16 @@
 </head>
 <body>
 
+    <!-- 1. WELCOME LANDING SCREEN -->
     <div id="welcomeView">
         <h1 class="welcome-title">Keshav Saroha</h1>
         <button class="get-started-btn" onclick="startApp()">Get Started</button>
         <p class="welcome-subtitle">Welcome to Catalogproai — Your All-in-One E-Commerce Tools Suite</p>
     </div>
 
+    <!-- 2. MAIN APP CONTAINER -->
     <div id="appContainer">
+        <!-- SIDEBAR -->
         <div class="sidebar">
             <div class="logo">
                 <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#0052cc" stroke-width="2.5"><path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/></svg>
@@ -148,8 +152,10 @@
         </div>
 
         <div class="main-wrapper">
+            <!-- MAIN CONTENT AREA -->
             <div class="main-content">
                 
+                <!-- VIEW 1: HOME DASHBOARD -->
                 <div id="homeView">
                     <div class="header-title">
                         <h1>Catalogproai</h1>
@@ -187,12 +193,14 @@
                     </div>
                 </div>
 
+                <!-- VIEW 2: PRICE & PROFIT CALCULATOR -->
                 <div id="calculatorView">
                     <div class="breadcrumb">Home / Price Calculator</div>
                     <h1>Profit Calculator</h1>
                     <p style="color: #6b778c; font-size: 14px;">Calculate your ideal listing price or check profit on any order.</p>
 
                     <div class="calc-grid">
+                        <!-- LEFT FORM -->
                         <div class="calc-box">
                             <div class="box-title">Calculator</div>
                             
@@ -255,6 +263,7 @@
                             </div>
                         </div>
 
+                        <!-- RIGHT RESULTS -->
                         <div class="results-box">
                             <div class="box-title">Results</div>
 
@@ -286,6 +295,7 @@
                     </div>
                 </div>
 
+                <!-- Meesho Image Generator View -->
                 <div id="meeshoGeneratorView" class="generator-container" style="display: none;">
                   <div class="card create-card">
                     <h3>Create New Generation</h3>
@@ -315,7 +325,11 @@
                   </div>
                 </div>
 
-            </div> </div> </div> <script>
+            </div> <!-- main-content closure -->
+        </div> <!-- main-wrapper closure -->
+    </div> <!-- appContainer closure -->
+
+    <script>
         let currentMode = 'listing';
 
         function startApp() {
