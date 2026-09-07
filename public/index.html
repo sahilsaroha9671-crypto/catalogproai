@@ -2,133 +2,22 @@
 <html lang="en">
 <head>
     <script src="https://unpkg.com/pdf-lib@1.17.1/dist/pdf-lib.min.js"></script>
-    <!-- Google tag (gtag.js) -->
     <script async src="https://www.googletagmanager.com/gtag/js?id=G-VST845P1XP"></script>
     <script>
       window.dataLayer = window.dataLayer || [];
       function gtag(){dataLayer.push(arguments);}
       gtag('js', new Date());
-
       gtag('config', 'G-VST845P1XP');
     </script>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Catalogproai - Price & Profit Calculator</title>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
-    <style>
-        * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Inter', sans-serif; }
-        body { background-color: #f8f9fa; color: #172b4d; }
-
-        /* WELCOME LANDING SCREEN WITH RED/BLACK GRADIENT */
-        #welcomeView {
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-            min-height: 100vh;
-            width: 100vw;
-            background: radial-gradient(circle at bottom right, #cc0000 0%, #330000 60%, #000000 100%);
-            position: fixed;
-            top: 0;
-            left: 0;
-            z-index: 9999;
-            text-align: center;
-            padding: 20px;
-        }
-
-        .welcome-title {
-            color: #ffffff;
-            font-size: 38px;
-            font-weight: 800;
-            letter-spacing: 1px;
-            margin-bottom: 25px;
-            text-shadow: 0 4px 15px rgba(0,0,0,0.6);
-        }
-
-        .get-started-btn {
-            background-color: #16a34a;
-            color: #ffffff;
-            font-size: 20px;
-            font-weight: 700;
-            padding: 16px 45px;
-            border: none;
-            border-radius: 50px;
-            cursor: pointer;
-            box-shadow: 0 10px 25px rgba(22, 163, 74, 0.4);
-            transition: all 0.3s ease;
-            margin-bottom: 18px;
-        }
-
-        .get-started-btn:hover {
-            background-color: #15803d;
-            transform: translateY(-3px) scale(1.03);
-            box-shadow: 0 15px 30px rgba(22, 163, 74, 0.6);
-        }
-
-        .welcome-subtitle {
-            color: #fca5a5;
-            font-size: 16px;
-            font-weight: 500;
-            max-width: 500px;
-            line-height: 1.5;
-            opacity: 0.9;
-        }
-
-        /* MAIN LAYOUT */
-        #appContainer { display: none; min-height: 100vh; flex-direction: row; }
-        .sidebar { width: 260px; background: #fff; border-right: 1px solid #dfe1e6; padding: 20px; display: flex; flex-direction: column; gap: 10px; }
-        .sidebar .logo { font-size: 20px; font-weight: 700; color: #0052cc; display: flex; align-items: center; gap: 8px; margin-bottom: 25px; }
-        .nav-item { display: flex; align-items: center; gap: 10px; padding: 11px 14px; color: #42526e; text-decoration: none; border-radius: 6px; font-size: 14px; font-weight: 500; cursor: pointer; }
-        .nav-item.active, .nav-item:hover { background: #e3f2fd; color: #0052cc; font-weight: 600; }
-        
-        .main-wrapper { flex: 1; display: flex; flex-direction: column; }
-        .main-content { flex: 1; padding: 35px 40px; overflow-y: auto; }
-
-        /* DASHBOARD VIEW */
-        .header-title h1 { font-size: 28px; font-weight: 700; margin-bottom: 8px; }
-        .header-title p { color: #6b778c; font-size: 15px; margin-bottom: 30px; }
-        .section-label { font-size: 12px; font-weight: 700; color: #6b778c; letter-spacing: 0.5px; margin-bottom: 15px; }
-        .tools-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 20px; }
-        .tool-card { background: #fff; border: 1px solid #dfe1e6; border-radius: 10px; padding: 24px; display: flex; flex-direction: column; justify-content: space-between; }
-        .tool-card h3 { font-size: 18px; margin-bottom: 10px; }
-        .tool-card p { font-size: 13px; color: #6b778c; line-height: 1.5; margin-bottom: 15px; }
-        .features-list { list-style: none; margin-bottom: 20px; }
-        .features-list li { font-size: 13px; color: #42526e; margin-bottom: 8px; display: flex; align-items: center; gap: 8px; }
-        .features-list li::before { content: "✓"; color: #36b37e; font-weight: bold; }
-        .card-btn { width: 100%; padding: 10px; background: #0052cc; color: white; border: none; border-radius: 6px; font-size: 14px; font-weight: 600; cursor: pointer; }
-
-        /* CALCULATOR VIEW */
-        #calculatorView { display: none; }
-        .breadcrumb { font-size: 13px; color: #6b778c; margin-bottom: 10px; }
-        .calc-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 30px; margin-top: 25px; }
-        .calc-box, .results-box { background: #fff; border: 1px solid #dfe1e6; border-radius: 10px; padding: 25px; }
-        .box-title { font-size: 16px; font-weight: 700; margin-bottom: 20px; color: #172b4d; }
-        
-        .form-group { margin-bottom: 18px; }
-        .form-group label { display: block; font-size: 13px; font-weight: 600; color: #42526e; margin-bottom: 6px; }
-        .form-group input, .form-group select { width: 100%; padding: 10px 12px; border: 1px solid #dfe1e6; border-radius: 6px; font-size: 14px; outline: none; background: #fff; }
-        
-        .tab-toggle { display: flex; border: 1px solid #dfe1e6; border-radius: 6px; overflow: hidden; }
-        .tab-btn { flex: 1; padding: 10px; border: none; background: #f4f6f8; font-weight: 600; font-size: 13px; cursor: pointer; color: #6b778c; }
-        .tab-btn.active { background: #0052cc; color: #fff; }
-
-        .row-group { display: flex; gap: 15px; }
-        .row-group .form-group { flex: 1; }
-
-        /* RESULTS STYLING */
-        .listing-banner { background: #f0f5ff; border-radius: 8px; padding: 20px; text-align: left; margin-bottom: 25px; border-left: 4px solid #0052cc; }
-        .listing-banner h2 { font-size: 32px; color: #0052cc; font-weight: 800; margin-top: 5px; }
-        .listing-banner p { font-size: 12px; color: #6b778c; margin-top: 4px; }
-        
-        .res-section-title { font-size: 11px; font-weight: 700; color: #6b778c; letter-spacing: 0.5px; margin: 20px 0 10px 0; }
-        .res-row { display: flex; justify-content: space-between; font-size: 13px; color: #42526e; margin-bottom: 8px; }
-        .res-row.bold { font-weight: 700; color: #172b4d; }
-        .res-row.total { font-size: 15px; font-weight: 700; border-top: 1px solid #dfe1e6; padding-top: 10px; margin-top: 10px; }
-    </style>
+    <link rel="stylesheet" href="style.css">
 </head>
 <body>
 
-    <!-- 1. WELCOME LANDING SCREEN -->
+    <!-- 1. BLUE GRADIENT LANDING SCREEN -->
     <div id="welcomeView">
         <h1 class="welcome-title">Keshav Saroha</h1>
         <button class="get-started-btn" onclick="startApp()">Get Started</button>
@@ -152,7 +41,6 @@
         </div>
 
         <div class="main-wrapper">
-            <!-- MAIN CONTENT AREA -->
             <div class="main-content">
                 
                 <!-- VIEW 1: HOME DASHBOARD -->
@@ -200,15 +88,12 @@
                     <p style="color: #6b778c; font-size: 14px;">Calculate your ideal listing price or check profit on any order.</p>
 
                     <div class="calc-grid">
-                        <!-- LEFT FORM -->
                         <div class="calc-box">
                             <div class="box-title">Calculator</div>
-                            
                             <div class="form-group">
                                 <label>* Platform</label>
                                 <select id="platform"><option>Meesho</option></select>
                             </div>
-
                             <div class="form-group">
                                 <label>* Calculate</label>
                                 <div class="tab-toggle">
@@ -216,12 +101,10 @@
                                     <button class="tab-btn" id="tabProfit" onclick="setMode('profit')">Profit</button>
                                 </div>
                             </div>
-
                             <div class="form-group">
                                 <label>* Product Cost (Without GST) ℹ️</label>
                                 <input type="number" id="prodCost" value="100.00" oninput="calculateAll()">
                             </div>
-
                             <div class="form-group">
                                 <label>* GST Rate ℹ️</label>
                                 <select id="gstRate" onchange="calculateAll()">
@@ -230,22 +113,18 @@
                                     <option value="5">5%</option>
                                 </select>
                             </div>
-
                             <div class="form-group" id="fieldDesiredProfit">
                                 <label>* Desired Profit Margin ℹ️</label>
                                 <input type="number" id="desiredProfit" value="50.00" oninput="calculateAll()">
                             </div>
-
                             <div class="form-group" id="fieldListingPriceInput" style="display: none;">
                                 <label>* Listing Price ℹ️</label>
                                 <input type="number" id="listingPriceInput" value="200.00" oninput="calculateAll()">
                             </div>
-
                             <div class="form-group">
                                 <label>* Customer Return Rate % ℹ️</label>
                                 <input type="number" id="returnRate" value="5" oninput="calculateAll()">
                             </div>
-
                             <div class="row-group">
                                 <div class="form-group">
                                     <label>Good Return % ℹ️</label>
@@ -256,29 +135,24 @@
                                     <input type="number" id="damagedReturn" value="20" oninput="calculateAll()">
                                 </div>
                             </div>
-
                             <div class="form-group">
                                 <label>* Return Cost ℹ️</label>
                                 <input type="number" id="returnCost" value="170.00" oninput="calculateAll()">
                             </div>
                         </div>
 
-                        <!-- RIGHT RESULTS -->
                         <div class="results-box">
                             <div class="box-title">Results</div>
-
                             <div class="listing-banner">
                                 <span id="resHeadingLabel" style="font-size: 13px; font-weight: 600; color: #42526e;">List your item at</span>
                                 <h2 id="resBannerVal">₹190.11</h2>
                                 <p id="resSubNote">Price customers will see, including 18% GST</p>
                             </div>
-
                             <div class="res-section-title">COSTS</div>
                             <div class="res-row"><span>Cost</span><span id="resCost">₹100.00</span></div>
                             <div class="res-row"><span>Return cost (<span id="resRetRateText">5%</span> × ₹<span id="resRetCostText">170</span>)</span><span id="resReturnCostVal">₹8.50</span></div>
                             <div class="res-row"><span>Product loss — damaged (<span id="resDmgLossText">1.0%</span> × ₹<span id="resProdLossCost">100</span>)</span><span id="resDamageVal">₹1.00</span></div>
                             <div class="res-row bold total"><span>Total cost</span><span id="resTotalCost">₹109.50</span></div>
-
                             <div class="res-section-title">PRICE CALCULATION</div>
                             <div class="res-row"><span>Total cost</span><span id="resCalcTotalCost">₹109.50</span></div>
                             <div class="res-row"><span id="lblCalcProfitOrListing">+ Desired profit</span><span id="resCalcProfit">+ ₹50.00</span></div>
@@ -286,7 +160,6 @@
                             <div class="res-row"><span>+ Return buffer (<span id="resBufferText">1.0% damaged</span>)</span><span id="resReturnBuffer">+ ₹1.61</span></div>
                             <div class="res-row"><span>+ GST (<span id="resGstRateText">18%</span>)</span><span id="resGstAdd">+ ₹29.00</span></div>
                             <div class="res-row bold total"><span id="lblFinalRowName">Listing Price</span><span id="resFinalListing">= ₹190.11</span></div>
-
                             <div class="res-section-title">GST SUMMARY</div>
                             <div class="res-row"><span>Output GST (collected from buyer)</span><span id="resOutputGst">₹29.00</span></div>
                             <div class="res-row"><span>Input GST (on your purchases)</span><span id="resInputGst">- ₹19.71</span></div>
@@ -295,7 +168,7 @@
                     </div>
                 </div>
 
-                <!-- Meesho Image Generator View -->
+                <!-- VIEW 3: MEESHO GENERATOR -->
                 <div id="meeshoGeneratorView" class="generator-container" style="display: none;">
                   <div class="card create-card">
                     <h3>Create New Generation</h3>
@@ -310,24 +183,22 @@
                         <option value="Footwear">Footwear</option>
                       </select>
                     </div>
-
                     <div class="form-group">
                       <label>Upload Image/Label</label>
                       <div class="upload-box" id="dropzone" onclick="document.getElementById('fileInput').click()">
                         <div class="upload-icon">📁</div>
                         <p class="upload-title">Click or drag file to upload</p>
-                        <p class="upload-des">Master Image, up to 25 MB</p>
+                        <p class="upload-desc">Master Image, up to 25 MB</p>
                       </div>
                       <input type="file" id="fileInput" accept="image/*" style="display: none;" onchange="handleFileSelect(event)">
                     </div>
-
                     <button class="btn-primary" onclick="generateImages()">Generate Images</button>
                   </div>
                 </div>
 
-            </div> <!-- main-content closure -->
-        </div> <!-- main-wrapper closure -->
-    </div> <!-- appContainer closure -->
+            </div>
+        </div>
+    </div>
 
     <script>
         let currentMode = 'listing';
@@ -486,6 +357,5 @@
           link.click();
         }
     </script>
-    <script src="script.js"></script>
 </body>
 </html>
