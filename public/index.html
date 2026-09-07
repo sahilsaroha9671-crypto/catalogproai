@@ -3,14 +3,14 @@
 <head>
     <script src="https://unpkg.com/pdf-lib@1.17.1/dist/pdf-lib.min.js"></script>
     <!-- Google tag (gtag.js) -->
-<script async src="https://www.googletagmanager.com/gtag/js?id=G-VST845P1XP"></script>
-<script>
-  window.dataLayer = window.dataLayer || [];
-  function gtag(){dataLayer.push(arguments);}
-  gtag('js', new Date());
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-VST845P1XP"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
 
-  gtag('config', 'G-VST845P1XP');
-</script>
+      gtag('config', 'G-VST845P1XP');
+    </script>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Catalogproai - Price & Profit Calculator</title>
@@ -19,24 +19,8 @@
         * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Inter', sans-serif; }
         body { background-color: #f8f9fa; color: #172b4d; }
         
-        /* LOGIN PAGE */
-        #loginView { display: flex; justify-content: center; align-items: center; min-height: 100vh; }
-        .login-card { background: #fff; padding: 40px; border-radius: 12px; box-shadow: 0 4px 20px rgba(0,0,0,0.08); width: 100%; max-width: 420px; text-align: center; }
-        .brand-header { display: flex; align-items: center; justify-content: center; gap: 8px; margin-bottom: 24px; }
-        .brand-header h2 { font-size: 22px; color: #172b4d; font-weight: 700; }
-        h3 { font-size: 20px; color: #172b4d; margin-bottom: 8px; }
-        .subtitle { color: #6b778c; font-size: 14px; margin-bottom: 24px; }
-        .google-btn { width: 100%; padding: 12px; border: 1px solid #dfe1e6; border-radius: 6px; background: #fff; display: flex; align-items: center; justify-content: center; gap: 10px; cursor: pointer; font-weight: 500; color: #333; }
-        .divider { display: flex; align-items: center; margin: 20px 0; color: #8993a4; font-size: 13px; }
-        .divider::before, .divider::after { content: ""; flex: 1; border-bottom: 1px solid #dfe1e6; }
-        .divider span { padding: 0 10px; }
-        .input-group { text-align: left; margin-bottom: 20px; }
-        .input-group label { display: block; font-size: 13px; font-weight: 600; color: #42526e; margin-bottom: 6px; }
-        .input-group input { width: 100%; padding: 12px; border: 1px solid #dfe1e6; border-radius: 6px; font-size: 14px; outline: none; }
-        .submit-btn { width: 100%; padding: 12px; background: #0052cc; color: #fff; border: none; border-radius: 6px; font-size: 15px; font-weight: 600; cursor: pointer; }
-        
-        /* LAYOUT */
-        #appContainer { display: none; min-height: 100vh; flex-direction: row; }
+        /* LAYOUT - Direct Open Home Container */
+        #appContainer { display: flex; min-height: 100vh; flex-direction: row; }
         .sidebar { width: 260px; background: #fff; border-right: 1px solid #dfe1e6; padding: 20px; display: flex; flex-direction: column; gap: 10px; }
         .sidebar .logo { font-size: 20px; font-weight: 700; color: #0052cc; display: flex; align-items: center; gap: 8px; margin-bottom: 25px; }
         .nav-item { display: flex; align-items: center; gap: 10px; padding: 11px 14px; color: #42526e; text-decoration: none; border-radius: 6px; font-size: 14px; font-weight: 500; cursor: pointer; }
@@ -87,50 +71,7 @@
 </head>
 <body>
 
-    <!-- 1. LOGIN VIEW -->
-    <div id="loginView">
-    <div class="login-card">
-      <div class="brand-header">
-        <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#0052cc" stroke-width="2.5"><path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/></svg>
-        <h2>Catalogproai</h2>
-      </div>
-      <h3>Sign in to Catalogproai</h3>
-      <p class="subtitle">Welcome back! Please sign in to continue</p>
-      
-      <button class="google-btn" type="button" onclick="handleGoogleLogin()">
-        Continue with Google
-      </button>
-
-      <div class="divider"><span>or</span></div>
-
-      <!-- Email Step -->
-      <div id="emailStep">
-        <div class="input-group">
-          <label>Email address</label>
-          <input type="email" id="userEmail" placeholder="sahilsaroha9671@gmail.com" required>
-        </div>
-        <button type="button" onclick="sendOTP()" id="sendOtpBtn" class="submit-btn" style="width: 100%; margin-top: 10px;">
-          Send OTP
-        </button>
-      </div>
-
-      <!-- OTP Step -->
-      <div id="otpStep" style="display: none; margin-top: 15px;">
-        <div class="input-group">
-          <label>Enter 4-Digit OTP</label>
-          <input type="text" id="userOTP" placeholder="X X X X" maxlength="4" style="width: 100%; padding: 10px; font-size: 18px; text-align: center; letter-spacing: 5px; margin-bottom: 10px; border: 1px solid #ccc; border-radius: 6px;">
-        </div>
-        <button type="button" onclick="verifyOTP()" class="submit-btn" style="width: 100%; background: #16a34a;">
-          Verify OTP & Login
-        </button>
-        <button type="button" onclick="resendOTP()" style="background: none; border: none; color: #2563eb; cursor: pointer; margin-top: 10px; font-size: 13px; width: 100%;">
-          Resend OTP
-        </button>
-      </div>
-
-    </div>
-  </div>
-        <!-- MAIN APP CONTAINER -->
+    <!-- MAIN APP CONTAINER -->
     <div id="appContainer">
         <!-- SIDEBAR -->
         <div class="sidebar">
@@ -290,18 +231,77 @@
                 </div>
             </div>
 
-        </div>
-    </div>
+            <!-- Meesho Image Generator View -->
+            <div id="meeshoGeneratorView" class="generator-container" style="display: none;">
+              <div class="card create-card">
+                <h3>Create New Generation</h3>
+                <div class="form-group">
+                  <label>Select Categories <span class="subtext">Max 5</span></label>
+                  <select id="categorySelect" class="form-control">
+                    <option value="" disabled selected>Search and select categories...</option>
+                    <option value="Kurtis">Kurtis</option>
+                    <option value="Sarees">Sarees</option>
+                    <option value="Western Wear">Western Wear</option>
+                    <option value="Jewelry">Jewelry</option>
+                    <option value="Footwear">Footwear</option>
+                  </select>
+                </div>
+
+                <div class="form-group">
+                  <label>Upload Image/Label</label>
+                  <div class="upload-box" id="dropzone" onclick="document.getElementById('fileInput').click()">
+                    <div class="upload-icon">📁</div>
+                    <p class="upload-title">Click or drag file to upload</p>
+                    <p class="upload-des">Master Image, up to 25 MB</p>
+                  </div>
+                  <input type="file" id="fileInput" accept="image/*" style="display: none;" onchange="handleFileSelect(event)">
+                </div>
+
+                <button class="btn-primary" onclick="generateImages()">Generate Images</button>
+              </div>
+
+              <div class="card recent-card" id="recentCard" style="display: none;">
+                <h3>Recent Generations</h3>
+                <img id="recentPreviewImg" src="" alt="Recent Upload">
+                <span class="badge-completed">COMPLETED</span>
+                <div class="recent-details">
+                  <span class="recent-cat" id="recentCat">Kurtis</span>
+                  <span class="recent-date" id="recentDate">Jun 13, 2026</span>
+                  <div class="recent-price">
+                    <span>Best Price</span>
+                    <strong>₹60</strong>
+                  </div>
+                </div>
+              </div>
+
+              <div class="results-grid" id="resultsGrid" style="display: none;">
+                <h3>Generated Meesho Images</h3>
+                <div class="grid-container" id="gridContainer"></div>
+              </div>
+            </div>
+
+        </div> <!-- main-content closure -->
+    </div> <!-- appContainer closure -->
 
     <script>
         let currentMode = 'listing'; // 'listing' OR 'profit'
 
+        // Auto calculate on load
+        window.onload = function() {
+            calculateAll();
+        };
+
         function switchView(viewName) {
             document.getElementById('homeView').style.display = viewName === 'home' ? 'block' : 'none';
             document.getElementById('calculatorView').style.display = viewName === 'calc' ? 'block' : 'none';
+            document.getElementById('meeshoGeneratorView').style.display = viewName === 'generator' ? 'block' : 'none';
             
             document.getElementById('navHome').classList.toggle('active', viewName === 'home');
             document.getElementById('navCalc').classList.toggle('active', viewName === 'calc');
+        }
+
+        function showMeeshoGenerator() {
+            switchView('generator');
         }
 
         function setMode(mode) {
@@ -400,150 +400,47 @@
             document.getElementById('resGstRateText').innerText = `${gstRate}%`;
         }
 
-        // AUTH HANDLER
-        async function handleSendOtp(e) {
-            e.preventDefault();
-            const email = document.getElementById('userEmail').value;
-            const btn = document.getElementById('btnText');
-            btn.innerText = "Sending OTP...";
-            btn.disabled = true;
+        async function cropMeeshoLabelsTo4x6(pdfFileBuffer) {
+          const { PDFDocument } = PDFLib;
+          const srcDoc = await PDFDocument.load(pdfFileBuffer);
+          const newDoc = await PDFDocument.create();
 
-            try {
-                const res = await fetch('/api/send-otp', {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ email })
-                });
+          const labelWidth = 288;  // 4 inches
+          const labelHeight = 432; // 6 inches
 
-                const data = await res.json();
-                btn.innerText = "Continue ›";
-                btn.disabled = false;
+          const pageCount = srcDoc.getPageCount();
 
-                if (data.success) {
-                    const otp = prompt("Aapke Email par 6-digit OTP bheja gaya hai.\n\nKripya yahan OTP bharein:");
-                    if (otp) {
-                        const vRes = await fetch('/api/verify-otp', {
-                            method: 'POST',
-                            headers: { 'Content-Type': 'application/json' },
-                            body: JSON.stringify({ email, otp })
-                        });
-                        const vData = await vRes.json();
-                        if (vData.success) {
-                            alert("Login Successful! Welcome to Catalogproai.");
-                            document.getElementById('loginView').style.display = 'none';
-                            document.getElementById('appContainer').style.display = 'flex';
-                            calculateAll();
-                        } else {
-                            alert(vData.message);
-                        }
-                    }
-                } else {
-                    alert("Error: " + data.message);
-                }
-            } catch (err) {
-                btn.innerText = "Continue ›";
-                btn.disabled = false;
-                alert("Server Connection Error!");
-            }
+          for (let i = 0; i < pageCount; i++) {
+            const [embeddedPage] = await newDoc.embedPages([srcDoc.getPage(i)]);
+            const newPage = newDoc.addPage([labelWidth, labelHeight]);
+
+            newPage.drawPage(embeddedPage, {
+              x: 0,
+              y: 0,
+              width: labelWidth,
+              height: labelHeight,
+              xScale: labelWidth / embeddedPage.width,
+              yScale: labelHeight / embeddedPage.height
+            });
+          }
+
+          return await newDoc.save();
+        }
+
+        async function handleShippingLabelUpload(event) {
+          const file = event.target.files[0];
+          if (!file) return;
+
+          const fileBuffer = await file.arrayBuffer();
+          const croppedPdfBytes = await cropMeeshoLabelsTo4x6(fileBuffer);
+
+          const blob = new Blob([croppedPdfBytes], { type: 'application/pdf' });
+          const link = document.createElement('a');
+          link.href = URL.createObjectURL(blob);
+          link.download = `Meesho_4x6_Labels_${Date.now()}.pdf`;
+          link.click();
         }
     </script>
-    <!-- Meesho Image Generator View -->
-<div id="meeshoGeneratorView" class="generator-container" style="display: none;">
-  <div class="main-content">
-    <div class="card create-card">
-      <h3>Create New Generation</h3>
-      <div class="form-group">
-        <label>Select Categories <span class="subtext">Max 5</span></label>
-        <select id="categorySelect" class="form-control">
-          <option value="" disabled selected>Search and select categories...</option>
-          <option value="Kurtis">Kurtis</option>
-          <option value="Sarees">Sarees</option>
-          <option value="Western Wear">Western Wear</option>
-          <option value="Jewelry">Jewelry</option>
-          <option value="Footwear">Footwear</option>
-        </select>
-      </div>
-
-      <div class="form-group">
-        <label>Upload Image/Label</label>
-        <div class="upload-box" id="dropzone" onclick="document.getElementById('fileInput').click()">
-          <div class="upload-icon">📁</div>
-          <p class="upload-title">Click or drag file to upload</p>
-          <p class="upload-des">Master Image, up to 25 MB</p>
-        </div>
-        <input type="file" id="fileInput" accept="image/*" style="display: none;" onchange="handleFileSelect(event)">
-      </div>
-
-      <button class="btn-primary" onclick="generateImages()">Generate Images</button>
-    </div>
-
-    <div class="card recent-card" id="recentCard" style="display: none;">
-      <h3>Recent Generations</h3>
-      <img id="recentPreviewImg" src="" alt="Recent Upload">
-      <span class="badge-completed">COMPLETED</span>
-      <div class="recent-details">
-        <span class="recent-cat" id="recentCat">Kurtis</span>
-        <span class="recent-date" id="recentDate">Jun 13, 2026</span>
-        <div class="recent-price">
-          <span>Best Price</span>
-          <strong>₹60</strong>
-        </div>
-      </div>
-    </div>
-
-    <div class="results-grid" id="resultsGrid" style="display: none;">
-      <h3>Generated Meesho Images</h3>
-      <div class="grid-container" id="gridContainer"></div>
-    </div>
-  </div>
-</div>
-
-</div> <!-- main-content closure -->
-</div> <!-- appContainer closure -->
-
-<script>
-async function cropMeeshoLabelsTo4x6(pdfFileBuffer) {
-  const { PDFDocument } = PDFLib;
-  const srcDoc = await PDFDocument.load(pdfFileBuffer);
-  const newDoc = await PDFDocument.create();
-
-  const labelWidth = 288;  // 4 inches
-  const labelHeight = 432; // 6 inches
-
-  const pageCount = srcDoc.getPageCount();
-
-  for (let i = 0; i < pageCount; i++) {
-    const [embeddedPage] = await newDoc.embedPages([srcDoc.getPage(i)]);
-    const newPage = newDoc.addPage([labelWidth, labelHeight]);
-
-    newPage.drawPage(embeddedPage, {
-      x: 0,
-      y: 0,
-      width: labelWidth,
-      height: labelHeight,
-      xScale: labelWidth / embeddedPage.width,
-      yScale: labelHeight / embeddedPage.height
-    });
-  }
-
-  return await newDoc.save();
-}
-
-async function handleShippingLabelUpload(event) {
-  const file = event.target.files[0];
-  if (!file) return;
-
-  const fileBuffer = await file.arrayBuffer();
-  const croppedPdfBytes = await cropMeeshoLabelsTo4x6(fileBuffer);
-
-  const blob = new Blob([croppedPdfBytes], { type: 'application/pdf' });
-  const link = document.createElement('a');
-  link.href = URL.createObjectURL(blob);
-  link.download = `Meesho_4x6_Labels_${Date.now()}.pdf`;
-  link.click();
-}
-</script>
-<script src="script.js"></script>
+    <script src="script.js"></script>
 </body>
 </html>
- 
