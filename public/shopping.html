@@ -39,6 +39,11 @@
             object-fit: cover;
             border-radius: 8px;
             margin-bottom: 10px;
+            cursor: pointer;
+            transition: opacity 0.2s;
+        }
+        .product-img:hover {
+            opacity: 0.9;
         }
         .delete-btn {
             background: #ef4444;
@@ -59,6 +64,69 @@
             cursor: pointer;
             font-size: 12px;
             float: right;
+        }
+
+        /* Modal Popup Styling */
+        .modal-overlay {
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0, 0, 0, 0.85);
+            display: none;
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+            backdrop-filter: blur(5px);
+        }
+        .modal-content {
+            background: #0f172a;
+            border: 1px solid rgba(255, 255, 255, 0.15);
+            border-radius: 16px;
+            width: 90%;
+            max-width: 600px;
+            padding: 25px;
+            box-sizing: border-box;
+            position: relative;
+            max-height: 90vh;
+            overflow-y: auto;
+        }
+        .modal-close {
+            position: absolute;
+            top: 15px; right: 20px;
+            background: rgba(255, 255, 255, 0.1);
+            color: #fff;
+            border: none;
+            font-size: 18px;
+            width: 36px; height: 36px;
+            border-radius: 50%;
+            cursor: pointer;
+        }
+        .main-preview-img {
+            width: 100%;
+            height: 320px;
+            object-fit: contain;
+            background: #000;
+            border-radius: 10px;
+            margin-bottom: 15px;
+        }
+        .thumbnail-strip {
+            display: flex;
+            gap: 10px;
+            overflow-x: auto;
+            margin-bottom: 20px;
+            padding-bottom: 5px;
+        }
+        .thumb-img {
+            width: 60px;
+            height: 60px;
+            object-fit: cover;
+            border-radius: 6px;
+            cursor: pointer;
+            border: 2px solid transparent;
+            opacity: 0.6;
+        }
+        .thumb-img.active {
+            border-color: #3b82f6;
+            opacity: 1;
         }
     </style>
 </head>
@@ -105,20 +173,20 @@
 
                     <!-- ADMIN LISTING FORM (PROTECTED) -->
                     <div class="admin-add-card" id="adminPanel">
-                        <strong style="color: #60a5fa; font-size: 16px;">🔑 Owner Panel: List a New Product</strong>
+                        <strong style="color: #60a5fa; font-size: 16px;">🔑 Owner Panel: List Product with Multiple Images</strong>
                         <form id="addProductForm">
                             <div class="form-grid">
-                                <input type="text" id="pTitle" class="form-input" placeholder="Product Title (e.g. Cotton Kurti)" required>
+                                <input type="text" id="pTitle" class="form-input" placeholder="Product Title (e.g. Designer Kurti)" required>
                                 <input type="number" id="pPrice" class="form-input" placeholder="Selling Price (₹)" required>
                                 <input type="number" id="pMRP" class="form-input" placeholder="Original Price / MRP (₹)" required>
                                 
-                                <!-- File Upload Field -->
+                                <!-- Multi File Upload Field -->
                                 <div style="display: flex; flex-direction: column; justify-content: center;">
-                                    <label style="font-size: 12px; color: #94a3b8; margin-bottom: 4px;">Upload Product Image:</label>
-                                    <input type="file" id="pImageFile" class="form-input" accept="image/*" required style="padding: 6px;">
+                                    <label style="font-size: 12px; color: #94a3b8; margin-bottom: 4px;">Upload Multiple Images (Select 2-5 photos):</label>
+                                    <input type="file" id="pImageFiles" class="form-input" accept="image/*" multiple required style="padding: 6px;">
                                 </div>
 
-                                <input type="text" id="pFeatures" class="form-input" placeholder="Sizes/Features (e.g. M, L, XL)" required style="grid-column: span 2;">
+                                <input type="text" id="pFeatures" class="form-input" placeholder="Sizes/Features (e.g. M, L, XL, XXL)" required style="grid-column: span 2;">
                             </div>
                             <input type="text" id="pDesc" class="form-input" style="margin-top: 10px;" placeholder="Product Short Description" required>
                             <button type="submit" class="card-btn btn-blue" style="margin-top: 15px; width: 100%; border: none; cursor: pointer; padding: 10px;">+ Publish Product To Store</button>
@@ -162,6 +230,28 @@
         </div>
     </div>
 
+    <!-- PRODUCT DETAIL POPUP MODAL -->
+    <div class="modal-overlay" id="productModal" onclick="closeModal(event)">
+        <div class="modal-content" onclick="event.stopPropagation()">
+            <button class="modal-close" onclick="closeModalBtn()">✕</button>
+            <h2 id="modalTitle" style="color: #fff; margin-top: 0; margin-bottom: 10px;">Product Name</h2>
+            
+            <!-- Big Image Preview -->
+            <img id="modalMainImg" src="" alt="Preview" class="main-preview-img">
+            
+            <!-- Thumbnail Selector Strip -->
+            <div class="thumbnail-strip" id="modalThumbStrip"></div>
+
+            <p id="modalDesc" style="color: #cbd5e1; font-size: 14px; margin-bottom: 10px;"></p>
+            <p id="modalFeatures" style="color: #38bdf8; font-size: 13px; margin-bottom: 20px;"></p>
+
+            <div style="display: flex; justify-content: space-between; align-items: center; border-top: 1px solid rgba(255,255,255,0.1); padding-top: 15px;">
+                <span id="modalPrice" style="font-size: 22px; font-weight: 800; color: #fff;">₹0</span>
+                <a href="#" class="card-btn btn-blue" style="text-decoration: none; padding: 10px 25px;">Buy Now</a>
+            </div>
+        </div>
+    </div>
+
     <script>
         const ADMIN_PASSWORD = "Sdivy@98_SarohA_98.798";
         let isAdminLoggedIn = false;
@@ -177,23 +267,29 @@
                 title: "Designer Cotton Kurti",
                 price: 499,
                 mrp: 999,
-                img: "https://images.unsplash.com/photo-1583391733956-3750e0ff4e8b?auto=format&fit=crop&w=500&q=80",
-                desc: "Pure cotton printed straight kurti with comfortable fit.",
-                features: "Sizes: M, L, XL, XXL"
+                images: [
+                    "https://images.unsplash.com/photo-1583391733956-3750e0ff4e8b?auto=format&fit=crop&w=500&q=80",
+                    "https://images.unsplash.com/photo-1598554747436-c9293d6a588f?auto=format&fit=crop&w=500&q=80"
+                ],
+                desc: "Pure cotton printed straight kurti with comfortable fit and premium stitching.",
+                features: "Sizes: M, L, XL, XXL | Premium Breathable Fabric"
             },
             {
                 id: 2,
                 title: "Casual Women Shirt",
                 price: 399,
                 mrp: 799,
-                img: "https://images.unsplash.com/photo-1598554747436-c9293d6a588f?auto=format&fit=crop&w=500&q=80",
-                desc: "Trendy formal & casual button-down shirt.",
-                features: "Soft Rayon Material"
+                images: [
+                    "https://images.unsplash.com/photo-1598554747436-c9293d6a588f?auto=format&fit=crop&w=500&q=80",
+                    "https://images.unsplash.com/photo-1583391733956-3750e0ff4e8b?auto=format&fit=crop&w=500&q=80"
+                ],
+                desc: "Trendy formal & casual button-down shirt designed for everyday comfort.",
+                features: "Soft Rayon Material | Multiple Color Options"
             }
         ];
 
         function getProducts() {
-            const stored = localStorage.getItem('my_store_products');
+            const stored = localStorage.getItem('my_store_products_multi');
             return stored ? JSON.parse(stored) : defaultProducts;
         }
 
@@ -228,9 +324,11 @@
             products.forEach((prod) => {
                 const card = document.createElement('div');
                 card.className = 'tool-card card-blue';
+                const firstImg = (prod.images && prod.images.length > 0) ? prod.images[0] : 'https://via.placeholder.com/300x180?text=No+Image';
+
                 card.innerHTML = `
                     <div>
-                        <img src="${prod.img}" alt="${prod.title}" class="product-img" onerror="this.src='https://via.placeholder.com/300x180?text=No+Image'">
+                        <img src="${firstImg}" alt="${prod.title}" class="product-img" onclick="openProductModal(${prod.id})" title="Click to view all images">
                         <h3>${prod.title}</h3>
                         <p>${prod.desc}</p>
                         <ul class="features-list">
@@ -241,7 +339,7 @@
                         <span style="font-size: 18px; font-weight: 800; color: #fff;">₹${prod.price} <s style="font-size: 12px; color: #888;">₹${prod.mrp}</s></span>
                         <div>
                             ${isAdminLoggedIn ? `<button onclick="deleteProduct(${prod.id})" class="delete-btn" style="display:inline-block;">Delete</button>` : ''}
-                            <a href="#" class="card-btn btn-blue" style="text-align: center; text-decoration: none; display: inline-block; padding: 6px 12px; margin-left: 5px;">Buy Now</a>
+                            <button onclick="openProductModal(${prod.id})" class="card-btn btn-blue" style="border:none; cursor:pointer; padding: 6px 12px; margin-left: 5px;">View / Buy</button>
                         </div>
                     </div>
                 `;
@@ -249,41 +347,96 @@
             });
         }
 
+        // Multi Image File Processing
         form.addEventListener('submit', (e) => {
             e.preventDefault();
+            const fileInput = document.getElementById('pImageFiles');
+            const files = fileInput.files;
             
-            const imageFile = document.getElementById('pImageFile').files[0];
-            if (!imageFile) return;
+            if (files.length === 0) return;
 
-            const reader = new FileReader();
-            reader.onload = function(uploadEvent) {
-                const products = getProducts();
-                
-                const newProd = {
-                    id: Date.now(),
-                    title: document.getElementById('pTitle').value,
-                    price: document.getElementById('pPrice').value,
-                    mrp: document.getElementById('pMRP').value,
-                    img: uploadEvent.target.result, // Base64 image data
-                    desc: document.getElementById('pDesc').value,
-                    features: document.getElementById('pFeatures').value
+            let uploadedImages = [];
+            let processedCount = 0;
+
+            Array.from(files).forEach((file) => {
+                const reader = new FileReader();
+                reader.onload = function(evt) {
+                    uploadedImages.push(evt.target.result);
+                    processedCount++;
+
+                    if (processedCount === files.length) {
+                        // All images converted to Base64
+                        const products = getProducts();
+                        const newProd = {
+                            id: Date.now(),
+                            title: document.getElementById('pTitle').value,
+                            price: document.getElementById('pPrice').value,
+                            mrp: document.getElementById('pMRP').value,
+                            images: uploadedImages,
+                            desc: document.getElementById('pDesc').value,
+                            features: document.getElementById('pFeatures').value
+                        };
+
+                        products.unshift(newProd);
+                        localStorage.setItem('my_store_products_multi', JSON.stringify(products));
+                        form.reset();
+                        renderProducts();
+                        alert("Product with " + uploadedImages.length + " images published successfully!");
+                    }
                 };
-
-                products.unshift(newProd);
-                localStorage.setItem('my_store_products', JSON.stringify(products));
-                form.reset();
-                renderProducts();
-                alert("Product aur Photo Successfully Live Ho Gaye!");
-            };
-            reader.readAsDataURL(imageFile);
+                reader.readAsDataURL(file);
+            });
         });
 
         function deleteProduct(id) {
             if(!isAdminLoggedIn) return;
             let products = getProducts();
             products = products.filter(p => p.id !== id);
-            localStorage.setItem('my_store_products', JSON.stringify(products));
+            localStorage.setItem('my_store_products_multi', JSON.stringify(products));
             renderProducts();
+        }
+
+        // Modal Logic for Multi Image Viewer
+        function openProductModal(id) {
+            const products = getProducts();
+            const prod = products.find(p => p.id === id);
+            if(!prod) return;
+
+            document.getElementById('modalTitle').innerText = prod.title;
+            document.getElementById('modalDesc').innerText = prod.desc;
+            document.getElementById('modalFeatures').innerText = "✓ " + prod.features;
+            document.getElementById('modalPrice').innerHTML = `₹${prod.price} <s style="font-size: 13px; color: #888;">₹${prod.mrp}</s>`;
+
+            const mainImg = document.getElementById('modalMainImg');
+            const thumbStrip = document.getElementById('modalThumbStrip');
+            thumbStrip.innerHTML = '';
+
+            const images = prod.images || [prod.img];
+            mainImg.src = images[0];
+
+            images.forEach((imgUrl, index) => {
+                const thumb = document.createElement('img');
+                thumb.src = imgUrl;
+                thumb.className = `thumb-img ${index === 0 ? 'active' : ''}`;
+                thumb.onclick = () => {
+                    mainImg.src = imgUrl;
+                    document.querySelectorAll('.thumb-img').forEach(t => t.classList.remove('active'));
+                    thumb.classList.add('active');
+                };
+                thumbStrip.appendChild(thumb);
+            });
+
+            document.getElementById('productModal').style.display = 'flex';
+        }
+
+        function closeModalBtn() {
+            document.getElementById('productModal').style.display = 'none';
+        }
+
+        function closeModal(event) {
+            if(event.target.id === 'productModal') {
+                document.getElementById('productModal').style.display = 'none';
+            }
         }
 
         renderProducts();
