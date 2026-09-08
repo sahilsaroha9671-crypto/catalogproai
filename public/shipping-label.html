@@ -1,26 +1,41 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Shipping Label Export - Catalogproai</title>
-  <link rel="stylesheet" href="style.css">
+    <script src="https://unpkg.com/pdf-lib@1.17.1/dist/pdf-lib.min.js"></script>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Shipping Label Export - Catalogproai</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
 </head>
 <body>
-  <div id="appContainer">
-    <nav class="sidebar">
-      <div class="logo"><h2>Catalogproai</h2></div>
-      <a href="dashboard.html" class="nav-item">Home</a>
-      <a href="image-generator.html" class="nav-item">Meesho Image Generator</a>
-      <a href="shipping-label.html" class="nav-item active">Shipping Label Export</a>
-      <a href="meesho-lens.html" class="nav-item">Meesho Lens</a>
-      <a href="price-calculator.html" class="nav-item">Price Calculator</a>
-      <a href="plans.html" class="nav-item">Plans</a>
-    </nav>
-    <main class="main-content">
-      <h1>Shipping Label Export</h1>
-      <p>Yahan PDF Upload aur Shipping Label filtering ka tool aayega.</p>
-    </main>
-  </div>
+    <div id="appContainer">
+        <div class="sidebar">
+            <div class="logo">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#3b82f6" stroke-width="2.5"><path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/></svg>
+                <span>Catalogproai</span>
+            </div>
+            <a class="nav-item" href="dashboard.html"> Home</a>
+            <a class="nav-item" href="image-generator.html"> Meesho Image Generator</a>
+            <a class="nav-item active" href="shipping-label.html"> Shipping Label Export</a>
+            <a class="nav-item" href="meesho-lens.html"> Meesho Lens</a>
+            <a class="nav-item" href="price-calculator.html"> Price Calculator</a>
+            <a class="nav-item" href="plans.html"> Plans</a>
+        </div>
+
+        <div class="main-wrapper">
+            <div class="main-content">
+                <h2>Shipping Label Export</h2>
+                <p>Upload Meesho label PDFs to filter, crop, and batch export.</p>
+                
+                <div style="background: rgba(255,255,255,0.05); padding: 30px; border-radius: 12px; border: 2px dashed rgba(255,255,255,0.2); text-align: center; margin-top: 20px;">
+                    <p style="font-size: 18px;">Select or Drag Meesho PDF Labels Here</p>
+                    <input type="file" id="pdfInput" accept="application/pdf" multiple style="margin-top: 15px;">
+                    <br><br>
+                    <button class="card-btn btn-green" style="max-width: 250px; margin: 0 auto;">Process Labels 📦</button>
+                </div>
+            </div>
+        </div>
+    </div>
 </body>
 </html>
