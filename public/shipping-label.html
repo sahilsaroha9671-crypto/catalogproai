@@ -143,12 +143,12 @@
             status.innerText = "Processing labels... Please wait.";
 
             try {
-                const { PDFDocument, PageSizes, degrees } = PDFLib;
+                const { PDFDocument } = PDFLib;
                 const outPdf = await PDFDocument.create();
 
-                // Standard 4x6 Inches in points (Landscape: 6 x 4 inches = 432 x 288 pt)
-                const width4x6 = 432; 
-                const height4x6 = 288;
+                // Standard 4x6 Inches Thermal Format (432 x 288 points - Landscape)
+                const targetW = 432; 
+                const targetH = 288;
 
                 for (let i = 0; i < input.files.length; i++) {
                     const file = input.files[i];
@@ -159,39 +159,36 @@
                     for (let j = 0; j < pages.length; j++) {
                         const page = pages[j];
                         const { width, height } = page.getSize();
-
-                        // Embed src page into new doc
                         const [embeddedPage] = await outPdf.embedPdf(srcPdf, [j]);
 
                         if (!keepInvoiceSeparate) {
-                            // NORMAL MODE: Crop main shipping label area (Top section) and fit into 4x6 horizontal page
-                            const newPage = outPdf.addPage([width4x6, height4x6]);
+                            // Single Page Label + Product Details (Zero Top Gap)
+                            const newPage = outPdf.addPage([targetW, targetH]);
 
-                            // Draw only the top label portion (removing tax invoice at bottom)
+                            // Align exact top edge (y offset shifted to remove top gap & include product details line at bottom)
                             newPage.drawPage(embeddedPage, {
                                 x: 0,
-                                y: -height * 0.45, // Trim bottom Tax Invoice section
-                                width: width4x6,
-                                height: height4x6 * 2.1
+                                y: -height * 0.28, 
+                                width: targetW,
+                                height: targetH * 1.78
                             });
                         } else {
-                            // SEPARATE PAGE MODE:
-                            // Page 1: Main Shipping Label
-                            const pageLabel = outPdf.addPage([width4x6, height4x6]);
+                            // Separate Page 1: Main Shipping Label + Product Details
+                            const pageLabel = outPdf.addPage([targetW, targetH]);
                             pageLabel.drawPage(embeddedPage, {
                                 x: 0,
-                                y: -height * 0.5,
-                                width: width4x6,
-                                height: height4x6 * 2
+                                y: -height * 0.28,
+                                width: targetW,
+                                height: targetH * 1.78
                             });
 
-                            // Page 2: Tax Invoice & Details
-                            const pageInvoice = outPdf.addPage([width4x6, height4x6]);
+                            // Separate Page 2: Tax Invoice
+                            const pageInvoice = outPdf.addPage([targetW, targetH]);
                             pageInvoice.drawPage(embeddedPage, {
                                 x: 0,
-                                y: 10,
-                                width: width4x6,
-                                height: height4x6 * 1.8
+                                y: 0,
+                                width: targetW,
+                                height: targetH * 1.3
                             });
                         }
                     }
@@ -201,13 +198,13 @@
                 const blob = new Blob([pdfBytes], { type: 'application/pdf' });
                 const link = document.createElement('a');
                 link.href = URL.createObjectURL(blob);
-                link.download = 'Processed_4x6_Shipping_Labels.pdf';
+                link.download = 'Meesho_4x6_Crop_Label.pdf';
                 link.click();
 
-                status.innerText = "✅ Success! Labels downloaded cleanly in 4x6 format.";
+                status.innerText = "✅ Download complete! Zero gap label created with product details.";
             } catch (err) {
                 console.error(err);
-                status.innerText = "❌ Error processing PDF. Make sure valid PDF is uploaded.";
+                status.innerText = "❌ Error processing PDF. Make sure valid Meesho PDF is uploaded.";
             }
         }
     </script>
