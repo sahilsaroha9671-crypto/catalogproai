@@ -1,424 +1,64 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <script src="https://unpkg.com/pdf-lib@1.17.1/dist/pdf-lib.min.js"></script>
-    <script async src="https://www.googletagmanager.com/gtag/js?id=G-VST845P1XP"></script>
-    <script>
-      window.dataLayer = window.dataLayer || [];
-      function gtag(){dataLayer.push(arguments);}
-      gtag('js', new Date());
-      gtag('config', 'G-VST845P1XP');
-    </script>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Catalogproai - Price & Profit Calculator</title>
-    <meta name="robots" content="index, follow">
-    <meta name="description" content="Catalogproai - Free suite of tools for Indian e-commerce sellers including price calculator, label exporter, and image generator.">
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="style.css">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Catalogproai - Welcome</title>
+  <link rel="stylesheet" href="style.css">
+  <style>
+    body {
+      margin: 0;
+      padding: 0;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      background: radial-gradient(circle at center, #1b2845 0%, #050b14 100%);
+      color: #ffffff;
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+      text-align: center;
+    }
+    .hero-container {
+      max-width: 600px;
+      padding: 20px;
+    }
+    .hero-title {
+      font-size: 48px;
+      font-weight: 800;
+      background: linear-gradient(135deg, #a8c0ff 0%, #3f2b96 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      margin-bottom: 20px;
+    }
+    .btn-get-started {
+      display: inline-block;
+      padding: 14px 36px;
+      font-size: 18px;
+      font-weight: 600;
+      color: #ffffff;
+      background: linear-gradient(90deg, #2563eb, #3b82f6);
+      border-radius: 30px;
+      text-decoration: none;
+      box-shadow: 0 4px 20px rgba(37, 99, 235, 0.4);
+      transition: all 0.3s ease;
+      margin-bottom: 24px;
+    }
+    .btn-get-started:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 6px 25px rgba(37, 99, 235, 0.6);
+    }
+    .hero-subtitle {
+      font-size: 16px;
+      color: #94a3b8;
+    }
+  </style>
 </head>
 <body>
-
-    <!-- 1. BLUE GRADIENT LANDING SCREEN -->
-    <div id="welcomeView">
-        <h1 class="welcome-title">Keshav Saroha</h1>
-        <button class="get-started-btn" onclick="startApp()">Get Started</button>
-        <p class="welcome-subtitle">Welcome to Catalogproai — Your All-in-One E-Commerce Tools Suite</p>
-    </div>
-
-    <!-- 2. MAIN APP CONTAINER -->
-    <div id="appContainer" style="display: none;">
-        <!-- SIDEBAR -->
-        <div class="sidebar">
-            <div class="logo">
-                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#3b82f6" stroke-width="2.5"><path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/></svg>
-                <span>Catalogproai</span>
-            </div>
-            <a class="nav-item active" id="navHome" onclick="switchView('home')"> Home</a>
-            <a class="nav-item" onclick="showMeeshoGenerator(); return false;"> Meesho Image Generator</a>
-            <a class="nav-item"> Shipping Label Export</a>
-            <a class="nav-item"> Meesho Lens</a>
-            <a class="nav-item" id="navCalc" onclick="switchView('calc')"> Price Calculator</a>
-            <a class="nav-item"> Plans</a>
-
-            <!-- Sidebar Footer Banner -->
-            <div class="sidebar-footer-card">
-                <span class="crown-icon">👑</span>
-                <div class="footer-card-text">
-                    <strong>Empowering Indian Sellers</strong>
-                    <p>List Smarter. Sell Faster.</p>
-                </div>
-            </div>
-        </div>
-
-        <div class="main-wrapper">
-            <div class="main-content">
-                
-                <!-- VIEW 1: HOME DASHBOARD -->
-                <div id="homeView">
-                    <!-- Top Tag Header -->
-                    <div class="top-header-bar">
-                        <div class="pill-badge">🚀 Sell Smarter | <strong>Grow Faster</strong></div>
-                        <div class="slogan-badge">INDIAN SELLERS STRONGER TOGETHER</div>
-                    </div>
-
-                    <div class="header-title">
-                        <h1>Catalogproai</h1>
-                        <p>A suite of tools designed to help Indian online sellers work faster, price smarter, and ship more efficiently.</p>
-                    </div>
-
-                    <div class="section-label">TOOLS <span>FOR SMART SELLERS</span></div>
-
-                    <!-- Tools Grid -->
-                    <div class="tools-grid">
-                        <!-- Tool 1: Image Generator -->
-                        <div class="tool-card card-blue">
-                            <div>
-                                <div class="card-icon-box">🖼️</div>
-                                <h3>Image Generator</h3>
-                                <p>Generate product images that qualify for lower shipping tiers on Meesho.</p>
-                                <ul class="features-list">
-                                    <li>✓ Lower shipping tier images</li>
-                                    <li>✓ Batch generation</li>
-                                </ul>
-                            </div>
-                            <button class="card-btn btn-blue" onclick="showMeeshoGenerator()">→ Open Generator</button>
-                        </div>
-
-                        <!-- Tool 2: Shipping Label Export -->
-                        <div class="tool-card card-green">
-                            <div>
-                                <div class="card-icon-box">📦</div>
-                                <h3>Shipping Label Export</h3>
-                                <p>Upload Meesho PDFs, filter by SKU, quantity, or courier, and export label packs.</p>
-                                <ul class="features-list">
-                                    <li>✓ Multi-file upload & processing</li>
-                                    <li>✓ Advanced filtering & sorting</li>
-                                </ul>
-                            </div>
-                            <label for="labelPdfInput" class="card-btn btn-green" style="cursor: pointer; display: block; text-align: center;">
-                                Start Exporting 📁
-                            </label>
-                            <input type="file" id="labelPdfInput" accept="application/pdf" onchange="handleShippingLabelUpload(event)" style="display: none;" />
-                        </div>
-
-                        <!-- Tool 3: Profit Calculator -->
-                        <div class="tool-card card-orange">
-                            <div>
-                                <div class="card-icon-box">📊</div>
-                                <h3>Profit Calculator</h3>
-                                <p>Calculate the ideal listing price or check your real profit on any order — accounting for GST & returns.</p>
-                                <ul class="features-list">
-                                    <li>✓ Listing price & profit modes</li>
-                                    <li>✓ Return cost & loss breakdown</li>
-                                    <li>✓ GST input credit summary</li>
-                                </ul>
-                            </div>
-                            <button class="card-btn btn-orange" onclick="switchView('calc')">→ Open Calculator</button>
-                        </div>
-                    </div>
-
-                    <!-- Bottom Features Footer -->
-                    <div class="bottom-features-bar">
-                        <div class="feature-box">
-                            <span class="f-icon">⚡</span>
-                            <div>
-                                <strong>Save Time</strong>
-                                <p>Automate your workflow</p>
-                            </div>
-                        </div>
-                        <div class="feature-box">
-                            <span class="f-icon">📈</span>
-                            <div>
-                                <strong>Increase Profits</strong>
-                                <p>Make data-driven decisions</p>
-                            </div>
-                        </div>
-                        <div class="feature-box">
-                            <span class="f-icon">👥</span>
-                            <div>
-                                <strong>Built for Indian Sellers</strong>
-                                <p>Simple. Fast. Reliable.</p>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- VIEW 2: PRICE & PROFIT CALCULATOR -->
-                <div id="calculatorView" style="display: none;">
-                    <div class="breadcrumb">Home / Price Calculator</div>
-                    <h1>Profit Calculator</h1>
-                    <p style="color: #94a3b8; font-size: 14px; margin-bottom: 24px;">Calculate your ideal listing price or check profit on any order.</p>
-
-                    <div class="calc-grid">
-                        <div class="calc-box">
-                            <div class="box-title">Calculator</div>
-                            <div class="form-group">
-                                <label>* Platform</label>
-                                <select id="platform"><option>Meesho</option></select>
-                            </div>
-                            <div class="form-group">
-                                <label>* Calculate</label>
-                                <div class="tab-toggle">
-                                    <button class="tab-btn active" id="tabListing" onclick="setMode('listing')">Listing Price</button>
-                                    <button class="tab-btn" id="tabProfit" onclick="setMode('profit')">Profit</button>
-                                </div>
-                            </div>
-                            <div class="form-group">
-                                <label>* Product Cost (Without GST) ℹ️</label>
-                                <input type="number" id="prodCost" value="100.00" oninput="calculateAll()">
-                            </div>
-                            <div class="form-group">
-                                <label>* GST Rate ℹ️</label>
-                                <select id="gstRate" onchange="calculateAll()">
-                                    <option value="18">18%</option>
-                                    <option value="12">12%</option>
-                                    <option value="5">5%</option>
-                                </select>
-                            </div>
-                            <div class="form-group" id="fieldDesiredProfit">
-                                <label>* Desired Profit Margin ℹ️</label>
-                                <input type="number" id="desiredProfit" value="50.00" oninput="calculateAll()">
-                            </div>
-                            <div class="form-group" id="fieldListingPriceInput" style="display: none;">
-                                <label>* Listing Price ℹ️</label>
-                                <input type="number" id="listingPriceInput" value="200.00" oninput="calculateAll()">
-                            </div>
-                            <div class="form-group">
-                                <label>* Customer Return Rate % ℹ️</label>
-                                <input type="number" id="returnRate" value="5" oninput="calculateAll()">
-                            </div>
-                            <div class="row-group">
-                                <div class="form-group">
-                                    <label>Good Return % ℹ️</label>
-                                    <input type="number" id="goodReturn" value="80" oninput="calculateAll()">
-                                </div>
-                                <div class="form-group">
-                                    <label>Damaged Return % ℹ️</label>
-                                    <input type="number" id="damagedReturn" value="20" oninput="calculateAll()">
-                                </div>
-                            </div>
-                            <div class="form-group">
-                                <label>* Return Cost ℹ️</label>
-                                <input type="number" id="returnCost" value="170.00" oninput="calculateAll()">
-                            </div>
-                        </div>
-
-                        <div class="results-box">
-                            <div class="box-title">Results</div>
-                            <div class="listing-banner">
-                                <span id="resHeadingLabel" style="font-size: 13px; font-weight: 600; color: #94a3b8;">List your item at</span>
-                                <h2 id="resBannerVal">₹190.11</h2>
-                                <p id="resSubNote">Price customers will see, including 18% GST</p>
-                            </div>
-                            <div class="res-section-title">COSTS</div>
-                            <div class="res-row"><span>Cost</span><span id="resCost">₹100.00</span></div>
-                            <div class="res-row"><span>Return cost (<span id="resRetRateText">5%</span> × ₹<span id="resRetCostText">170</span>)</span><span id="resReturnCostVal">₹8.50</span></div>
-                            <div class="res-row"><span>Product loss — damaged (<span id="resDmgLossText">1.0%</span> × ₹<span id="resProdLossCost">100</span>)</span><span id="resDamageVal">₹1.00</span></div>
-                            <div class="res-row bold total"><span>Total cost</span><span id="resTotalCost">₹109.50</span></div>
-                            <div class="res-section-title">PRICE CALCULATION</div>
-                            <div class="res-row"><span>Total cost</span><span id="resCalcTotalCost">₹109.50</span></div>
-                            <div class="res-row"><span id="lblCalcProfitOrListing">+ Desired profit</span><span id="resCalcProfit">+ ₹50.00</span></div>
-                            <div class="res-row bold"><span id="lblTargetRev">Target revenue</span><span id="resTargetRev">₹159.50</span></div>
-                            <div class="res-row"><span>+ Return buffer (<span id="resBufferText">1.0% damaged</span>)</span><span id="resReturnBuffer">+ ₹1.61</span></div>
-                            <div class="res-row"><span>+ GST (<span id="resGstRateText">18%</span>)</span><span id="resGstAdd">+ ₹29.00</span></div>
-                            <div class="res-row bold total"><span id="lblFinalRowName">Listing Price</span><span id="resFinalListing">= ₹190.11</span></div>
-                            <div class="res-section-title">GST SUMMARY</div>
-                            <div class="res-row"><span>Output GST (collected from buyer)</span><span id="resOutputGst">₹29.00</span></div>
-                            <div class="res-row"><span>Input GST (on your purchases)</span><span id="resInputGst">- ₹19.71</span></div>
-                            <div class="res-row bold total"><span>Net GST payable</span><span id="resNetGst">= ₹9.29</span></div>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- VIEW 3: MEESHO GENERATOR -->
-                <div id="meeshoGeneratorView" class="generator-container" style="display: none;">
-                  <div class="card create-card">
-                    <h3>Create New Generation</h3>
-                    <div class="form-group">
-                      <label>Select Categories <span class="subtext">Max 5</span></label>
-                      <select id="categorySelect" class="form-control">
-                        <option value="" disabled selected>Search and select categories...</option>
-                        <option value="Kurtis">Kurtis</option>
-                        <option value="Sarees">Sarees</option>
-                        <option value="Western Wear">Western Wear</option>
-                        <option value="Jewelry">Jewelry</option>
-                        <option value="Footwear">Footwear</option>
-                      </select>
-                    </div>
-                    <div class="form-group">
-                      <label>Upload Image/Label</label>
-                      <div class="upload-box" id="dropzone" onclick="document.getElementById('fileInput').click()">
-                        <div class="upload-icon">📁</div>
-                        <p class="upload-title">Click or drag file to upload</p>
-                        <p class="upload-desc">Master Image, up to 25 MB</p>
-                      </div>
-                      <input type="file" id="fileInput" accept="image/*" style="display: none;" onchange="handleFileSelect(event)">
-                    </div>
-                    <button class="btn-primary" onclick="generateImages()">Generate Images</button>
-                  </div>
-                </div>
-
-            </div>
-        </div>
-    </div>
-
-    <script>
-        let currentMode = 'listing';
-
-        function startApp() {
-            document.getElementById('welcomeView').style.display = 'none';
-            document.getElementById('appContainer').style.display = 'flex';
-            calculateAll();
-        }
-
-        function switchView(viewName) {
-            document.getElementById('homeView').style.display = viewName === 'home' ? 'block' : 'none';
-            document.getElementById('calculatorView').style.display = viewName === 'calc' ? 'block' : 'none';
-            document.getElementById('meeshoGeneratorView').style.display = viewName === 'generator' ? 'block' : 'none';
-            
-            document.getElementById('navHome').classList.toggle('active', viewName === 'home');
-            document.getElementById('navCalc').classList.toggle('active', viewName === 'calc');
-        }
-
-        function showMeeshoGenerator() {
-            switchView('generator');
-        }
-
-        function setMode(mode) {
-            currentMode = mode;
-            document.getElementById('tabListing').classList.toggle('active', mode === 'listing');
-            document.getElementById('tabProfit').classList.toggle('active', mode === 'profit');
-
-            if (mode === 'listing') {
-                document.getElementById('fieldDesiredProfit').style.display = 'block';
-                document.getElementById('fieldListingPriceInput').style.display = 'none';
-                document.getElementById('resHeadingLabel').innerText = "List your item at";
-                document.getElementById('lblCalcProfitOrListing').innerText = "+ Desired profit";
-                document.getElementById('lblFinalRowName').innerText = "Listing Price";
-            } else {
-                document.getElementById('fieldDesiredProfit').style.display = 'none';
-                document.getElementById('fieldListingPriceInput').style.display = 'block';
-                document.getElementById('resHeadingLabel').innerText = "Your estimated profit per order";
-                document.getElementById('lblCalcProfitOrListing').innerText = "Listing Price";
-                document.getElementById('lblFinalRowName').innerText = "Net Profit";
-            }
-
-            calculateAll();
-        }
-
-        function calculateAll() {
-            const cost = parseFloat(document.getElementById('prodCost').value) || 0;
-            const gstRate = parseFloat(document.getElementById('gstRate').value) || 18;
-            const retRate = parseFloat(document.getElementById('returnRate').value) || 0;
-            const dmgRate = parseFloat(document.getElementById('damagedReturn').value) || 0;
-            const retCost = parseFloat(document.getElementById('returnCost').value) || 0;
-
-            const returnCostVal = (retRate / 100) * retCost;
-            const damagedLossPercent = (retRate / 100) * (dmgRate / 100);
-            const damageVal = damagedLossPercent * cost;
-            const totalCost = cost + returnCostVal + damageVal;
-
-            if (currentMode === 'listing') {
-                const desiredProfit = parseFloat(document.getElementById('desiredProfit').value) || 0;
-                const targetRevenue = totalCost + desiredProfit;
-                const returnBuffer = (damagedLossPercent / 100) * targetRevenue * 10; 
-                const gstAdd = (targetRevenue + returnBuffer) * (gstRate / 100);
-                const finalListingPrice = targetRevenue + returnBuffer + gstAdd;
-
-                const outputGst = gstAdd;
-                const inputGst = finalListingPrice * (gstRate / (100 + gstRate)) * 0.6;
-                const netGstPayable = outputGst - inputGst;
-
-                document.getElementById('resBannerVal').innerText = `₹${finalListingPrice.toFixed(2)}`;
-                document.getElementById('resSubNote').innerText = `Price customers will see, including ${gstRate}% GST`;
-
-                document.getElementById('resCalcProfit').innerText = `+ ₹${desiredProfit.toFixed(2)}`;
-                document.getElementById('resTargetRev').innerText = `₹${targetRevenue.toFixed(2)}`;
-                document.getElementById('resReturnBuffer').innerText = `+ ₹${returnBuffer.toFixed(2)}`;
-                document.getElementById('resGstAdd').innerText = `+ ₹${gstAdd.toFixed(2)}`;
-                document.getElementById('resFinalListing').innerText = `= ₹${finalListingPrice.toFixed(2)}`;
-
-                document.getElementById('resOutputGst').innerText = `₹${outputGst.toFixed(2)}`;
-                document.getElementById('resInputGst').innerText = `- ₹${inputGst.toFixed(2)}`;
-                document.getElementById('resNetGst').innerText = `= ₹${netGstPayable.toFixed(2)}`;
-            } else {
-                const listingPrice = parseFloat(document.getElementById('listingPriceInput').value) || 0;
-                const basePriceNoGst = listingPrice / (1 + (gstRate / 100));
-                const gstAmount = listingPrice - basePriceNoGst;
-                const calculatedProfit = basePriceNoGst - totalCost;
-
-                const outputGst = gstAmount;
-                const inputGst = cost * (gstRate / 100);
-                const netGstPayable = outputGst - inputGst;
-
-                document.getElementById('resBannerVal').innerText = `₹${calculatedProfit.toFixed(2)}`;
-                document.getElementById('resSubNote').innerText = `Profit after GST, returns, and damaged product losses`;
-
-                document.getElementById('resCalcProfit').innerText = `₹${listingPrice.toFixed(2)}`;
-                document.getElementById('resTargetRev').innerText = `₹${basePriceNoGst.toFixed(2)}`;
-                document.getElementById('resReturnBuffer').innerText = `- ₹${(returnCostVal + damageVal).toFixed(2)}`;
-                document.getElementById('resGstAdd').innerText = `- ₹${gstAmount.toFixed(2)}`;
-                document.getElementById('resFinalListing').innerText = `= ₹${calculatedProfit.toFixed(2)}`;
-
-                document.getElementById('resOutputGst').innerText = `₹${outputGst.toFixed(2)}`;
-                document.getElementById('resInputGst').innerText = `- ₹${inputGst.toFixed(2)}`;
-                document.getElementById('resNetGst').innerText = `= ₹${netGstPayable.toFixed(2)}`;
-            }
-
-            document.getElementById('resCost').innerText = `₹${cost.toFixed(2)}`;
-            document.getElementById('resRetRateText').innerText = `${retRate}%`;
-            document.getElementById('resRetCostText').innerText = `${retCost}`;
-            document.getElementById('resReturnCostVal').innerText = `₹${returnCostVal.toFixed(2)}`;
-            document.getElementById('resDmgLossText').innerText = `${(damagedLossPercent * 100).toFixed(1)}%`;
-            document.getElementById('resProdLossCost').innerText = `${cost}`;
-            document.getElementById('resDamageVal').innerText = `₹${damageVal.toFixed(2)}`;
-            document.getElementById('resTotalCost').innerText = `₹${totalCost.toFixed(2)}`;
-            document.getElementById('resCalcTotalCost').innerText = `₹${totalCost.toFixed(2)}`;
-            document.getElementById('resBufferText').innerText = `${(damagedLossPercent * 100).toFixed(1)}% damaged`;
-            document.getElementById('resGstRateText').innerText = `${gstRate}%`;
-        }
-
-        async function cropMeeshoLabelsTo4x6(pdfFileBuffer) {
-          const { PDFDocument } = PDFLib;
-          const srcDoc = await PDFDocument.load(pdfFileBuffer);
-          const newDoc = await PDFDocument.create();
-
-          const labelWidth = 288;
-          const labelHeight = 432;
-
-          const pageCount = srcDoc.getPageCount();
-
-          for (let i = 0; i < pageCount; i++) {
-            const [embeddedPage] = await newDoc.embedPages([srcDoc.getPage(i)]);
-            const newPage = newDoc.addPage([labelWidth, labelHeight]);
-
-            newPage.drawPage(embeddedPage, {
-              x: 0,
-              y: 0,
-              width: labelWidth,
-              height: labelHeight,
-              xScale: labelWidth / embeddedPage.width,
-              yScale: labelHeight / embeddedPage.height
-            });
-          }
-
-          return await newDoc.save();
-        }
-
-        async function handleShippingLabelUpload(event) {
-          const file = event.target.files[0];
-          if (!file) return;
-
-          const fileBuffer = await file.arrayBuffer();
-          const croppedPdfBytes = await cropMeeshoLabelsTo4x6(fileBuffer);
-
-          const blob = new Blob([croppedPdfBytes], { type: 'application/pdf' });
-          const link = document.createElement('a');
-          link.href = URL.createObjectURL(blob);
-          link.download = `Meesho_4x6_Labels_${Date.now()}.pdf`;
-          link.click();
-        }
-    </script>
+  <div class="hero-container">
+    <h1 class="hero-title">Keshav Saroha</h1>
+    <a href="dashboard.html" class="btn-get-started">Get Started</a>
+    <p class="hero-subtitle">Welcome to Catalogproai — Your All-in-One E-Commerce Tools Suite</p>
+  </div>
 </body>
 </html>
