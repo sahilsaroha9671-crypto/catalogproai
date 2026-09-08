@@ -129,7 +129,7 @@ body {
   overflow: hidden;
 }
 
-/* Curved Neon Ring Lines (Reference Picture Exact Effect) */
+/* Curved Neon Ring Lines */
 .main-wrapper::before {
   content: '';
   position: absolute;
@@ -228,25 +228,84 @@ body {
   flex-direction: column;
   justify-content: space-between;
   box-shadow: 0 10px 30px rgba(0, 0, 0, 0.4);
-  transition: transform 0.3s ease, border-color 0.3s ease;
+  transition: transform 0.3s ease, border-color 0.3s ease, box-shadow 0.3s ease;
 }
 
 .tool-card:hover {
   transform: translateY(-6px);
 }
 
-.card-blue { border-color: rgba(59, 130, 246, 0.3); }
-.card-blue:hover { border-color: rgba(59, 130, 246, 0.8); }
+/* Card Outer Glowing Borders */
+.card-blue, .card-purple {
+  border-color: rgba(168, 85, 247, 0.4);
+  box-shadow: 0 0 25px rgba(168, 85, 247, 0.15);
+}
+.card-blue:hover, .card-purple:hover {
+  border-color: rgba(168, 85, 247, 0.8);
+  box-shadow: 0 0 35px rgba(168, 85, 247, 0.3);
+}
 
-.card-green { border-color: rgba(16, 185, 129, 0.3); }
-.card-green:hover { border-color: rgba(16, 185, 129, 0.8); }
+.card-green {
+  border-color: rgba(34, 197, 94, 0.4);
+  box-shadow: 0 0 25px rgba(34, 197, 94, 0.15);
+}
+.card-green:hover {
+  border-color: rgba(34, 197, 94, 0.8);
+  box-shadow: 0 0 35px rgba(34, 197, 94, 0.3);
+}
 
-.card-orange { border-color: rgba(245, 158, 11, 0.3); }
-.card-orange:hover { border-color: rgba(245, 158, 11, 0.8); }
+.card-orange {
+  border-color: rgba(249, 115, 22, 0.4);
+  box-shadow: 0 0 25px rgba(249, 115, 22, 0.15);
+}
+.card-orange:hover {
+  border-color: rgba(249, 115, 22, 0.8);
+  box-shadow: 0 0 35px rgba(249, 115, 22, 0.3);
+}
 
-.card-icon-box {
-  font-size: 28px;
-  margin-bottom: 12px;
+/* Custom Yellow Glowing Frame with Reflection for Card Icons */
+.custom-image-icon, .card-icon-box {
+  width: 48px;
+  height: 48px;
+  background: #000000;
+  border: 2.5px solid #EAB308;
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 4px;
+  box-shadow: 0 0 12px rgba(234, 179, 8, 0.6), inset 0 0 6px rgba(234, 179, 8, 0.3);
+  margin-bottom: 16px;
+  transition: all 0.3s ease;
+}
+
+.custom-image-icon img, .card-custom-img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  border-radius: 4px;
+}
+
+.tool-card:hover .custom-image-icon,
+.tool-card:hover .card-icon-box {
+  box-shadow: 0 0 20px rgba(234, 179, 8, 0.9), 0 0 35px rgba(234, 179, 8, 0.4);
+  transform: translateY(-2px);
+}
+
+/* Card Header Text Colors */
+.text-purple, .card-title.text-purple {
+  color: #A855F7;
+  font-weight: 700;
+}
+
+.text-green, .card-title.text-green {
+  color: #22C55E;
+  font-weight: 700;
+}
+
+.text-orange, .card-title.text-orange {
+  color: #F97316;
+  font-weight: 700;
 }
 
 .tool-card h3 {
@@ -261,18 +320,25 @@ body {
   margin-bottom: 16px;
 }
 
-.features-list {
+/* Checkmark List Colors */
+.features-list, .card-checklist {
   list-style: none;
   margin-bottom: 20px;
+  padding: 0;
 }
 
-.features-list li {
+.features-list li, .card-checklist li {
   color: #cbd5e1;
-  font-size: 12px;
+  font-size: 13px;
   margin-bottom: 6px;
 }
 
-.card-btn {
+.purple-check { color: #A855F7; font-weight: bold; margin-right: 6px; }
+.green-check { color: #22C55E; font-weight: bold; margin-right: 6px; }
+.orange-check { color: #EAB308; font-weight: bold; margin-right: 6px; }
+
+/* Buttons Style */
+.card-btn, .btn-card {
   width: 100%;
   padding: 12px;
   border-radius: 10px;
@@ -280,15 +346,18 @@ body {
   font-weight: 600;
   font-size: 14px;
   cursor: pointer;
+  text-decoration: none;
+  display: block;
+  text-align: center;
   transition: transform 0.2s ease, opacity 0.2s ease;
 }
 
-.card-btn:hover {
+.card-btn:hover, .btn-card:hover {
   opacity: 0.9;
   transform: scale(1.02);
 }
 
-.btn-blue {
+.btn-blue, .btn-purple {
   background: linear-gradient(135deg, #2563eb, #1d4ed8);
   color: white;
   box-shadow: 0 4px 14px rgba(37, 99, 235, 0.4);
@@ -300,7 +369,7 @@ body {
   box-shadow: 0 4px 14px rgba(5, 150, 105, 0.4);
 }
 
-.btn-orange {
+.btn-orange, .btn-pink-orange {
   background: linear-gradient(135deg, #db2777, #be123c);
   color: white;
   box-shadow: 0 4px 14px rgba(219, 39, 119, 0.4);
@@ -443,6 +512,7 @@ body {
   padding-top: 8px;
   margin-top: 4px;
 }
+
 /* ==========================================
    MOBILE & TABLET RESPONSIVE FIXES
    ========================================== */
@@ -454,12 +524,10 @@ body {
 }
 
 @media (max-width: 768px) {
-  /* Main Container Adjustment */
   #appContainer {
     flex-direction: column;
   }
 
-  /* Mobile Top Sidebar - Horizontal Scroll Bar */
   .sidebar {
     width: 100%;
     border-right: none;
@@ -474,14 +542,12 @@ body {
     -webkit-overflow-scrolling: touch;
   }
 
-  /* Logo Alignment */
   .logo {
     margin-bottom: 0 !important;
     margin-right: 12px;
     flex-shrink: 0;
   }
 
-  /* Nav Items Horizontal Buttons */
   .sidebar .nav-item {
     display: inline-flex !important;
     align-items: center;
@@ -496,12 +562,10 @@ body {
     display: none !important;
   }
 
-  /* Main Content Padding Fix */
   .main-content {
     padding: 20px 16px;
   }
 
-  /* Header Bar Fix */
   .top-header-bar {
     flex-direction: column;
     align-items: flex-start;
@@ -512,7 +576,6 @@ body {
     font-size: 28px;
   }
 
-  /* Single Column Layout for Cards & Calculator */
   .tools-grid {
     grid-template-columns: 1fr;
     gap: 16px;
@@ -523,13 +586,11 @@ body {
     gap: 16px;
   }
 
-  /* Bottom Features Footer */
   .bottom-features-bar {
     flex-direction: column;
     gap: 16px;
   }
 
-  /* Table / Row Spacing Fixes */
   .row-group {
     display: flex;
     flex-direction: column;
