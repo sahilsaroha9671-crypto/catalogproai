@@ -1,75 +1,129 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Catalogproai - Dashboard</title>
-  <link rel="stylesheet" href="style.css">
+    <script src="https://unpkg.com/pdf-lib@1.17.1/dist/pdf-lib.min.js"></script>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Catalogproai - Dashboard</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
 </head>
 <body>
-  <div id="appContainer">
-    <nav class="sidebar">
-      <div class="logo">
-        <h2>Catalogproai</h2>
-      </div>
-      <a href="dashboard.html" class="nav-item active">Home</a>
-      <a href="image-generator.html" class="nav-item">Meesho Image Generator</a>
-      <a href="shipping-label.html" class="nav-item">Shipping Label Export</a>
-      <a href="meesho-lens.html" class="nav-item">Meesho Lens</a>
-      <a href="price-calculator.html" class="nav-item">Price Calculator</a>
-      <a href="plans.html" class="nav-item">Plans</a>
-    </nav>
 
-    <main class="main-content">
-      <div class="top-header-bar">
-        <div class="header-title">
-          <span class="badge">🚀 Sell Smarter | Grow Faster</span>
-          <h1>Catalogproai</h1>
-          <p>A suite of tools designed to help Indian online sellers work faster, price smarter, and ship more efficiently.</p>
-        </div>
-      </div>
+    <div id="appContainer">
+        <!-- SIDEBAR -->
+        <div class="sidebar">
+            <div class="logo">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#3b82f6" stroke-width="2.5"><path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/></svg>
+                <span>Catalogproai</span>
+            </div>
+            <a class="nav-item active" href="dashboard.html"> Home</a>
+            <a class="nav-item" href="image-generator.html"> Meesho Image Generator</a>
+            <a class="nav-item" href="shipping-label.html"> Shipping Label Export</a>
+            <a class="nav-item" href="meesho-lens.html"> Meesho Lens</a>
+            <a class="nav-item" href="price-calculator.html"> Price Calculator</a>
+            <a class="nav-item" href="plans.html"> Plans</a>
 
-      <div class="section-heading">
-        <span>TOOLS FOR SMART SELLERS</span>
-      </div>
-
-      <div class="tools-grid">
-        <div class="tool-card">
-          <div class="card-icon">🖼️</div>
-          <h3>Image Generator</h3>
-          <p>Generate product images that qualify for lower shipping tiers on Meesho.</p>
-          <ul>
-            <li>✓ Lower shipping tier images</li>
-            <li>✓ Batch generation</li>
-          </ul>
-          <a href="image-generator.html" class="btn btn-primary">→ Open Generator</a>
+            <div class="sidebar-footer-card">
+                <span class="crown-icon">👑</span>
+                <div class="footer-card-text">
+                    <strong>Empowering Indian Sellers</strong>
+                    <p>List Smarter. Sell Faster.</p>
+                </div>
+            </div>
         </div>
 
-        <div class="tool-card">
-          <div class="card-icon">📦</div>
-          <h3>Shipping Label Export</h3>
-          <p>Upload Meesho PDFs, filter by SKU, quantity, or courier, and export label packs.</p>
-          <ul>
-            <li>✓ Multi-file upload & processing</li>
-            <li>✓ Advanced filtering & sorting</li>
-          </ul>
-          <a href="shipping-label.html" class="btn btn-success">Start Exporting 📁</a>
-        </div>
+        <div class="main-wrapper">
+            <div class="main-content">
+                
+                <div id="homeView">
+                    <div class="top-header-bar">
+                        <div class="pill-badge">🚀 Sell Smarter | <strong>Grow Faster</strong></div>
+                        <div class="slogan-badge">INDIAN SELLERS STRONGER TOGETHER</div>
+                    </div>
 
-        <div class="tool-card">
-          <div class="card-icon">📊</div>
-          <h3>Profit Calculator</h3>
-          <p>Calculate the ideal listing price or check your real profit on any order — accounting for GST & returns.</p>
-          <ul>
-            <li>✓ Listing price & profit modes</li>
-            <li>✓ Return cost & loss breakdown</li>
-            <li>✓ GST input credit summary</li>
-          </ul>
-          <a href="price-calculator.html" class="btn btn-danger">→ Open Calculator</a>
+                    <div class="header-title">
+                        <h1>Catalogproai</h1>
+                        <p>A suite of tools designed to help Indian online sellers work faster, price smarter, and ship more efficiently.</p>
+                    </div>
+
+                    <div class="section-label">TOOLS <span>FOR SMART SELLERS</span></div>
+
+                    <!-- Tools Grid -->
+                    <div class="tools-grid">
+                        <!-- Tool 1: Image Generator -->
+                        <div class="tool-card card-blue">
+                            <div>
+                                <div class="card-icon-box">🖼️</div>
+                                <h3>Image Generator</h3>
+                                <p>Generate product images that qualify for lower shipping tiers on Meesho.</p>
+                                <ul class="features-list">
+                                    <li>✓ Lower shipping tier images</li>
+                                    <li>✓ Batch generation</li>
+                                </ul>
+                            </div>
+                            <a href="image-generator.html" class="card-btn btn-blue" style="text-align: center; text-decoration: none; display: block;">→ Open Generator</a>
+                        </div>
+
+                        <!-- Tool 2: Shipping Label Export -->
+                        <div class="tool-card card-green">
+                            <div>
+                                <div class="card-icon-box">📦</div>
+                                <h3>Shipping Label Export</h3>
+                                <p>Upload Meesho PDFs, filter by SKU, quantity, or courier, and export label packs.</p>
+                                <ul class="features-list">
+                                    <li>✓ Multi-file upload & processing</li>
+                                    <li>✓ Advanced filtering & sorting</li>
+                                </ul>
+                            </div>
+                            <a href="shipping-label.html" class="card-btn btn-green" style="text-align: center; text-decoration: none; display: block;">Start Exporting 📁</a>
+                        </div>
+
+                        <!-- Tool 3: Profit Calculator -->
+                        <div class="tool-card card-orange">
+                            <div>
+                                <div class="card-icon-box">📊</div>
+                                <h3>Profit Calculator</h3>
+                                <p>Calculate the ideal listing price or check your real profit on any order — accounting for GST & returns.</p>
+                                <ul class="features-list">
+                                    <li>✓ Listing price & profit modes</li>
+                                    <li>✓ Return cost & loss breakdown</li>
+                                    <li>✓ GST input credit summary</li>
+                                </ul>
+                            </div>
+                            <a href="price-calculator.html" class="card-btn btn-orange" style="text-align: center; text-decoration: none; display: block;">→ Open Calculator</a>
+                        </div>
+                    </div>
+
+                    <!-- Bottom Features Footer -->
+                    <div class="bottom-features-bar">
+                        <div class="feature-box">
+                            <span class="f-icon">⚡</span>
+                            <div>
+                                <strong>Save Time</strong>
+                                <p>Automate your workflow</p>
+                            </div>
+                        </div>
+                        <div class="feature-box">
+                            <span class="f-icon">📈</span>
+                            <div>
+                                <strong>Increase Profits</strong>
+                                <p>Make data-driven decisions</p>
+                            </div>
+                        </div>
+                        <div class="feature-box">
+                            <span class="f-icon">👥</span>
+                            <div>
+                                <strong>Built for Indian Sellers</strong>
+                                <p>Simple. Fast. Reliable.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
         </div>
-      </div>
-    </main>
-  </div>
+    </div>
+
 </body>
 </html>
-
