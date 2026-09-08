@@ -61,81 +61,6 @@
             font-size: 12px;
             float: right;
         }
-
-        /* Detailed Product View Page / Modal Overlay */
-        .detail-overlay {
-            position: fixed;
-            top: 0; left: 0; width: 100%; height: 100%;
-            background: #090d16;
-            display: none;
-            z-index: 2000;
-            overflow-y: auto;
-            padding: 30px 20px;
-            box-sizing: border-box;
-        }
-        .detail-container {
-            max-width: 900px;
-            margin: 0 auto;
-            background: #0f172a;
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            border-radius: 16px;
-            padding: 30px;
-            position: relative;
-        }
-        .back-btn {
-            background: rgba(255, 255, 255, 0.1);
-            color: #fff;
-            border: none;
-            padding: 8px 16px;
-            border-radius: 6px;
-            cursor: pointer;
-            font-size: 14px;
-            margin-bottom: 20px;
-        }
-        .detail-grid {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 30px;
-        }
-        @media(max-width: 768px) {
-            .detail-grid { grid-template-columns: 1fr; }
-        }
-        .detail-main-img {
-            width: 100%;
-            height: 380px;
-            object-fit: cover;
-            border-radius: 12px;
-            background: #000;
-            margin-bottom: 12px;
-        }
-        .detail-thumbs {
-            display: flex;
-            gap: 10px;
-            overflow-x: auto;
-            margin-bottom: 15px;
-        }
-        .detail-thumb {
-            width: 70px; height: 70px;
-            object-fit: cover;
-            border-radius: 6px;
-            cursor: pointer;
-            border: 2px solid transparent;
-            opacity: 0.6;
-        }
-        .detail-thumb.active {
-            border-color: #3b82f6;
-            opacity: 1;
-        }
-        .auto-specs {
-            background: rgba(59, 130, 246, 0.08);
-            border-left: 3px solid #3b82f6;
-            padding: 12px;
-            border-radius: 0 8px 8px 0;
-            margin: 15px 0;
-            font-size: 13px;
-            color: #cbd5e1;
-            line-height: 1.5;
-        }
     </style>
 </head>
 <body>
@@ -193,7 +118,7 @@
                                     <input type="file" id="pImageFiles" class="form-input" accept="image/*" multiple required style="padding: 6px;">
                                 </div>
 
-                                <input type="text" id="pFeatures" class="form-input" placeholder="Sizes / Specs (e.g. Sizes: M, L, XL)" required style="grid-column: span 2;">
+                                <input type="text" id="pFeatures" class="form-input" placeholder="Sizes Available (e.g. S, M, L, XL, XXL)" required style="grid-column: span 2;">
                             </div>
                             <input type="text" id="pDesc" class="form-input" style="margin-top: 10px;" placeholder="Product Short Description" required>
                             <button type="submit" class="card-btn btn-blue" style="margin-top: 15px; width: 100%; border: none; cursor: pointer; padding: 10px;">+ Publish Product To Store</button>
@@ -227,49 +152,6 @@
         </div>
     </div>
 
-    <!-- FULL DETAILED PRODUCT PAGE VIEW -->
-    <div class="detail-overlay" id="productDetailPage">
-        <div class="detail-container">
-            <button class="back-btn" onclick="closeDetailPage()">← Back to Store</button>
-            
-            <div class="detail-grid">
-                <!-- Left: Images gallery -->
-                <div>
-                    <img id="dtMainImg" src="" class="detail-main-img" alt="Product Image">
-                    <div class="detail-thumbs" id="dtThumbStrip"></div>
-                </div>
-
-                <!-- Right: Details & Auto-Generated Specs -->
-                <div>
-                    <h2 id="dtTitle" style="color:#fff; margin-top:0; font-size:26px;"></h2>
-                    <div style="margin: 15px 0;">
-                        <span id="dtPrice" style="font-size: 28px; font-weight: 800; color: #38bdf8;"></span>
-                        <s id="dtMrp" style="font-size: 16px; color: #888; margin-left: 10px;"></s>
-                    </div>
-                    
-                    <p id="dtDesc" style="color: #cbd5e1; font-size: 15px; line-height: 1.6;"></p>
-                    <p id="dtFeatures" style="color: #60a5fa; font-weight: 600; margin-top: 10px;"></p>
-
-                    <!-- WEBSITE AUTO-GENERATED ADDITIONAL DETAILS -->
-                    <div class="auto-specs">
-                        <strong>🛡️ Website Quality Assured Guarantees:</strong>
-                        <ul style="margin: 6px 0 0 18px; padding: 0;">
-                            <li>100% Premium Export Quality Fabric Checked</li>
-                            <li>Fast Dispatch within 24 Hours across India</li>
-                            <li>Easy 7-Day Return & Exchange Policy Applicable</li>
-                            <li>COD (Cash on Delivery) & UPI Secure Checkout Available</li>
-                        </ul>
-                    </div>
-
-                    <!-- BUY NOW BUTTON AT BOTTOM -->
-                    <div style="margin-top: 30px;">
-                        <a href="#" id="dtBuyBtn" onclick="alert('Order placed / redirected successfully!'); return false;" class="card-btn btn-blue" style="text-align: center; text-decoration: none; display: block; padding: 14px; font-size: 18px; font-weight: 700; border-radius: 8px;">🛍️ Buy Now (Order Direct)</a>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-
     <script>
         const ADMIN_PASSWORD = "Sdivy@98_SarohA_98.798";
         let isAdminLoggedIn = false;
@@ -280,8 +162,8 @@
         const adminLockBtn = document.getElementById('adminLockBtn');
 
         function getProducts() {
-            const stored = localStorage.getItem('my_store_clean_products');
-            return stored ? JSON.parse(stored) : []; // Default empty so only user listed items show
+            const stored = localStorage.getItem('my_store_peach_products');
+            return stored ? JSON.parse(stored) : [];
         }
 
         function toggleAdminPanel() {
@@ -318,19 +200,19 @@
                 const firstImg = (prod.images && prod.images.length > 0) ? prod.images[0] : 'https://via.placeholder.com/300x180?text=No+Image';
 
                 card.innerHTML = `
-                    <div onclick="openDetailPage(${prod.id})" style="cursor: pointer;">
+                    <div onclick="openProductPage(${prod.id})" style="cursor: pointer;">
                         <img src="${firstImg}" alt="${prod.title}" class="product-img">
                         <h3>${prod.title}</h3>
                         <p>${prod.desc}</p>
                         <ul class="features-list">
-                            <li>✓ ${prod.features}</li>
+                            <li>✓ Sizes: ${prod.features}</li>
                         </ul>
                     </div>
                     <div style="margin-top: 15px; display: flex; justify-content: space-between; align-items: center;">
                         <span style="font-size: 18px; font-weight: 800; color: #fff;">₹${prod.price} <s style="font-size: 12px; color: #888;">₹${prod.mrp}</s></span>
                         <div>
                             ${isAdminLoggedIn ? `<button onclick="deleteProduct(${prod.id})" class="delete-btn" style="display:inline-block;">Delete</button>` : ''}
-                            <button onclick="openDetailPage(${prod.id})" class="card-btn btn-blue" style="border:none; cursor:pointer; padding: 6px 12px; margin-left: 5px;">View / Buy</button>
+                            <button onclick="openProductPage(${prod.id})" class="card-btn btn-blue" style="border:none; cursor:pointer; padding: 6px 12px; margin-left: 5px;">View / Buy</button>
                         </div>
                     </div>
                 `;
@@ -338,7 +220,6 @@
             });
         }
 
-        // Add Product Form Handler
         form.addEventListener('submit', (e) => {
             e.preventDefault();
             const fileInput = document.getElementById('pImageFiles');
@@ -368,7 +249,7 @@
                         };
 
                         products.unshift(newProd);
-                        localStorage.setItem('my_store_clean_products', JSON.stringify(products));
+                        localStorage.setItem('my_store_peach_products', JSON.stringify(products));
                         form.reset();
                         renderProducts();
                         alert("Product Successfully Live Ho Gaya!");
@@ -382,48 +263,13 @@
             if(!isAdminLoggedIn) return;
             let products = getProducts();
             products = products.filter(p => p.id !== id);
-            localStorage.setItem('my_store_clean_products', JSON.stringify(products));
+            localStorage.setItem('my_store_peach_products', JSON.stringify(products));
             renderProducts();
         }
 
-        // Open Individual Detailed Product Page
-        function openDetailPage(id) {
-            const products = getProducts();
-            const prod = products.find(p => p.id === id);
-            if(!prod) return;
-
-            document.getElementById('dtTitle').innerText = prod.title;
-            document.getElementById('dtPrice').innerText = `₹${prod.price}`;
-            document.getElementById('dtMrp').innerText = `₹${prod.mrp}`;
-            document.getElementById('dtDesc').innerText = prod.desc;
-            document.getElementById('dtFeatures').innerText = "✓ " + prod.features;
-
-            const mainImg = document.getElementById('dtMainImg');
-            const thumbStrip = document.getElementById('dtThumbStrip');
-            thumbStrip.innerHTML = '';
-
-            const images = prod.images || [];
-            if(images.length > 0) {
-                mainImg.src = images[0];
-                images.forEach((imgUrl, index) => {
-                    const thumb = document.createElement('img');
-                    thumb.src = imgUrl;
-                    thumb.className = `detail-thumb ${index === 0 ? 'active' : ''}`;
-                    thumb.onclick = () => {
-                        mainImg.src = imgUrl;
-                        document.querySelectorAll('.detail-thumb').forEach(t => t.classList.remove('active'));
-                        thumb.classList.add('active');
-                    };
-                    thumbStrip.appendChild(thumb);
-                });
-            }
-
-            document.getElementById('productDetailPage').style.display = 'block';
-            window.scrollTo(0,0);
-        }
-
-        function closeDetailPage() {
-            document.getElementById('productDetailPage').style.display = 'none';
+        // Navigate to Separate Product Page with ID
+        function openProductPage(id) {
+            window.location.href = `product-detail.html?id=${id}`;
         }
 
         renderProducts();
