@@ -1,26 +1,39 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Meesho Image Generator - Catalogproai</title>
-  <link rel="stylesheet" href="style.css">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Meesho Image Generator - Catalogproai</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
 </head>
 <body>
-  <div id="appContainer">
-    <nav class="sidebar">
-      <div class="logo"><h2>Catalogproai</h2></div>
-      <a href="dashboard.html" class="nav-item">Home</a>
-      <a href="image-generator.html" class="nav-item active">Meesho Image Generator</a>
-      <a href="shipping-label.html" class="nav-item">Shipping Label Export</a>
-      <a href="meesho-lens.html" class="nav-item">Meesho Lens</a>
-      <a href="price-calculator.html" class="nav-item">Price Calculator</a>
-      <a href="plans.html" class="nav-item">Plans</a>
-    </nav>
-    <main class="main-content">
-      <h1>Meesho Image Generator</h1>
-      <p>Yahan aapka Image Generator Tool ka interface/form aayega.</p>
-    </main>
-  </div>
+    <div id="appContainer">
+        <div class="sidebar">
+            <div class="logo">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#3b82f6" stroke-width="2.5"><path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/></svg>
+                <span>Catalogproai</span>
+            </div>
+            <a class="nav-item" href="dashboard.html"> Home</a>
+            <a class="nav-item active" href="image-generator.html"> Meesho Image Generator</a>
+            <a class="nav-item" href="shipping-label.html"> Shipping Label Export</a>
+            <a class="nav-item" href="meesho-lens.html"> Meesho Lens</a>
+            <a class="nav-item" href="price-calculator.html"> Price Calculator</a>
+            <a class="nav-item" href="plans.html"> Plans</a>
+        </div>
+
+        <div class="main-wrapper">
+            <div class="main-content">
+                <h2>Meesho Image Generator</h2>
+                <p>Convert and resize images to lower shipping tier dimensions.</p>
+
+                <div style="background: rgba(255,255,255,0.05); padding: 30px; border-radius: 12px; margin-top: 20px;">
+                    <label>Upload Product Photo:</label><br><br>
+                    <input type="file" id="imgUpload" accept="image/*"><br><br>
+                    <button class="card-btn btn-blue" style="max-width: 200px;">Generate Image 🖼️</button>
+                </div>
+            </div>
+        </div>
+    </div>
 </body>
 </html>
