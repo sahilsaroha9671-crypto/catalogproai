@@ -443,3 +443,83 @@ body {
   padding-top: 8px;
   margin-top: 4px;
 }
+/* ==========================================
+   MOBILE & TABLET RESPONSIVE FIXES
+   ========================================== */
+
+@media (max-width: 1024px) {
+  .tools-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (max-width: 768px) {
+  /* Main Container Adjustment */
+  #appContainer {
+    flex-direction: column;
+  }
+
+  /* Mobile Top Sidebar/Header */
+  .sidebar {
+    width: 100%;
+    border-right: none;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+    padding: 16px;
+  }
+
+  .logo {
+    margin-bottom: 12px;
+  }
+
+  /* Horizontal Scrollable Nav for Mobile */
+  .sidebar .nav-item {
+    display: inline-block;
+    margin-right: 6px;
+    margin-bottom: 0;
+    white-space: nowrap;
+  }
+
+  .sidebar-footer-card {
+    display: none; /* Mobile par clean look ke liye hide */
+  }
+
+  /* Padding Fix for Mobile Screen */
+  .main-content {
+    padding: 20px 16px;
+  }
+
+  /* Header Bar Fix */
+  .top-header-bar {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 10px;
+  }
+
+  .header-title h1 {
+    font-size: 28px;
+  }
+
+  /* Single Column Layout for Cards & Calculator */
+  .tools-grid {
+    grid-template-columns: 1fr;
+    gap: 16px;
+  }
+
+  .calc-grid {
+    grid-template-columns: 1fr;
+    gap: 16px;
+  }
+
+  /* Bottom Features Footer */
+  .bottom-features-bar {
+    flex-direction: column;
+    gap: 16px;
+  }
+
+  /* Table / Row Spacing Fixes */
+  .row-group {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+}
