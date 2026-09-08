@@ -459,31 +459,44 @@ body {
     flex-direction: column;
   }
 
-  /* Mobile Top Sidebar/Header */
+  /* Mobile Top Sidebar - Horizontal Scroll Bar */
   .sidebar {
     width: 100%;
     border-right: none;
     border-bottom: 1px solid rgba(255, 255, 255, 0.08);
-    padding: 16px;
+    padding: 12px 16px;
+    display: flex !important;
+    flex-direction: row !important;
+    align-items: center;
+    overflow-x: auto !important;
+    white-space: nowrap !important;
+    gap: 8px;
+    -webkit-overflow-scrolling: touch;
   }
 
+  /* Logo Alignment */
   .logo {
-    margin-bottom: 12px;
+    margin-bottom: 0 !important;
+    margin-right: 12px;
+    flex-shrink: 0;
   }
 
-  /* Horizontal Scrollable Nav for Mobile */
+  /* Nav Items Horizontal Buttons */
   .sidebar .nav-item {
-    display: inline-block;
+    display: inline-flex !important;
+    align-items: center;
+    margin-bottom: 0 !important;
     margin-right: 6px;
-    margin-bottom: 0;
+    flex-shrink: 0;
+    padding: 8px 12px;
     white-space: nowrap;
   }
 
   .sidebar-footer-card {
-    display: none; /* Mobile par clean look ke liye hide */
+    display: none !important;
   }
 
-  /* Padding Fix for Mobile Screen */
+  /* Main Content Padding Fix */
   .main-content {
     padding: 20px 16px;
   }
