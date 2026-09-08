@@ -10,6 +10,8 @@ const userOTPStore = {};
 app.use(cors());
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
+
+// Public folder ki sabhi static files serve karne ke liye
 app.use(express.static(path.join(__dirname, 'public')));
 
 app.post('/api/send-otp', async (req, res) => {
@@ -81,8 +83,24 @@ app.post('/api/verify-otp', (req, res) => {
   }
 });
 
+// Clean URLs and Fallback handling for HTML Pages
 app.get('*', (req, res) => {
-  res.sendFile(path.join(__dirname, 'public', 'index.html'));
+  const requestedPath = path.join(__dirname, 'public', req.path);
+  
+  // Clean URL extension fallback (e.g. /shopping -> shopping.html)
+  if (!path.extname(req.path)) {
+    return res.sendFile(path.join(__dirname, 'public', `${req.path}.html`), (err) => {
+      if (err) {
+        res.sendFile(path.join(__dirname, 'public', 'index.html'));
+      }
+    });
+  }
+
+  res.sendFile(requestedPath, (err) => {
+    if (err) {
+      res.sendFile(path.join(__dirname, 'public', 'index.html'));
+    }
+  });
 });
 
 app.listen(PORT, () => {
