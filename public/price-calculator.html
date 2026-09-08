@@ -3,9 +3,111 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Price Calculator - Catalogproai</title>
+    <title>Profit & Price Calculator - Catalogproai</title>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="style.css">
+    <style>
+        .calc-container {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 24px;
+            margin-top: 20px;
+        }
+        @media (max-width: 900px) {
+            .calc-container { grid-template-columns: 1fr; }
+        }
+        .card-panel {
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            border-radius: 16px;
+            padding: 24px;
+        }
+        .mode-toggle {
+            display: flex;
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 8px;
+            padding: 4px;
+            margin-bottom: 20px;
+        }
+        .mode-btn {
+            flex: 1;
+            padding: 10px;
+            border: none;
+            background: transparent;
+            color: #94a3b8;
+            font-weight: 600;
+            border-radius: 6px;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        .mode-btn.active {
+            background: #2563eb;
+            color: #ffffff;
+        }
+        .form-group {
+            margin-bottom: 16px;
+        }
+        .form-group label {
+            display: block;
+            font-size: 13px;
+            color: #94a3b8;
+            margin-bottom: 6px;
+            font-weight: 500;
+        }
+        .form-input, .form-select {
+            width: 100%;
+            padding: 10px 14px;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.12);
+            border-radius: 8px;
+            color: #ffffff;
+            font-size: 14px;
+            outline: none;
+            box-sizing: border-box;
+        }
+        .form-input:focus, .form-select:focus {
+            border-color: #3b82f6;
+        }
+        .grid-2 {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 12px;
+        }
+        .result-box {
+            background: rgba(37, 99, 235, 0.1);
+            border: 1px solid rgba(37, 99, 235, 0.3);
+            border-radius: 12px;
+            padding: 20px;
+            margin-bottom: 20px;
+        }
+        .result-title { font-size: 13px; color: #94a3b8; }
+        .result-val { font-size: 32px; font-weight: 800; color: #38bdf8; margin: 4px 0; }
+        .result-sub { font-size: 12px; color: #64748b; }
+        .summary-section { margin-bottom: 18px; }
+        .summary-section h4 {
+            font-size: 11px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            color: #64748b;
+            margin-bottom: 10px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+            padding-bottom: 4px;
+        }
+        .summary-row {
+            display: flex;
+            justify-content: space-between;
+            font-size: 13px;
+            margin-bottom: 6px;
+            color: #cbd5e1;
+        }
+        .summary-row.total {
+            font-weight: 700;
+            color: #ffffff;
+            border-top: 1px dashed rgba(255, 255, 255, 0.1);
+            padding-top: 6px;
+            margin-top: 6px;
+        }
+    </style>
 </head>
 <body>
     <div id="appContainer">
@@ -24,29 +126,152 @@
 
         <div class="main-wrapper">
             <div class="main-content">
-                <h2>Profit & Price Calculator</h2>
-                <p>Calculate your net margin, return impact, and GST input credit instantly.</p>
-                
-                <div class="calc-grid" style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin-top: 20px;">
-                    <div class="input-card" style="background: rgba(255,255,255,0.05); padding: 20px; border-radius: 12px;">
-                        <h3>Cost Breakdown</h3>
-                        <label>Product Cost (₹):</label>
-                        <input type="number" id="prodCost" value="200" style="width: 100%; padding: 10px; margin: 8px 0; border-radius: 6px;">
-                        
-                        <label>Selling Price (₹):</label>
-                        <input type="number" id="sellPrice" value="499" style="width: 100%; padding: 10px; margin: 8px 0; border-radius: 6px;">
-                        
-                        <label>Shipping Fee (₹):</label>
-                        <input type="number" id="shipFee" value="70" style="width: 100%; padding: 10px; margin: 8px 0; border-radius: 6px;">
+                <h2>Profit Calculator</h2>
+                <p style="color: #94a3b8; font-size: 14px;">Calculate your ideal listing price or check profit on any order.</p>
 
-                        <button onclick="calculateProfit()" class="card-btn btn-orange" style="margin-top: 15px; width: 100%;">Calculate Profit</button>
+                <div class="calc-container">
+                    <!-- LEFT PANEL: INPUT FORM -->
+                    <div class="card-panel">
+                        <h3 style="margin-bottom: 16px; font-size: 18px;">Calculator</h3>
+                        
+                        <div class="form-group">
+                            <label>* Platform</label>
+                            <select class="form-select" id="platform">
+                                <option value="meesho">Meesho</option>
+                            </select>
+                        </div>
+
+                        <div class="form-group">
+                            <label>* Calculate Mode</label>
+                            <div class="mode-toggle">
+                                <button type="button" class="mode-btn active" id="btnModeListing" onclick="setMode('listing')">Listing Price</button>
+                                <button type="button" class="mode-btn" id="btnModeProfit" onclick="setMode('profit')">Profit</button>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label>* Product Cost (Without GST) (₹)</label>
+                            <input type="number" class="form-input" id="inpCost" value="100.00" oninput="recalculate()">
+                        </div>
+
+                        <div class="form-group">
+                            <label>* GST Rate (%)</label>
+                            <select class="form-select" id="inpGstRate" onchange="recalculate()">
+                                <option value="0">0%</option>
+                                <option value="5">5%</option>
+                                <option value="12">12%</option>
+                                <option value="18" selected>18%</option>
+                                <option value="28">28%</option>
+                            </select>
+                        </div>
+
+                        <div class="form-group" id="groupProfit">
+                            <label>* Desired Profit (₹)</label>
+                            <input type="number" class="form-input" id="inpProfit" value="50.00" oninput="recalculate()">
+                        </div>
+
+                        <div class="form-group" id="groupListing" style="display: none;">
+                            <label>* Listing Price (₹)</label>
+                            <input type="number" class="form-input" id="inpListingPrice" value="200.00" oninput="recalculate()">
+                        </div>
+
+                        <div class="form-group">
+                            <label>* Customer Return Rate (%)</label>
+                            <input type="number" class="form-input" id="inpReturnRate" value="5" oninput="recalculate()">
+                        </div>
+
+                        <div class="grid-2">
+                            <div class="form-group">
+                                <label>* Good Return %</label>
+                                <input type="number" class="form-input" id="inpGoodReturn" value="80" oninput="recalculate()">
+                            </div>
+                            <div class="form-group">
+                                <label>* Damaged Return %</label>
+                                <input type="number" class="form-input" id="inpDamagedReturn" value="20" oninput="recalculate()">
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label>* Return Cost (₹)</label>
+                            <input type="number" class="form-input" id="inpReturnCost" value="170.00" oninput="recalculate()">
+                        </div>
                     </div>
 
-                    <div class="result-card" style="background: rgba(255,255,255,0.05); padding: 20px; border-radius: 12px;">
-                        <h3>Calculation Summary</h3>
-                        <div id="calcResults" style="margin-top: 15px; font-size: 18px;">
-                            <p>Estimated Net Profit: <strong id="netProfit" style="color: #4ade80;">₹229</strong></p>
-                            <p>Profit Margin: <strong id="profitMargin" style="color: #60a5fa;">45.8%</strong></p>
+                    <!-- RIGHT PANEL: DYNAMIC RESULTS -->
+                    <div class="card-panel">
+                        <h3 style="margin-bottom: 16px; font-size: 18px;">Results</h3>
+
+                        <div class="result-box">
+                            <div class="result-title" id="resHeaderTitle">List your item at</div>
+                            <div class="result-val" id="resMainValue">₹190.11</div>
+                            <div class="result-sub" id="resHeaderSub">Price customers will see, including 18% GST</div>
+                        </div>
+
+                        <!-- COSTS SUMMARY -->
+                        <div class="summary-section">
+                            <h4>COSTS</h4>
+                            <div class="summary-row">
+                                <span>Cost</span>
+                                <span id="lblCost">₹100.00</span>
+                            </div>
+                            <div class="summary-row">
+                                <span id="lblReturnCostText">Return cost (5% × ₹170)</span>
+                                <span id="lblReturnCostVal">₹8.50</span>
+                            </div>
+                            <div class="summary-row">
+                                <span id="lblDamageLossText">Product loss — damaged (1.0% × ₹100)</span>
+                                <span id="lblDamageLossVal">₹1.00</span>
+                            </div>
+                            <div class="summary-row total">
+                                <span>Total cost</span>
+                                <span id="lblTotalCost">₹109.50</span>
+                            </div>
+                        </div>
+
+                        <!-- PRICE CALCULATION SUMMARY -->
+                        <div class="summary-section">
+                            <h4>PRICE CALCULATION</h4>
+                            <div class="summary-row">
+                                <span>Total cost</span>
+                                <span id="lblCalcTotalCost">₹109.50</span>
+                            </div>
+                            <div class="summary-row" id="rowDesiredProfit">
+                                <span>+ Desired profit</span>
+                                <span id="lblDesiredProfit">+ ₹50.00</span>
+                            </div>
+                            <div class="summary-row" id="rowTargetRevenue">
+                                <span>Target revenue</span>
+                                <span id="lblTargetRevenue">₹159.50</span>
+                            </div>
+                            <div class="summary-row">
+                                <span id="lblReturnBufferText">+ Return buffer (1.0% damaged)</span>
+                                <span id="lblReturnBufferVal">+ ₹1.61</span>
+                            </div>
+                            <div class="summary-row" id="rowGstAdd">
+                                <span id="lblGstRateText">+ GST (18%)</span>
+                                <span id="lblGstAddVal">+ ₹29.00</span>
+                            </div>
+                            <div class="summary-row total">
+                                <span>Listing Price</span>
+                                <span id="lblFinalListingPrice">= ₹190.11</span>
+                            </div>
+                        </div>
+
+                        <!-- GST SUMMARY -->
+                        <div class="summary-section">
+                            <h4>GST SUMMARY</h4>
+                            <div class="summary-row">
+                                <span>Output GST (collected from buyer)</span>
+                                <span id="lblOutputGst">₹29.00</span>
+                            </div>
+                            <div class="summary-row">
+                                <span>Input GST (on your purchases)</span>
+                                <span id="lblInputGst">- ₹19.71</span>
+                            </div>
+                            <div class="summary-row total">
+                                <span>Net GST payable</span>
+                                <span id="lblNetGst">= ₹9.29</span>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -54,18 +279,113 @@
         </div>
     </div>
 
+    <!-- CALCULATOR ENGINE SCRIPT -->
     <script>
-        function calculateProfit() {
-            const cost = parseFloat(document.getElementById('prodCost').value) || 0;
-            const price = parseFloat(document.getElementById('sellPrice').value) || 0;
-            const ship = parseFloat(document.getElementById('shipFee').value) || 0;
-            
-            const profit = price - cost - ship;
-            const margin = price > 0 ? ((profit / price) * 100).toFixed(1) : 0;
-            
-            document.getElementById('netProfit').innerText = '₹' + profit.toFixed(2);
-            document.getElementById('profitMargin').innerText = margin + '%';
+        let currentMode = 'listing'; // 'listing' or 'profit'
+
+        function setMode(mode) {
+            currentMode = mode;
+            if(mode === 'listing') {
+                document.getElementById('btnModeListing').classList.add('active');
+                document.getElementById('btnModeProfit').classList.remove('active');
+                document.getElementById('groupProfit').style.display = 'block';
+                document.getElementById('groupListing').style.display = 'none';
+            } else {
+                document.getElementById('btnModeProfit').classList.add('active');
+                document.getElementById('btnModeListing').classList.remove('active');
+                document.getElementById('groupProfit').style.display = 'none';
+                document.getElementById('groupListing').style.display = 'block';
+            }
+            recalculate();
         }
+
+        function recalculate() {
+            const cost = parseFloat(document.getElementById('inpCost').value) || 0;
+            const gstRate = parseFloat(document.getElementById('inpGstRate').value) || 0;
+            const returnRate = parseFloat(document.getElementById('inpReturnRate').value) || 0;
+            const goodReturnPct = parseFloat(document.getElementById('inpGoodReturn').value) || 0;
+            const damagedReturnPct = parseFloat(document.getElementById('inpDamagedReturn').value) || 0;
+            const returnCostUnit = parseFloat(document.getElementById('inpReturnCost').value) || 0;
+
+            // Calculations
+            const returnCost = (returnRate / 100) * returnCostUnit;
+            const damagedRateEffective = (returnRate / 100) * (damagedReturnPct / 100);
+            const productLossDamaged = damagedRateEffective * cost;
+            const totalCost = cost + returnCost + productLossDamaged;
+
+            let finalListingPrice = 0;
+            let netProfitValue = 0;
+
+            if (currentMode === 'listing') {
+                const desiredProfit = parseFloat(document.getElementById('inpProfit').value) || 0;
+                const targetRevenue = totalCost + desiredProfit;
+                const returnBuffer = damagedRateEffective * targetRevenue;
+                const baseBeforeGst = targetRevenue + returnBuffer;
+                const gstAmount = baseBeforeGst * (gstRate / 100);
+                finalListingPrice = baseBeforeGst + gstAmount;
+                netProfitValue = desiredProfit;
+
+                // UI Updates for Listing Price mode
+                document.getElementById('resHeaderTitle').innerText = 'List your item at';
+                document.getElementById('resMainValue').innerText = '₹' + finalListingPrice.toFixed(2);
+                document.getElementById('resHeaderSub').innerText = `Price customers will see, including ${gstRate}% GST`;
+
+                document.getElementById('rowDesiredProfit').style.display = 'flex';
+                document.getElementById('lblDesiredProfit').innerText = '+ ₹' + desiredProfit.toFixed(2);
+                document.getElementById('lblTargetRevenue').innerText = '₹' + targetRevenue.toFixed(2);
+                document.getElementById('lblReturnBufferVal').innerText = '+ ₹' + returnBuffer.toFixed(2);
+                document.getElementById('lblGstAddVal').innerText = '+ ₹' + gstAmount.toFixed(2);
+                document.getElementById('lblFinalListingPrice').innerText = '= ₹' + finalListingPrice.toFixed(2);
+
+                // GST Updates
+                const outputGst = finalListingPrice - (finalListingPrice / (1 + gstRate/100));
+                const inputGst = (totalCost * (gstRate/100));
+                const netGst = outputGst - inputGst;
+
+                document.getElementById('lblOutputGst').innerText = '₹' + outputGst.toFixed(2);
+                document.getElementById('lblInputGst').innerText = '- ₹' + inputGst.toFixed(2);
+                document.getElementById('lblNetGst').innerText = '= ₹' + Math.max(0, netGst).toFixed(2);
+
+            } else {
+                const listingPriceInp = parseFloat(document.getElementById('inpListingPrice').value) || 0;
+                const priceWithoutGst = listingPriceInp / (1 + (gstRate / 100));
+                const outputGst = listingPriceInp - priceWithoutGst;
+                const returnBuffer = damagedRateEffective * priceWithoutGst;
+                netProfitValue = priceWithoutGst - totalCost - returnBuffer;
+
+                // UI Updates for Profit Mode
+                document.getElementById('resHeaderTitle').innerText = 'Your Net Profit Per Order';
+                document.getElementById('resMainValue').innerText = '₹' + netProfitValue.toFixed(2);
+                document.getElementById('resHeaderSub').innerText = `Profit margin after GST, return costs & damage buffer`;
+
+                document.getElementById('rowDesiredProfit').style.display = 'none';
+                document.getElementById('lblTargetRevenue').innerText = '₹' + priceWithoutGst.toFixed(2);
+                document.getElementById('lblReturnBufferVal').innerText = '- ₹' + returnBuffer.toFixed(2);
+                document.getElementById('lblGstAddVal').innerText = '- ₹' + outputGst.toFixed(2);
+                document.getElementById('lblFinalListingPrice').innerText = '= ₹' + listingPriceInp.toFixed(2);
+
+                const inputGst = (totalCost * (gstRate/100));
+                const netGst = outputGst - inputGst;
+
+                document.getElementById('lblOutputGst').innerText = '₹' + outputGst.toFixed(2);
+                document.getElementById('lblInputGst').innerText = '- ₹' + inputGst.toFixed(2);
+                document.getElementById('lblNetGst').innerText = '= ₹' + Math.max(0, netGst).toFixed(2);
+            }
+
+            // Labels update
+            document.getElementById('lblCost').innerText = '₹' + cost.toFixed(2);
+            document.getElementById('lblReturnCostText').innerText = `Return cost (${returnRate}% × ₹${returnCostUnit.toFixed(0)})`;
+            document.getElementById('lblReturnCostVal').innerText = '₹' + returnCost.toFixed(2);
+            document.getElementById('lblDamageLossText').innerText = `Product loss — damaged (${(damagedRateEffective*100).toFixed(1)}% × ₹${cost.toFixed(0)})`;
+            document.getElementById('lblDamageLossVal').innerText = '₹' + productLossDamaged.toFixed(2);
+            document.getElementById('lblTotalCost').innerText = '₹' + totalCost.toFixed(2);
+            document.getElementById('lblCalcTotalCost').innerText = '₹' + totalCost.toFixed(2);
+            document.getElementById('lblReturnBufferText').innerText = `+ Return buffer (${(damagedRateEffective*100).toFixed(1)}% damaged)`;
+            document.getElementById('lblGstRateText').innerText = `+ GST (${gstRate}%)`;
+        }
+
+        // Initialize on page load
+        recalculate();
     </script>
 </body>
 </html>
