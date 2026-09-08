@@ -111,8 +111,14 @@
                                 <input type="text" id="pTitle" class="form-input" placeholder="Product Title (e.g. Cotton Kurti)" required>
                                 <input type="number" id="pPrice" class="form-input" placeholder="Selling Price (₹)" required>
                                 <input type="number" id="pMRP" class="form-input" placeholder="Original Price / MRP (₹)" required>
-                                <input type="text" id="pImg" class="form-input" placeholder="Image URL (http://...)" required>
-                                <input type="text" id="pFeatures" class="form-input" placeholder="Sizes/Features (e.g. M, L, XL)" required>
+                                
+                                <!-- File Upload Field -->
+                                <div style="display: flex; flex-direction: column; justify-content: center;">
+                                    <label style="font-size: 12px; color: #94a3b8; margin-bottom: 4px;">Upload Product Image:</label>
+                                    <input type="file" id="pImageFile" class="form-input" accept="image/*" required style="padding: 6px;">
+                                </div>
+
+                                <input type="text" id="pFeatures" class="form-input" placeholder="Sizes/Features (e.g. M, L, XL)" required style="grid-column: span 2;">
                             </div>
                             <input type="text" id="pDesc" class="form-input" style="margin-top: 10px;" placeholder="Product Short Description" required>
                             <button type="submit" class="card-btn btn-blue" style="margin-top: 15px; width: 100%; border: none; cursor: pointer; padding: 10px;">+ Publish Product To Store</button>
@@ -245,23 +251,31 @@
 
         form.addEventListener('submit', (e) => {
             e.preventDefault();
-            const products = getProducts();
             
-            const newProd = {
-                id: Date.now(),
-                title: document.getElementById('pTitle').value,
-                price: document.getElementById('pPrice').value,
-                mrp: document.getElementById('pMRP').value,
-                img: document.getElementById('pImg').value,
-                desc: document.getElementById('pDesc').value,
-                features: document.getElementById('pFeatures').value
-            };
+            const imageFile = document.getElementById('pImageFile').files[0];
+            if (!imageFile) return;
 
-            products.unshift(newProd);
-            localStorage.setItem('my_store_products', JSON.stringify(products));
-            form.reset();
-            renderProducts();
-            alert("Product Live Ho Gaya Hai!");
+            const reader = new FileReader();
+            reader.onload = function(uploadEvent) {
+                const products = getProducts();
+                
+                const newProd = {
+                    id: Date.now(),
+                    title: document.getElementById('pTitle').value,
+                    price: document.getElementById('pPrice').value,
+                    mrp: document.getElementById('pMRP').value,
+                    img: uploadEvent.target.result, // Base64 image data
+                    desc: document.getElementById('pDesc').value,
+                    features: document.getElementById('pFeatures').value
+                };
+
+                products.unshift(newProd);
+                localStorage.setItem('my_store_products', JSON.stringify(products));
+                form.reset();
+                renderProducts();
+                alert("Product aur Photo Successfully Live Ho Gaye!");
+            };
+            reader.readAsDataURL(imageFile);
         });
 
         function deleteProduct(id) {
