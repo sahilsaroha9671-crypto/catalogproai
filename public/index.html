@@ -22,8 +22,10 @@
       text-align: center;
     }
     .hero-container {
-      max-width: 600px;
-      padding: 20px;
+      max-width: 1100px;
+      padding: 40px 20px;
+      width: 100%;
+      box-sizing: border-box;
     }
     .hero-title {
       font-size: 48px;
@@ -53,6 +55,140 @@
     .hero-subtitle {
       font-size: 16px;
       color: #94a3b8;
+      margin-bottom: 40px;
+    }
+
+    /* CARDS SECTION */
+    .cards-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 24px;
+      margin-top: 20px;
+      text-align: left;
+    }
+
+    .tool-card {
+      position: relative;
+      border-radius: 16px;
+      padding: 24px;
+      background: rgba(15, 23, 42, 0.6);
+      backdrop-filter: blur(12px);
+      overflow: hidden;
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+    }
+
+    .tool-card:hover {
+      transform: translateY(-4px);
+    }
+
+    /* Glow Borders for Cards */
+    .tool-card.card-purple {
+      border: 1px solid rgba(168, 85, 247, 0.4);
+      box-shadow: 0 0 25px rgba(168, 85, 247, 0.15);
+    }
+
+    .tool-card.card-green {
+      border: 1px solid rgba(34, 197, 94, 0.4);
+      box-shadow: 0 0 25px rgba(34, 197, 94, 0.15);
+    }
+
+    .tool-card.card-orange {
+      border: 1px solid rgba(249, 115, 22, 0.4);
+      box-shadow: 0 0 25px rgba(249, 115, 22, 0.15);
+    }
+
+    /* Icon Box with Yellow Frame & Outer Glow Reflection */
+    .custom-image-icon {
+      width: 48px;
+      height: 48px;
+      background: #000000;
+      border: 2px solid #EAB308;
+      border-radius: 8px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 4px;
+      box-shadow: 0 0 12px rgba(234, 179, 8, 0.6), inset 0 0 6px rgba(234, 179, 8, 0.3);
+      margin-bottom: 16px;
+      transition: box-shadow 0.3s ease;
+    }
+
+    .tool-card:hover .custom-image-icon {
+      box-shadow: 0 0 20px rgba(234, 179, 8, 0.9), 0 0 35px rgba(234, 179, 8, 0.4);
+    }
+
+    .card-custom-img {
+      width: 100%;
+      height: 100%;
+      object-fit: contain;
+      border-radius: 4px;
+    }
+
+    /* Heading Text Colors */
+    .card-title {
+      font-size: 20px;
+      font-weight: 700;
+      margin: 0 0 8px 0;
+    }
+
+    .card-title.text-purple { color: #A855F7; }
+    .card-title.text-green { color: #22C55E; }
+    .card-title.text-orange { color: #F97316; }
+
+    .card-desc {
+      color: #94a3b8;
+      font-size: 14px;
+      line-height: 1.5;
+      margin-bottom: 16px;
+    }
+
+    .card-checklist {
+      list-style: none;
+      padding: 0;
+      margin: 0 0 24px 0;
+    }
+
+    .card-checklist li {
+      color: #e2e8f0;
+      font-size: 14px;
+      margin-bottom: 8px;
+    }
+
+    .check-icon.purple-check { color: #A855F7; font-weight: bold; margin-right: 6px; }
+    .check-icon.green-check { color: #22C55E; font-weight: bold; margin-right: 6px; }
+    .check-icon.orange-check { color: #EAB308; font-weight: bold; margin-right: 6px; }
+
+    /* Action Buttons */
+    .btn-card {
+      display: block;
+      text-align: center;
+      padding: 10px 16px;
+      border-radius: 8px;
+      font-weight: 600;
+      text-decoration: none;
+      transition: opacity 0.2s ease;
+    }
+
+    .btn-card:hover {
+      opacity: 0.9;
+    }
+
+    .btn-purple {
+      background: linear-gradient(135deg, #3B82F6 0%, #2563EB 100%);
+      color: #FFFFFF;
+    }
+
+    .btn-green {
+      background: linear-gradient(135deg, #22C55E 0%, #16A34A 100%);
+      color: #FFFFFF;
+    }
+
+    .btn-pink-orange {
+      background: linear-gradient(135deg, #F43F5E 0%, #E11D48 100%);
+      color: #FFFFFF;
     }
   </style>
 </head>
@@ -61,6 +197,58 @@
     <h1 class="hero-title">Keshav Saroha</h1>
     <a href="dashboard.html" class="btn-get-started">Get Started</a>
     <p class="hero-subtitle">Welcome to Catalogproai — Your All-in-One E-Commerce Tools Suite</p>
+
+    <!-- 3 CARDS WITH GLOW, CUSTOM IMAGE ICON & TEXT COLORS -->
+    <div class="cards-grid">
+      <!-- Card 1: Image Generator -->
+      <div class="tool-card card-purple">
+        <div>
+          <div class="custom-image-icon">
+            <img src="IMG_6768.PNG" alt="Image Generator Icon" class="card-custom-img">
+          </div>
+          <h3 class="card-title text-purple">Image Generator</h3>
+          <p class="card-desc">Generate product images that qualify for lower shipping tiers on Meesho.</p>
+          <ul class="card-checklist">
+            <li><span class="check-icon purple-check">✓</span> Lower shipping tier images</li>
+            <li><span class="check-icon purple-check">✓</span> Batch generation</li>
+          </ul>
+        </div>
+        <a href="image-generator.html" class="btn-card btn-purple">→ Open Generator</a>
+      </div>
+
+      <!-- Card 2: Shipping Label Export -->
+      <div class="tool-card card-green">
+        <div>
+          <div class="custom-image-icon">
+            <img src="IMG_6768.PNG" alt="Shipping Label Icon" class="card-custom-img">
+          </div>
+          <h3 class="card-title text-green">Shipping Label Export</h3>
+          <p class="card-desc">Upload Meesho PDFs, filter by SKU, quantity, or courier, and export label packs.</p>
+          <ul class="card-checklist">
+            <li><span class="check-icon green-check">✓</span> Multi-file upload & processing</li>
+            <li><span class="check-icon green-check">✓</span> Advanced filtering & sorting</li>
+          </ul>
+        </div>
+        <a href="shipping-label.html" class="btn-card btn-green">Start Exporting 📁</a>
+      </div>
+
+      <!-- Card 3: Profit Calculator -->
+      <div class="tool-card card-orange">
+        <div>
+          <div class="custom-image-icon">
+            <img src="IMG_6768.PNG" alt="Profit Calculator Icon" class="card-custom-img">
+          </div>
+          <h3 class="card-title text-orange">Profit Calculator</h3>
+          <p class="card-desc">Calculate the ideal listing price or check your real profit on any order — accounting for GST & returns.</p>
+          <ul class="card-checklist">
+            <li><span class="check-icon orange-check">✓</span> Listing price & profit modes</li>
+            <li><span class="check-icon orange-check">✓</span> Return cost & loss breakdown</li>
+            <li><span class="check-icon orange-check">✓</span> GST input credit summary</li>
+          </ul>
+        </div>
+        <a href="price-calculator.html" class="btn-card btn-pink-orange">→ Open Calculator</a>
+      </div>
+    </div>
   </div>
 </body>
 </html>
