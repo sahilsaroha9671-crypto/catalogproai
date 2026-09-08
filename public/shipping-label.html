@@ -7,6 +7,81 @@
     <title>Shipping Label Export - Catalogproai</title>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="style.css">
+    <style>
+        .shipping-card {
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            border-radius: 16px;
+            padding: 24px;
+            max-width: 800px;
+            margin: 20px auto;
+        }
+        .pro-banner {
+            background: linear-gradient(90deg, rgba(37, 99, 235, 0.2), rgba(168, 85, 247, 0.2));
+            border: 1px solid rgba(168, 85, 247, 0.4);
+            border-radius: 12px;
+            padding: 16px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 24px;
+        }
+        .pro-banner-text h4 { margin: 0 0 4px 0; color: #a855f7; font-size: 16px; }
+        .pro-banner-text p { margin: 0; color: #94a3b8; font-size: 13px; }
+        .btn-pro {
+            background: linear-gradient(90deg, #8b5cf6, #ec4899);
+            color: #fff;
+            padding: 10px 18px;
+            border-radius: 8px;
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 14px;
+            box-shadow: 0 4px 12px rgba(139, 92, 246, 0.3);
+            transition: all 0.2s;
+        }
+        .btn-pro:hover { transform: translateY(-2px); }
+        .upload-dropzone {
+            border: 2px dashed rgba(255, 255, 255, 0.15);
+            background: rgba(255, 255, 255, 0.02);
+            border-radius: 12px;
+            padding: 30px;
+            text-align: center;
+            margin-bottom: 20px;
+        }
+        .options-group {
+            margin: 20px 0;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            background: rgba(255, 255, 255, 0.04);
+            padding: 12px 16px;
+            border-radius: 8px;
+        }
+        .options-group label {
+            cursor: pointer;
+            font-size: 14px;
+            color: #e2e8f0;
+        }
+        .btn-action {
+            width: 100%;
+            background: #22c55e;
+            color: #fff;
+            padding: 14px;
+            border: none;
+            border-radius: 8px;
+            font-size: 16px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: background 0.2s;
+        }
+        .btn-action:hover { background: #16a34a; }
+        #statusMsg {
+            margin-top: 15px;
+            font-size: 14px;
+            text-align: center;
+            color: #38bdf8;
+        }
+    </style>
 </head>
 <body>
     <div id="appContainer">
@@ -26,16 +101,115 @@
         <div class="main-wrapper">
             <div class="main-content">
                 <h2>Shipping Label Export</h2>
-                <p>Upload Meesho label PDFs to filter, crop, and batch export.</p>
-                
-                <div style="background: rgba(255,255,255,0.05); padding: 30px; border-radius: 12px; border: 2px dashed rgba(255,255,255,0.2); text-align: center; margin-top: 20px;">
-                    <p style="font-size: 18px;">Select or Drag Meesho PDF Labels Here</p>
-                    <input type="file" id="pdfInput" accept="application/pdf" multiple style="margin-top: 15px;">
-                    <br><br>
-                    <button class="card-btn btn-green" style="max-width: 250px; margin: 0 auto;">Process Labels 📦</button>
+                <p style="color: #94a3b8; font-size: 14px;">Crop Meesho PDF shipping labels to 4x6 thermal printer format seamlessly.</p>
+
+                <div class="shipping-card">
+                    <div class="pro-banner">
+                        <div class="pro-banner-text">
+                            <h4>Try Pro Crop Label ⚡</h4>
+                            <p>Unlock advanced multi-SKU sorting, auto-sku grouping & custom branding.</p>
+                        </div>
+                        <a href="plans.html" class="btn-pro">Try Pro Crop Label →</a>
+                    </div>
+
+                    <div class="upload-dropzone">
+                        <p style="font-size: 16px; color: #cbd5e1; margin-bottom: 12px;">Select Meesho PDF Label Files</p>
+                        <input type="file" id="pdfInput" accept="application/pdf" multiple style="color: #94a3b8;">
+                    </div>
+
+                    <div class="options-group">
+                        <input type="checkbox" id="chkSeparateInvoice" style="width: 18px; height: 18px; cursor: pointer;">
+                        <label for="chkSeparateInvoice">Keep invoice & address details on a separate page</label>
+                    </div>
+
+                    <button class="btn-action" onclick="processShippingLabels()">Prepare Shipping Labels 📦</button>
+                    <div id="statusMsg"></div>
                 </div>
             </div>
         </div>
     </div>
+
+    <script>
+        async function processShippingLabels() {
+            const input = document.getElementById('pdfInput');
+            const status = document.getElementById('statusMsg');
+            const keepInvoiceSeparate = document.getElementById('chkSeparateInvoice').checked;
+
+            if (!input.files || input.files.length === 0) {
+                alert("Kripya kam se kam ek PDF file select karein!");
+                return;
+            }
+
+            status.innerText = "Processing labels... Please wait.";
+
+            try {
+                const { PDFDocument, PageSizes, degrees } = PDFLib;
+                const outPdf = await PDFDocument.create();
+
+                // Standard 4x6 Inches in points (Landscape: 6 x 4 inches = 432 x 288 pt)
+                const width4x6 = 432; 
+                const height4x6 = 288;
+
+                for (let i = 0; i < input.files.length; i++) {
+                    const file = input.files[i];
+                    const fileBytes = await file.arrayBuffer();
+                    const srcPdf = await PDFDocument.load(fileBytes);
+                    const pages = srcPdf.getPages();
+
+                    for (let j = 0; j < pages.length; j++) {
+                        const page = pages[j];
+                        const { width, height } = page.getSize();
+
+                        // Embed src page into new doc
+                        const [embeddedPage] = await outPdf.embedPdf(srcPdf, [j]);
+
+                        if (!keepInvoiceSeparate) {
+                            // NORMAL MODE: Crop main shipping label area (Top section) and fit into 4x6 horizontal page
+                            const newPage = outPdf.addPage([width4x6, height4x6]);
+
+                            // Draw only the top label portion (removing tax invoice at bottom)
+                            newPage.drawPage(embeddedPage, {
+                                x: 0,
+                                y: -height * 0.45, // Trim bottom Tax Invoice section
+                                width: width4x6,
+                                height: height4x6 * 2.1
+                            });
+                        } else {
+                            // SEPARATE PAGE MODE:
+                            // Page 1: Main Shipping Label
+                            const pageLabel = outPdf.addPage([width4x6, height4x6]);
+                            pageLabel.drawPage(embeddedPage, {
+                                x: 0,
+                                y: -height * 0.5,
+                                width: width4x6,
+                                height: height4x6 * 2
+                            });
+
+                            // Page 2: Tax Invoice & Details
+                            const pageInvoice = outPdf.addPage([width4x6, height4x6]);
+                            pageInvoice.drawPage(embeddedPage, {
+                                x: 0,
+                                y: 10,
+                                width: width4x6,
+                                height: height4x6 * 1.8
+                            });
+                        }
+                    }
+                }
+
+                const pdfBytes = await outPdf.save();
+                const blob = new Blob([pdfBytes], { type: 'application/pdf' });
+                const link = document.createElement('a');
+                link.href = URL.createObjectURL(blob);
+                link.download = 'Processed_4x6_Shipping_Labels.pdf';
+                link.click();
+
+                status.innerText = "✅ Success! Labels downloaded cleanly in 4x6 format.";
+            } catch (err) {
+                console.error(err);
+                status.innerText = "❌ Error processing PDF. Make sure valid PDF is uploaded.";
+            }
+        }
+    </script>
 </body>
 </html>
