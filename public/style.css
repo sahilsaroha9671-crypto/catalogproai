@@ -12,15 +12,17 @@ body {
   overflow-x: hidden;
 }
 
-/* Landing Page Screen */
+/* Landing Page Screen (Fixed Layout & Center Alignment) */
 #welcomeView {
+  width: 100%;
+  min-height: 100vh;
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  height: 100vh;
   background: radial-gradient(circle at center, #0f172a 0%, #020617 100%);
   text-align: center;
+  padding: 20px;
 }
 
 .welcome-title {
@@ -41,6 +43,14 @@ body {
   font-weight: 600;
   cursor: pointer;
   box-shadow: 0 4px 20px rgba(37, 99, 235, 0.4);
+  text-decoration: none;
+  display: inline-block;
+  transition: all 0.3s ease;
+}
+
+.get-started-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 25px rgba(37, 99, 235, 0.6);
 }
 
 .welcome-subtitle {
@@ -129,7 +139,7 @@ body {
   overflow: hidden;
 }
 
-/* Curved Neon Ring Lines (Reference Picture Exact Effect) */
+/* Curved Neon Ring Lines */
 .main-wrapper::before {
   content: '';
   position: absolute;
@@ -443,6 +453,7 @@ body {
   padding-top: 8px;
   margin-top: 4px;
 }
+
 /* ==========================================
    MOBILE & TABLET RESPONSIVE FIXES
    ========================================== */
@@ -454,12 +465,10 @@ body {
 }
 
 @media (max-width: 768px) {
-  /* Main Container Adjustment */
   #appContainer {
     flex-direction: column;
   }
 
-  /* Mobile Top Sidebar - Horizontal Scroll Bar */
   .sidebar {
     width: 100%;
     border-right: none;
@@ -474,14 +483,12 @@ body {
     -webkit-overflow-scrolling: touch;
   }
 
-  /* Logo Alignment */
   .logo {
     margin-bottom: 0 !important;
     margin-right: 12px;
     flex-shrink: 0;
   }
 
-  /* Nav Items Horizontal Buttons */
   .sidebar .nav-item {
     display: inline-flex !important;
     align-items: center;
@@ -496,12 +503,10 @@ body {
     display: none !important;
   }
 
-  /* Main Content Padding Fix */
   .main-content {
     padding: 20px 16px;
   }
 
-  /* Header Bar Fix */
   .top-header-bar {
     flex-direction: column;
     align-items: flex-start;
@@ -512,7 +517,6 @@ body {
     font-size: 28px;
   }
 
-  /* Single Column Layout for Cards & Calculator */
   .tools-grid {
     grid-template-columns: 1fr;
     gap: 16px;
@@ -523,13 +527,11 @@ body {
     gap: 16px;
   }
 
-  /* Bottom Features Footer */
   .bottom-features-bar {
     flex-direction: column;
     gap: 16px;
   }
 
-  /* Table / Row Spacing Fixes */
   .row-group {
     display: flex;
     flex-direction: column;
