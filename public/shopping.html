@@ -15,6 +15,7 @@
             border-radius: 12px;
             padding: 20px;
             margin-bottom: 25px;
+            display: none;
         }
         .form-grid {
             display: grid;
@@ -47,6 +48,17 @@
             border-radius: 6px;
             cursor: pointer;
             font-size: 12px;
+            display: none;
+        }
+        .admin-toggle-btn {
+            background: rgba(255, 255, 255, 0.1);
+            color: #aaa;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            padding: 5px 12px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 12px;
+            float: right;
         }
     </style>
 </head>
@@ -81,18 +93,19 @@
                 
                 <div id="shoppingView">
                     <div class="top-header-bar">
-                        <div class="pill-badge">🛍️ Live Product Listing | <strong>Seller Store</strong></div>
+                        <div class="pill-badge">🛍️ Exclusive Store | <strong>Direct Collection</strong></div>
                         <div class="slogan-badge">WHOLESALE & RETAIL APPAREL</div>
                     </div>
 
                     <div class="header-title">
+                        <button onclick="toggleAdminPanel()" class="admin-toggle-btn" id="adminLockBtn">🔒 Owner Login</button>
                         <h1>Shopping Store</h1>
-                        <p>Manage and view your live listed products directly.</p>
+                        <p>Explore and purchase directly from our verified apparel collections.</p>
                     </div>
 
-                    <!-- ADMIN LISTING FORM -->
-                    <div class="admin-add-card">
-                        <strong style="color: #60a5fa; font-size: 16px;">➕ List a New Product (Admin Form)</strong>
+                    <!-- ADMIN LISTING FORM (PROTECTED) -->
+                    <div class="admin-add-card" id="adminPanel">
+                        <strong style="color: #60a5fa; font-size: 16px;">🔑 Owner Panel: List a New Product</strong>
                         <form id="addProductForm">
                             <div class="form-grid">
                                 <input type="text" id="pTitle" class="form-input" placeholder="Product Title (e.g. Cotton Kurti)" required>
@@ -102,11 +115,11 @@
                                 <input type="text" id="pFeatures" class="form-input" placeholder="Sizes/Features (e.g. M, L, XL)" required>
                             </div>
                             <input type="text" id="pDesc" class="form-input" style="margin-top: 10px;" placeholder="Product Short Description" required>
-                            <button type="submit" class="card-btn btn-blue" style="margin-top: 15px; width: 100%; border: none; cursor: pointer; padding: 10px;">+ Add Product To Store</button>
+                            <button type="submit" class="card-btn btn-blue" style="margin-top: 15px; width: 100%; border: none; cursor: pointer; padding: 10px;">+ Publish Product To Store</button>
                         </form>
                     </div>
 
-                    <div class="section-label">YOUR LIVE <span>PRODUCTS</span></div>
+                    <div class="section-label">AVAILABLE <span>PRODUCTS</span></div>
 
                     <!-- Products Grid -->
                     <div class="tools-grid" id="productGrid">
@@ -144,10 +157,14 @@
     </div>
 
     <script>
+        const ADMIN_PASSWORD = "Sdivy@98_SarohA_98.798";
+        let isAdminLoggedIn = false;
+
         const form = document.getElementById('addProductForm');
         const productGrid = document.getElementById('productGrid');
+        const adminPanel = document.getElementById('adminPanel');
+        const adminLockBtn = document.getElementById('adminLockBtn');
 
-        // Initial default products if store is empty
         const defaultProducts = [
             {
                 id: 1,
@@ -174,12 +191,31 @@
             return stored ? JSON.parse(stored) : defaultProducts;
         }
 
+        function toggleAdminPanel() {
+            if (isAdminLoggedIn) {
+                isAdminLoggedIn = false;
+                adminPanel.style.display = 'none';
+                adminLockBtn.innerText = '🔒 Owner Login';
+                renderProducts();
+            } else {
+                const pass = prompt("Owner Access Key Enter Karein:");
+                if (pass === ADMIN_PASSWORD) {
+                    isAdminLoggedIn = true;
+                    adminPanel.style.display = 'block';
+                    adminLockBtn.innerText = '🔓 Lock Panel';
+                    renderProducts();
+                } else if (pass !== null) {
+                    alert("Galat Password!");
+                }
+            }
+        }
+
         function renderProducts() {
             const products = getProducts();
             productGrid.innerHTML = '';
 
             if(products.length === 0) {
-                productGrid.innerHTML = '<p style="color: #888;">Koi product list nahi hai. Upar form se add karein.</p>';
+                productGrid.innerHTML = '<p style="color: #888;">Koi product available nahi hai.</p>';
                 return;
             }
 
@@ -198,8 +234,8 @@
                     <div style="margin-top: 15px; display: flex; justify-content: space-between; align-items: center;">
                         <span style="font-size: 18px; font-weight: 800; color: #fff;">₹${prod.price} <s style="font-size: 12px; color: #888;">₹${prod.mrp}</s></span>
                         <div>
-                            <button onclick="deleteProduct(${prod.id})" class="delete-btn">Delete</button>
-                            <a href="#" class="card-btn btn-blue" style="text-align: center; text-decoration: none; display: inline-block; padding: 6px 12px; margin-left: 5px;">Buy</a>
+                            ${isAdminLoggedIn ? `<button onclick="deleteProduct(${prod.id})" class="delete-btn" style="display:inline-block;">Delete</button>` : ''}
+                            <a href="#" class="card-btn btn-blue" style="text-align: center; text-decoration: none; display: inline-block; padding: 6px 12px; margin-left: 5px;">Buy Now</a>
                         </div>
                     </div>
                 `;
@@ -225,9 +261,11 @@
             localStorage.setItem('my_store_products', JSON.stringify(products));
             form.reset();
             renderProducts();
+            alert("Product Live Ho Gaya Hai!");
         });
 
         function deleteProduct(id) {
+            if(!isAdminLoggedIn) return;
             let products = getProducts();
             products = products.filter(p => p.id !== id);
             localStorage.setItem('my_store_products', JSON.stringify(products));
