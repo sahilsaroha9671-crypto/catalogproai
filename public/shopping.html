@@ -1,207 +1,139 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <!-- Google tag (gtag.js) -->
-  <script async src="https://www.googletagmanager.com/gtag/js?id=G-6WKDPGRS0F"></script>
-  <script>
-    window.dataLayer = window.dataLayer || [];
-    function gtag(){dataLayer.push(arguments);}
-    gtag('js', new Date());
-
-    gtag('config', 'G-6WKDPGRS0F');
-  </script>
-
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Catalogproai - Shopping</title>
-  <link rel="icon" type="image/png" href="IMG_6768.PNG">
-  <link rel="stylesheet" href="style.css">
-
-  <style>
-    /* Shopping Store Layout Styling */
-    .store-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
-      gap: 24px;
-      margin-top: 24px;
-    }
-
-    .product-card {
-      background: rgba(15, 23, 42, 0.7);
-      backdrop-filter: blur(16px);
-      -webkit-backdrop-filter: blur(16px);
-      border: 1px solid rgba(255, 255, 255, 0.12);
-      border-radius: 16px;
-      padding: 18px;
-      display: flex;
-      flex-direction: column;
-      justify-content: space-between;
-      position: relative;
-      transition: transform 0.3s ease, border-color 0.3s ease;
-    }
-
-    .product-card:hover {
-      transform: translateY(-6px);
-      border-color: rgba(59, 130, 246, 0.8);
-    }
-
-    .badge-discount {
-      position: absolute;
-      top: 14px;
-      left: 14px;
-      background: #ef4444;
-      color: #fff;
-      font-size: 11px;
-      font-weight: 700;
-      padding: 4px 10px;
-      border-radius: 12px;
-      z-index: 2;
-    }
-
-    .product-img-box {
-      width: 100%;
-      height: 180px;
-      background: rgba(30, 41, 59, 0.5);
-      border-radius: 12px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      margin-bottom: 16px;
-      overflow: hidden;
-    }
-
-    .product-img-box img {
-      width: 100%;
-      height: 100%;
-      object-fit: cover;
-    }
-
-    .product-title {
-      font-size: 18px;
-      font-weight: 700;
-      margin-bottom: 6px;
-      color: #f8fafc;
-    }
-
-    .product-desc {
-      font-size: 12px;
-      color: #94a3b8;
-      margin-bottom: 16px;
-      line-height: 1.4;
-    }
-
-    .price-wrapper {
-      display: flex;
-      align-items: baseline;
-      gap: 8px;
-      margin-bottom: 16px;
-    }
-
-    .current-price {
-      font-size: 20px;
-      font-weight: 800;
-      color: #38bdf8;
-    }
-
-    .old-price {
-      font-size: 14px;
-      color: #64748b;
-      text-decoration: line-through;
-    }
-
-    .btn-buy {
-      width: 100%;
-      padding: 12px;
-      background: linear-gradient(135deg, #2563eb, #1d4ed8);
-      color: #ffffff;
-      border: none;
-      border-radius: 10px;
-      font-weight: 600;
-      font-size: 14px;
-      cursor: pointer;
-      text-decoration: none;
-      text-align: center;
-      transition: all 0.2s ease;
-    }
-
-    .btn-buy:hover {
-      box-shadow: 0 4px 16px rgba(37, 99, 235, 0.5);
-      transform: scale(1.02);
-    }
-  </style>
+    <script src="https://unpkg.com/pdf-lib@1.17.1/dist/pdf-lib.min.js"></script>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Catalogproai - Shopping Store</title>
+    <link rel="icon" type="image/png" href="IMG_6768.PNG">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
 </head>
 <body>
-  <div id="appContainer">
-    <!-- Sidebar Navigation -->
-    <aside class="sidebar">
-      <div class="logo">
-        <span>📦</span> Catalogproai
-      </div>
-      <a href="dashboard.html" class="nav-item">Dashboard</a>
-      <a href="shopping.html" class="nav-item active">Shopping</a>
-    </aside>
 
-    <!-- Main Content Area -->
-    <main class="main-wrapper">
-      <div class="main-content">
-        <header class="top-header-bar">
-          <div class="header-title">
-            <h1>Shopping</h1>
-            <p>Explore and buy our premium products & tools</p>
-          </div>
-          <span class="pill-badge">Shopping Store</span>
-        </header>
+    <div id="appContainer">
+        <!-- SIDEBAR -->
+        <div class="sidebar">
+            <div class="logo">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#3b82f6" stroke-width="2.5"><path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/></svg>
+                <span>Catalogproai</span>
+            </div>
+            <a class="nav-item" href="dashboard.html"> Home</a>
+            <a class="nav-item active" href="shopping.html"> Shopping</a>
+            <a class="nav-item" href="image-generator.html"> Meesho Image Generator</a>
+            <a class="nav-item" href="shipping-label.html"> Shipping Label Export</a>
+            <a class="nav-item" href="meesho-lens.html"> Meesho Lens</a>
+            <a class="nav-item" href="price-calculator.html"> Price Calculator</a>
+            <a class="nav-item" href="plans.html"> Plans</a>
 
-        <!-- Shopping Product Cards Grid -->
-        <div class="store-grid">
-
-          <!-- Item 1 -->
-          <div class="product-card">
-            <span class="badge-discount">20% OFF</span>
-            <div class="product-img-box">
-              <img src="IMG_6768.PNG" alt="Product Image">
+            <div class="sidebar-footer-card">
+                <span class="crown-icon">👑</span>
+                <div class="footer-card-text">
+                    <strong>Empowering Indian Sellers</strong>
+                    <p>List Smarter. Sell Faster.</p>
+                </div>
             </div>
-            <h3 class="product-title">E-Commerce Pricing Calculator</h3>
-            <p class="product-desc">Automate your product pricing, GST calculation, and platform commission fee logic effortlessly.</p>
-            <div class="price-wrapper">
-              <span class="current-price">₹499</span>
-              <span class="old-price">₹625</span>
-            </div>
-            <a href="#" class="btn-buy">Buy Now</a>
-          </div>
-
-          <!-- Item 2 -->
-          <div class="product-card">
-            <div class="product-img-box">
-              <span style="font-size: 40px;">⚡</span>
-            </div>
-            <h3 class="product-title">AI Catalog Generator Tool</h3>
-            <p class="product-desc">Generate professional product titles, SEO descriptions, and search tags in seconds.</p>
-            <div class="price-wrapper">
-              <span class="current-price">₹999</span>
-              <span class="old-price">₹1,499</span>
-            </div>
-            <a href="#" class="btn-buy">Buy Now</a>
-          </div>
-
-          <!-- Item 3 -->
-          <div class="product-card">
-            <span class="badge-discount">HOT</span>
-            <div class="product-img-box">
-              <span style="font-size: 40px;">📊</span>
-            </div>
-            <h3 class="product-title">Inventory Master Template</h3>
-            <p class="product-desc">Track stock, profit margin calculations, and order management with smart analytics.</p>
-            <div class="price-wrapper">
-              <span class="current-price">₹299</span>
-              <span class="old-price">₹499</span>
-            </div>
-            <a href="#" class="btn-buy">Buy Now</a>
-          </div>
-
         </div>
-      </div>
-    </main>
-  </div>
+
+        <div class="main-wrapper">
+            <div class="main-content">
+                
+                <div id="shoppingView">
+                    <div class="top-header-bar">
+                        <div class="pill-badge">🛍️ Premium Fashion | <strong>Best Quality</strong></div>
+                        <div class="slogan-badge">WHOLESALE & RETAIL CLOTHING</div>
+                    </div>
+
+                    <div class="header-title">
+                        <h1>Shopping Store</h1>
+                        <p>Explore our exclusive collection of Ladies Kurtis, Designer Shirts, and Trending Apparel.</p>
+                    </div>
+
+                    <div class="section-label">FEATURED <span>COLLECTION</span></div>
+
+                    <!-- Products Grid -->
+                    <div class="tools-grid">
+                        <!-- Item 1: Designer Cotton Kurti -->
+                        <div class="tool-card card-blue">
+                            <div>
+                                <div class="card-icon-box">👗</div>
+                                <h3>Designer Cotton Kurti</h3>
+                                <p>Pure cotton printed straight kurti with comfortable fit and premium stitching.</p>
+                                <ul class="features-list">
+                                    <li>✓ Sizes: M, L, XL, XXL</li>
+                                    <li>✓ Premium Breathable Fabric</li>
+                                </ul>
+                            </div>
+                            <div style="margin-top: 15px; display: flex; justify-content: space-between; align-items: center;">
+                                <span style="font-size: 20px; font-weight: 800; color: #fff;">₹499 <s style="font-size: 14px; color: #888;">₹999</s></span>
+                                <a href="#" class="card-btn btn-blue" style="text-align: center; text-decoration: none; display: inline-block; padding: 8px 16px;">Buy Now</a>
+                            </div>
+                        </div>
+
+                        <!-- Item 2: Stylish Women Shirt -->
+                        <div class="tool-card card-green">
+                            <div>
+                                <div class="card-icon-box">👚</div>
+                                <h3>Casual Women Shirt</h3>
+                                <p>Trendy formal & casual button-down shirt designed for everyday comfort.</p>
+                                <ul class="features-list">
+                                    <li>✓ Soft Rayon Material</li>
+                                    <li>✓ Multiple Color Options</li>
+                                </ul>
+                            </div>
+                            <div style="margin-top: 15px; display: flex; justify-content: space-between; align-items: center;">
+                                <span style="font-size: 20px; font-weight: 800; color: #fff;">₹399 <s style="font-size: 14px; color: #888;">₹799</s></span>
+                                <a href="#" class="card-btn btn-green" style="text-align: center; text-decoration: none; display: inline-block; padding: 8px 16px;">Buy Now</a>
+                            </div>
+                        </div>
+
+                        <!-- Item 3: Anarkali Kurti Set -->
+                        <div class="tool-card card-orange">
+                            <div>
+                                <div class="card-icon-box">💃</div>
+                                <h3>Anarkali Kurti Set</h3>
+                                <p>Heavy flair printed Anarkali kurti with dupatta set for festive occasions.</p>
+                                <ul class="features-list">
+                                    <li>✓ Includes Matching Dupatta</li>
+                                    <li>✓ Party & Festive Wear</li>
+                                </ul>
+                            </div>
+                            <div style="margin-top: 15px; display: flex; justify-content: space-between; align-items: center;">
+                                <span style="font-size: 20px; font-weight: 800; color: #fff;">₹899 <s style="font-size: 14px; color: #888;">₹1,599</s></span>
+                                <a href="#" class="card-btn btn-orange" style="text-align: center; text-decoration: none; display: inline-block; padding: 8px 16px;">Buy Now</a>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Bottom Features Footer -->
+                    <div class="bottom-features-bar">
+                        <div class="feature-box">
+                            <span class="f-icon">🚚</span>
+                            <div>
+                                <strong>Fast Shipping</strong>
+                                <p>Quick delivery across India</p>
+                            </div>
+                        </div>
+                        <div class="feature-box">
+                            <span class="f-icon">✨</span>
+                            <div>
+                                <strong>Best Quality</strong>
+                                <p>100% Verified fabrics</p>
+                            </div>
+                        </div>
+                        <div class="feature-box">
+                            <span class="f-icon">💳</span>
+                            <div>
+                                <strong>Secure Payment</strong>
+                                <p>UPI, Cards & COD Available</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+
 </body>
 </html>
