@@ -164,22 +164,7 @@
 
         function getProducts() {
             const stored = localStorage.getItem('my_store_peach_products');
-            if (stored) {
-                return JSON.parse(stored);
-            } else {
-                // Default Sample Product taaki store khali na dikhe
-                return [
-                    {
-                        id: 1711000000000,
-                        title: "Kurti With Pant or Dupatta",
-                        price: "799",
-                        mrp: "1499",
-                        images: ["https://images.unsplash.com/photo-1583391733956-3750e0ff4e8b?q=80&w=600&auto=format&fit=crop"],
-                        desc: "Product Details: * Fabric: Premium Rayon * Set Includes: Kurti + Pant + Dupatta * Color: Purple / बैंगनी",
-                        features: "M, L, XL, XXL"
-                    }
-                ];
-            }
+            return stored ? JSON.parse(stored) : [];
         }
 
         function toggleAdminPanel() {
