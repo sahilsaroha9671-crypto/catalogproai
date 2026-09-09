@@ -6,13 +6,31 @@ const app = express();
 const PORT = process.env.PORT || 3000;
 
 const userOTPStore = {};
+let sharedProducts = []; // Server par products store karne ke liye array
 
 app.use(cors());
-app.use(express.json());
-app.use(express.urlencoded({ extended: true }));
+app.use(express.json({ limit: '50mb' })); // Badi images handle karne ke liye limit badha di hai
+app.use(express.urlencoded({ extended: true, limit: '50mb' }));
 
 // Public folder ki sabhi static files serve karne ke liye
 app.use(express.static(path.join(__dirname, 'public')));
+
+// Products API Routes for Cross-Device Sync
+app.get('/api/products', (req, res) => {
+  res.json(sharedProducts);
+});
+
+app.post('/api/products', (req, res) => {
+  const newProd = req.body;
+  sharedProducts.unshift(newProd);
+  res.json({ success: true, product: newProd });
+});
+
+app.delete('/api/products/:id', (req, res) => {
+  const id = Number(req.params.id);
+  sharedProducts = sharedProducts.filter(p => p.id !== id);
+  res.json({ success: true });
+});
 
 app.post('/api/send-otp', async (req, res) => {
   try {
@@ -87,7 +105,6 @@ app.post('/api/verify-otp', (req, res) => {
 app.get('*', (req, res) => {
   const requestedPath = path.join(__dirname, 'public', req.path);
   
-  // Clean URL extension fallback (e.g. /shopping -> shopping.html)
   if (!path.extname(req.path)) {
     return res.sendFile(path.join(__dirname, 'public', `${req.path}.html`), (err) => {
       if (err) {
