@@ -1,34 +1,61 @@
 const express = require('express');
 const path = require('path');
 const cors = require('cors');
+const fs = require('fs');
 
 const app = express();
 const PORT = process.env.PORT || 3000;
 
 const userOTPStore = {};
-let sharedProducts = []; // Server par products store karne ke liye array
+const DATA_FILE = path.join(__dirname, 'products.json');
 
 app.use(cors());
-app.use(express.json({ limit: '50mb' })); // Badi images handle karne ke liye limit badha di hai
+app.use(express.json({ limit: '50mb' }));
 app.use(express.urlencoded({ extended: true, limit: '50mb' }));
+
+// Helper functions to read/write products to a file on server disk
+function getStoredProducts() {
+  try {
+    if (fs.existsSync(DATA_FILE)) {
+      const data = fs.readFileSync(DATA_FILE, 'utf8');
+      return JSON.parse(data);
+    }
+  } catch (err) {
+    console.error('Error reading products file:', err);
+  }
+  return [];
+}
+
+function saveStoredProducts(products) {
+  try {
+    fs.writeFileSync(DATA_FILE, JSON.stringify(products, null, 2));
+  } catch (err) {
+    console.error('Error saving products file:', err);
+  }
+}
 
 // Public folder ki sabhi static files serve karne ke liye
 app.use(express.static(path.join(__dirname, 'public')));
 
-// Products API Routes for Cross-Device Sync
+// Products API Routes (File System based for multi-device sync)
 app.get('/api/products', (req, res) => {
-  res.json(sharedProducts);
+  const products = getStoredProducts();
+  res.json(products);
 });
 
 app.post('/api/products', (req, res) => {
   const newProd = req.body;
-  sharedProducts.unshift(newProd);
+  const products = getStoredProducts();
+  products.unshift(newProd);
+  saveStoredProducts(products);
   res.json({ success: true, product: newProd });
 });
 
 app.delete('/api/products/:id', (req, res) => {
   const id = Number(req.params.id);
-  sharedProducts = sharedProducts.filter(p => p.id !== id);
+  let products = getStoredProducts();
+  products = products.filter(p => p.id !== id);
+  saveStoredProducts(products);
   res.json({ success: true });
 });
 
