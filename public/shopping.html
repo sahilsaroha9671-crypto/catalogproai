@@ -164,7 +164,22 @@
 
         function getProducts() {
             const stored = localStorage.getItem('my_store_peach_products');
-            return stored ? JSON.parse(stored) : [];
+            if (stored) {
+                return JSON.parse(stored);
+            } else {
+                // Default Sample Product taaki store khali na dikhe
+                return [
+                    {
+                        id: 1711000000000,
+                        title: "Kurti With Pant or Dupatta",
+                        price: "799",
+                        mrp: "1499",
+                        images: ["https://images.unsplash.com/photo-1583391733956-3750e0ff4e8b?q=80&w=600&auto=format&fit=crop"],
+                        desc: "Product Details: * Fabric: Premium Rayon * Set Includes: Kurti + Pant + Dupatta * Color: Purple / बैंगनी",
+                        features: "M, L, XL, XXL"
+                    }
+                ];
+            }
         }
 
         function toggleAdminPanel() {
@@ -238,7 +253,9 @@
                     processedCount++;
 
                     if (processedCount === files.length) {
-                        const products = getProducts();
+                        const stored = localStorage.getItem('my_store_peach_products');
+                        const products = stored ? JSON.parse(stored) : [];
+                        
                         const newProd = {
                             id: Date.now(),
                             title: document.getElementById('pTitle').value,
@@ -262,10 +279,13 @@
 
         function deleteProduct(id) {
             if(!isAdminLoggedIn) return;
-            let products = getProducts();
-            products = products.filter(p => p.id !== id);
-            localStorage.setItem('my_store_peach_products', JSON.stringify(products));
-            renderProducts();
+            let stored = localStorage.getItem('my_store_peach_products');
+            if(stored) {
+                let products = JSON.parse(stored);
+                products = products.filter(p => p.id !== id);
+                localStorage.setItem('my_store_peach_products', JSON.stringify(products));
+                renderProducts();
+            }
         }
 
         // Navigate to Separate Product Page with ID
